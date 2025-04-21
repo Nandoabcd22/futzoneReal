@@ -50,4 +50,4 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
         Route::get('/membership', [BookingController::class, 'showMembership'])->name('membership');
         Route::get('/event', [BookingController::class, 'showEvent'])->name('event');
     });
-});git 
+});
