@@ -1,0 +1,442 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    font-family: "Poppins", sans-serif;
+    padding-top: 56px;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand h2 {
+    margin-bottom: 0;
+}
+
+.nav-item .nav-link {
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-transform: uppercase;
+}
+
+
+.navbar .btn {
+    font-size: 18px;
+    font-weight: 500;
+    padding: 6px 16px;
+}
+
+/* Hero Section */
+/* Hero Section */
+#hero {
+    background-image: url("../image/bg1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+#hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+#hero h1 {
+    font-weight: 700;
+    font-size: 5rem;
+    text-transform: uppercase;
+}
+
+#hero h3 {
+    font-weight: 500;
+}
+
+#hero p {
+    max-width: 600px;
+    margin-top: -30px;
+}
+
+#hero .btn {
+    padding: 10px 30px;
+    font-weight: 500;
+}
+
+/* About Section */
+#about {
+    background-color: #ffffff;
+    padding: 60px 0;
+}
+
+.image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+#about img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.about-content {
+    padding-left: 10px;
+}
+
+#about h2 {
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 20px;
+    font-size: 56px;
+}
+
+#about h6.text-success {
+    color: #28a745 !important;
+    letter-spacing: 1px;
+    font-size: 22px;
+}
+
+#about p {
+    color: #555;
+    font-size: 18px;
+    line-height: 1.7;
+    margin-top: -20px;
+}
+
+#about p:last-of-type::after {
+    content: "";
+    display: block;
+    width: 500px;
+    height: 4px;
+    background-color: #28a745; /* hijau */
+    margin-top: 10px;
+    border-radius: 2px;
+}
+
+@media (max-width: 991px) {
+    .about-content {
+        padding-left: 0;
+        text-align: center;
+        margin-top: 30px;
+    }
+}
+
+/* Features Section */
+#features {
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+.feature-item {
+    padding: 20px 10px;
+}
+
+.feature-item h5 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.feature-item i {
+    color: white;
+}
+/* Fields Section */
+#lapangan-tersedia {
+    padding: 60px 0;
+    position: relative;
+    background-color: #f9f9f9;
+}
+
+#lapangan-tersedia h2 {
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+}
+
+#lapangan-tersedia h2:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background-color: #28a745;
+}
+
+.fields-container {
+    position: relative;
+    overflow: hidden;
+    padding: 10px 0;
+}
+
+.fields-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    padding: 10px 0;
+}
+
+.fields-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.field-card {
+    flex: 0 0 auto;
+    width: 300px;
+    margin-right: 20px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+
+.card-text {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.pricing {
+    font-size: 14px;
+    color: #555;
+}
+
+.price-tag {
+    font-weight: 700;
+    color: #28a745;
+    font-size: 16px;
+}
+
+.field-nav {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    z-index: 10;
+    padding: 0 15px;
+}
+
+.field-prev, .field-next {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.field-prev:hover, .field-next:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.field-prev {
+    margin-left: -20px;
+}
+
+.field-next {
+    margin-right: -20px;
+}
+
+@media (max-width: 768px) {
+    .field-card {
+        width: 280px;
+    }
+    
+    .field-nav {
+        padding: 0 5px;
+    }
+    
+    .field-prev {
+        margin-left: -5px;
+    }
+    
+    .field-next {
+        margin-right: -5px;
+    }
+}
+
+/* Booking Info Section */
+#booking-info {
+    background-color: #464646;
+    padding: 50px 0;
+}
+
+#booking-info h2 {
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.info-list {
+    padding-left: 20px;
+}
+
+.info-list li {
+    margin-bottom: 15px;
+    position: relative;
+    padding-left: 15px;
+    font-size: 21px;
+    line-height: 1.6;
+}
+
+.info-list li:before {
+    content: "•";
+    position: absolute;
+    left: -10px;
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Calendar Button Section */
+.btn-outline-success {
+    border-width: 2px;
+    font-weight: 500;
+}
+
+/* Schedule Section */
+#jadwal-lapangan {
+    padding: 60px 0;
+}
+
+#jadwal-lapangan h2 {
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+#jadwal-lapangan h2:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background-color: #28a745;
+}
+
+.schedule-table {
+    margin-top: 30px;
+    border: 1px solid #dee2e6;
+}
+
+.schedule-table th, .schedule-table td {
+    text-align: center;
+    padding: 12px 8px;
+    border: 1px solid #28a745;
+    font-size: 14px;
+}
+
+.schedule-table th {
+    background-color: #28a745;
+    color: white;
+    font-weight: 600;
+}
+
+.schedule-table td.bg-success {
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Gallery Section */
+#gallery {
+    padding: 50px 0;
+    background-color: #f9f9f9;
+}
+
+#gallery img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+footer {
+    background-color: #28a745;
+    padding: 50px 0 30px;
+}
+
+footer h2 {
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+footer p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+footer i {
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.social-icons a {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 22px;
+    transition: transform 0.3s;
+}
+
+.social-icons a:hover {
+    transform: translateY(-3px);
+}
+
+/* Modal */
+.modal-header {
+    background-color: #28a745;
+    color: white;
+}
+
+.modal-header .btn-close {
+    background-color: white;
+}
+

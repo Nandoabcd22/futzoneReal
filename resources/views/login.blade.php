@@ -1,0 +1,38 @@
+<!-- resources/views/login.blade.php -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - FutZone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/" class="btn-back">Kembali</a>
+        <div><strong>LOGIN</strong></div>
+        <div class="brand">FutZone</div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="login-form">
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Masukkan E-mail" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn">LOGIN</button>
+        </form>
+        <div class="register-link">
+            Belum punya akun? <a href="{{ route('register') }}">Register</a>
+        </div>
+    </div>
+</body>
+</html>
