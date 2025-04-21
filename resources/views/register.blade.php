@@ -11,7 +11,7 @@
 <body>
 
     <div class="navbar">
-        <a href="/" class="btn-back">Kembal i</a>
+        <a href="/" class="btn-back">Kembali</a>
         <div class="brand">Register</div>
         <div class="brand">FutZone</div>
     </div>
