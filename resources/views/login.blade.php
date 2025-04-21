@@ -1,4 +1,3 @@
-<!-- resources/views/login.blade.php -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,6 +8,23 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet">
+
+    <style>
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -17,6 +33,20 @@
         <div><strong>LOGIN</strong></div>
         <div class="brand">FutZone</div>
     </div>
+
+    <!-- Flash Message: Sukses Registrasi -->
+    @if(session('success'))
+        <div class="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- Flash Message: Error Login -->
+    @if($errors->any())
+        <div class="alert-danger">
+            {{ $errors->first() }}
+        </div>
+    @endif
 
     <!-- Login Form -->
     <div class="login-form">

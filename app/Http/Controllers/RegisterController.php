@@ -1,31 +1,32 @@
 <?php
-
+// app/Http/Controllers/RegisterController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
-
 {
     public function showRegistrationForm()
     {
-        return view('register'); 
+        return view('register'); // pastikan file resources/views/register.blade.php ada
     }
 
-    public function register(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:6',
+            'phone' => 'required|digits_between:10,13',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        User::create([
+        \App\Models\User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'password' => \Hash::make($request->password),
         ]);
 
-        return redirect()->route('login');
+        return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }

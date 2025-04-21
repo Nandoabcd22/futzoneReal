@@ -3,45 +3,52 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;    // Auth untuk proses login/logout
+use Illuminate\Support\Facades\Hash;    // Hash hanya dibutuhkan jika kamu ingin membandingkan manual
 
-class LoginController extends Controller
+class LoginController extends Controller 
 {
-    // Tampilkan form login
+    // Menampilkan form login
     public function showLoginForm()
     {
-        return view('login'); // Pastikan file resources/views/login.blade.php ada
+        return view('login');
     }
-
+    
     // Proses login
     public function login(Request $request)
     {
         // Validasi input
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
+        $request->validate([
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
-
-        // Coba login
+        
+        // Set credentials dengan tambahan opsi untuk hash driver
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
+        
+        // Coba autentikasi menggunakan Auth::attempt dengan pengaturan hash
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('/'); // redirect ke halaman home atau dashboard
+            $request->session()->regenerate(); // Hindari session fixation
+            
+            // Redirect ke halaman user profile setelah login
+            return redirect()->intended(route('user.profile'));
         }
-
+        
         // Jika gagal
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
     }
-
+    
     // Logout
     public function logout(Request $request)
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
+        Auth::logout();                         // Logout user
+        $request->session()->invalidate();      // Invalidate session
+        $request->session()->regenerateToken(); // Regenerate CSRF token
         return redirect('/login');
     }
 }
