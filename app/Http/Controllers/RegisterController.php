@@ -11,6 +11,11 @@ class RegisterController extends Controller
         return view('register'); // pastikan file resources/views/register.blade.php ada
     }
 
+    public function register(Request $request)
+    {
+        return $this->store($request);
+    }
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -19,14 +24,13 @@ class RegisterController extends Controller
             'phone' => 'required|digits_between:10,13',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
+    
         \App\Models\User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => \Hash::make($request->password),
         ]);
-
+    
         return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
-    }
-}
+    }}
