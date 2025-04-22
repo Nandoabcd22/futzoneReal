@@ -84,40 +84,6 @@
       </div>
   </div>
 </section>
-<!-- End About Section -->
-        <!-- Features Section -->
-        <section id="features" class="bg-success text-white py-4">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <div class="feature-item">
-                            <i class="fas fa-users fa-2x mb-3"></i>
-                            <h5>CLUB<br>FOOTBALL</h5>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <div class="feature-item">
-                            <i class="fas fa-calendar-alt fa-2x mb-3"></i>
-                            <h5>EVENT<br>FOOTBALL</h5>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <div class="feature-item">
-                            <i class="fas fa-trophy fa-2x mb-3"></i>
-                            <h5>COPA<br>FOOTBALL</h5>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="feature-item">
-                            <i class="fas fa-futbol fa-2x mb-3"></i>
-                            <h5>ACADEMY<br>FOOTBALL</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- End Features Section -->
-
         <!-- Fields Section -->
 <section id="lapangan-tersedia" class="py-5">
   <div class="container">

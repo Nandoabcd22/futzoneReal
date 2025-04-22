@@ -30,8 +30,9 @@ body {
 }
 
 /* Hero Section */
-/* Hero Section */#hero {
-    background-image: url('../image/bg1.jpg');
+/* Hero Section */
+#hero {
+    background-image: url("../image/bg1.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -60,7 +61,7 @@ body {
 #hero h3 {
     font-weight: 500;
     margin-bottom: 0;
-    color: #4ade80;
+    color: #ffffff;
     letter-spacing: 2px;
 }
 

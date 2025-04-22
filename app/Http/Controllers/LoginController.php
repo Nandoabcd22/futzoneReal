@@ -32,7 +32,10 @@ class LoginController extends Controller
         // Coba autentikasi menggunakan Auth::attempt dengan pengaturan hash
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate(); // Hindari session fixation
-            
+             // Check user role and redirect accordingly
+    if (Auth::user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    } else { 
             // Redirect ke halaman user profile setelah login
             return redirect()->intended(route('user.profile'));
         }
@@ -42,7 +45,7 @@ class LoginController extends Controller
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
     }
-    
+}
     // Logout
     public function logout(Request $request)
     {
