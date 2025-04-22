@@ -128,13 +128,13 @@
               <!-- Field 1 -->
               <div class="field-card">
                   <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/1.jpeg')}}" class="card-img-top" alt="Lapangan 1">
+                      <img src="{{asset('assets/image/lp1.jpeg')}}" class="card-img-top" alt="Lapangan 1">
                       <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 1 - Lantai Vinyl</h5>
+                          <h5 class="card-title">Lapangan 1 - Lantai Vinyl ukuran large 38m x 18m </h5>
                           <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp100.000/jam</span> <small>(pagi-siang)</small><br>
+                              <span class="price-tag">Rp135.000/jam</span> <small>(malam)</small>
                           </div>
                       </div>
                   </div>
@@ -145,8 +145,8 @@
                   <div class="card h-100 shadow">
                       <img src="{{asset('assets/image/2.jpeg')}}" class="card-img-top" alt="Lapangan 2">
                       <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 2 - Rumput Sintetis</h5>
-                          <p class="card-text">Rasakan pengalaman bermain di rumput sintetis berkualitas FIFA. Mengurangi risiko cedera dan nyaman untuk bermain.</p>
+                          <h5 class="card-title">Lapangan 2 - Rumput Sintetis ukuran 25m x 15m </h5>
+                          <p class="card-text">Rasakan pengalaman bermain di rumput sintetis berkualitas. Mengurangi risiko cedera dan nyaman untuk bermain.</p>
                           <div class="pricing mb-3">
                               <span class="price-tag">Rp100.000/jam</span> <small>(pagi-siang)</small><br>
                               <span class="price-tag">Rp135.000/jam</span> <small>(malam)</small>
@@ -160,8 +160,8 @@
                   <div class="card h-100 shadow">
                       <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 3">
                       <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 3 - Lantai Interlock</h5>
-                          <p class="card-text">Permukaan interlock yang aman dengan grip optimal. Cocok untuk gaya bermain agresif dan cepat.</p>
+                          <h5 class="card-title">Lapangan 3 - Lantai vinyl standart 25m x 15m </h5>
+                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</</p>
                           <div class="pricing mb-3">
                               <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
                               <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
@@ -175,8 +175,8 @@
                   <div class="card h-100 shadow">
                       <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 4">
                       <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 4 - Indoor Deluxe</h5>
-                          <p class="card-text">Lapangan indoor dengan sistem pendingin udara. Bermain dengan nyaman di segala cuaca tanpa terganggu panas.</p>
+                          <h5 class="card-title">Lapangan 4 - Lantai vinyl standart 25m x 15m </h5>
+                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
                               <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
                               <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
@@ -190,11 +190,11 @@
                   <div class="card h-100 shadow">
                       <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 5">
                       <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 5 - Rumput Premium</h5>
-                          <p class="card-text">Lapangan rumput sintetis premium dengan ketebalan 50mm. Memberikan sensasi bermain seperti di stadion profesional.</p>
+                          <h5 class="card-title">Lapangan 5 - Lantai vinyl standart 25m x 15m </h5>
+                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp100.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp135.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
+                              <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
                           </div>
                       </div>
                   </div>
@@ -205,8 +205,8 @@
                   <div class="card h-100 shadow">
                       <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 6">
                       <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 6 - Vinyl Competition</h5>
-                          <p class="card-text">Lapangan standar kompetisi dengan permukaan vinyl khusus. Dilengkapi dengan sistem skor digital dan bangku cadangan.</p>
+                          <h5 class="card-title">Lapangan 6 - Lantai vinyl standart 25m x 15m </h5>
+                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
                               <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
                               <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
@@ -218,13 +218,13 @@
               <!-- Field 7 -->
               <div class="field-card">
                   <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/1.jpeg')}}" class="card-img-top" alt="Lapangan 7">
+                      <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 7">
                       <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 7 - Outdoor Premium</h5>
-                          <p class="card-text">Lapangan outdoor dengan pencahayaan premium. Ideal untuk pertandingan malam dengan visibilitas sempurna.</p>
+                          <h5 class="card-title">Lapangan 7 - Lantai vinyl standart 25m x 15m </h5>
+                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp100.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp135.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp1Rp60.000/jam</span> <small>(pagi-siang)</small><br>
+                              <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
                           </div>
                       </div>
                   </div>
@@ -244,21 +244,23 @@
         <!-- Booking Info Section -->
         <section id="booking-info" class="py-5 bg-light">
             <div class="container">
-                <h2 class="text-center mb-4">INFORMASI ALUR BOOKING FUTZONE</h2>
+                <h2 class="text-center mb-4">KETENTUAN DAN INFORMASI PEMESANAN FOTZONE</h2>
                 <div class="row">
                     <div class="col-lg-6">
                         <ul class="info-list">
-                            <li>Membership berlaku pada minimal 4 kali permainan. Jika 4 permainan dilewatkan, maka tidak dapat ditagih. Konsumen mendapatkan diskon sebesar 10% dari total biaya.</li>
-                            <li>Harga satu jam permainan Anda hanya membutuhkan 1 ball untuk jaminan. Biaya pembatalan dibebankan kepada tim yang terlibat air membership.</li>
-                            <li>Pembatalan atau tidak hadir latihan setelah invoice menimbulkan penalti berikutnya.</li>
+                            <li>Untuk Setiap pemesanan diharapkan register akun kemudian login.</li>
+                            <li>Harga sewa lapangan pada hari/malam [pagi-siang] & [sore-malam]: Rp.85.000/jam [malam] & Rp.95.000/jam [malam].</li>
+                            <li>Setiap Pemesanan diwajibkan melakukan DP 50%.</li>
+                            <li>Konformasi pembatalan maksimal 24jam sebelum bermain, jika lebih maka DP akan hangus.</li>
+                            <li>Untuk booking event skala besar minimal dilakukan 1 minggu sebelumnya</li>
                         </ul>
                     </div>
                     <div class="col-lg-6">
                         <ul class="info-list">
-                            <li>Tersedia 7 lapangan, 5 lapangan untuk standar, 2 lapangan untuk kompetisi atau pertandingan.</li>
-                            <li>Harga sewa lapangan pada hari/malam [pagi-siang] & [sore-malam]: Rp.85.000/jam [malam] & Rp.95.000/jam [malam].</li>
-                            <li>Setiap lapangan memiliki QR link untuk melihat atau memesan.</li>
-                        </ul>
+                            <li>Tersedia 7 lapangan, 5 lapangan untuk standar, 2 lapangan untuk rumput vinyl dan lebih lebar.</li>
+                            <li>Untuk pemesanan booking reguler, setiap 10 kali pemesanan maka akan mendapatkan gratis sesi 1jam dengan pilihan lapangan dan waktu yang bebas</li>
+                            <li>Membership berlaku pada minimal 4 kali/jam dalam 1 bulan, serta konsumen mendapatkan diskon sebesar 10% dari total biaya.</li>
+                            <li>Tidak menyediakan penyewaan atribut futsal.</li>
                     </div>
                 </div>
             </div>
