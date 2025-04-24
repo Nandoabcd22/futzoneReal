@@ -99,8 +99,8 @@
                           <h5 class="card-title">Lapangan 1 - Lantai Vinyl ukuran large 38m x 18m </h5>
                           <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp100.000/jam</span> <small>(07.00-16.00)</small><br>
-                              <span class="price-tag">Rp135.000/jam</span> <small>(16.00-22)</small>
+                              <span class="price-tag">Rp100.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
+                              <span class="price-tag">Rp135.000/jam</span> <small>(17.00-22.00 WIB)</small>
                           </div>
                       </div>
                   </div>
@@ -114,8 +114,8 @@
                           <h5 class="card-title">Lapangan 2 - Rumput Sintetis ukuran 25m x 15m </h5>
                           <p class="card-text">Rasakan pengalaman bermain di rumput sintetis berkualitas. Mengurangi risiko cedera dan nyaman untuk bermain.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp100.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp135.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp100.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
+                              <span class="price-tag">Rp135.000/jam</span> <small>(17.00-22.00 WIB)</small>
                           </div>
                       </div>
                   </div>
@@ -129,8 +129,8 @@
                           <h5 class="card-title">Lapangan 3 - Lantai vinyl standart 25m x 15m </h5>
                           <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
+                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
                           </div>
                       </div>
                   </div>
@@ -144,8 +144,8 @@
                           <h5 class="card-title">Lapangan 4 - Lantai vinyl standart 25m x 15m </h5>
                           <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
+                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
                           </div>
                       </div>
                   </div>
@@ -159,8 +159,8 @@
                           <h5 class="card-title">Lapangan 5 - Lantai vinyl standart 25m x 15m </h5>
                           <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
+                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
                           </div>
                       </div>
                   </div>
@@ -174,8 +174,8 @@
                           <h5 class="card-title">Lapangan 6 - Lantai vinyl standart 25m x 15m </h5>
                           <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
+                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
                           </div>
                       </div>
                   </div>
@@ -189,8 +189,8 @@
                           <h5 class="card-title">Lapangan 7 - Lantai vinyl standart 25m x 15m </h5>
                           <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp1Rp60.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp1Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
+                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
                           </div>
                       </div>
                   </div>
