@@ -3,6 +3,8 @@
 body {
     font-family: "Poppins", sans-serif;
     padding-top: 56px;
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
 }
 
 /* Navbar */
@@ -385,15 +387,11 @@ body {
     font-weight: bold;
 }
 
-/* Calendar Button Section */
-.btn-outline-success {
-    border-width: 2px;
-    font-weight: 500;
-}
 
-/* Schedule Section */
+/* Calendar Section */
 #jadwal-lapangan {
     padding: 60px 0;
+    background-color: #fff;
 }
 
 #jadwal-lapangan h2 {
@@ -401,6 +399,8 @@ body {
     position: relative;
     padding-bottom: 15px;
     text-align: center;
+    margin-bottom: 30px;
+    color: #28a745;
 }
 
 #jadwal-lapangan h2:after {
@@ -409,33 +409,274 @@ body {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
+    width: 80px;
     height: 3px;
     background-color: #28a745;
 }
 
-.schedule-table {
-    margin-top: 30px;
-    border: 1px solid #dee2e6;
+/* Calendar Display */
+.calendar-navigation {
+    max-width: 350px;
+    margin: 0 auto 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 15px;
 }
 
-.schedule-table th, .schedule-table td {
+.calendar-header {
+    margin-bottom: 15px;
+}
+
+.calendar-header h5 {
+    font-weight: 600;
+    color: #333;
+}
+
+.calendar-header button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+    padding: 8px;
+    font-size: 14px;
+}
+
+.calendar-table th {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.calendar-table td {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.calendar-table td:hover:not(.prev-month):not(.next-month) {
+    background-color: #e9f7ef;
+}
+
+.calendar-table td.selected {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: 600;
+}
+
+.calendar-table td.today {
+    border: 2px solid #28a745;
+    font-weight: 600;
+}
+
+.calendar-table td.has-bookings {
+    position: relative;
+}
+
+.calendar-table td.has-bookings:after {
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #dc3545;
+}
+
+.calendar-table td.prev-month,
+.calendar-table td.next-month {
+    color: #b8b8b8;
+    cursor: default;
+}
+
+/* Schedule Options */
+.schedule-options {
+    margin: 30px 0;
+}
+
+.schedule-buttons {
+    position: relative;
+}
+
+.schedule-buttons:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -60px;
+    right: -60px;
+    height: 1px;
+    background-color: #dee2e6;
+    z-index: 0;
+}
+
+.btn-outline-success {
+    border-width: 2px;
+    font-weight: 500;
+    background-color: #fff;
+    padding: 8px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success.active {
+    background-color: #28a745;
+    color: #fff;
+}
+
+/* Selected Date Display */
+.selected-date {
+    margin: 20px 0;
+}
+
+.selected-date h5 {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Schedule Table */
+.schedule-table {
+    margin-top: 20px;
+    border: 1px solid #28a745;
+    background-color: #fff;
+}
+
+.schedule-table th, 
+.schedule-table td {
     text-align: center;
     padding: 12px 8px;
     border: 1px solid #28a745;
     font-size: 14px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
 }
 
 .schedule-table th {
     background-color: #28a745;
     color: white;
     font-weight: 600;
+    cursor: default;
 }
 
-.schedule-table td.bg-success {
-    white-space: nowrap;
+.field-name {
+    background-color: #28a745;
+    color: white;
     font-weight: 600;
+    white-space: nowrap;
+    cursor: default;
+}
+
+.table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Booking Status Classes */
+.booked {
+    background-color: #dc3545 !important;
+    color: white;
+}
+
+.booked:hover {
+    background-color: #c82333 !important;
+}
+
+.booked-cell {
+    background-color: #dc3545;
+    color: white;
+}
+
+.selected-cell {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.booked-info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* Legend */
+.schedule-legend {
+    margin-top: 20px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 4px;
+}
+
+.legend-color.available {
+    background-color: white;
+    border: 1px solid #28a745;
+}
+
+.legend-color.booked {
+    background-color: #dc3545;
+}
+
+.legend-color.selected {
+    background-color: #ffc107;
+}
+
+.legend-text {
     font-size: 14px;
+    color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .calendar-navigation {
+        max-width: 300px;
+    }
+    
+    .schedule-table th, 
+    .schedule-table td {
+        padding: 8px 4px;
+        font-size: 12px;
+    }
+    
+    .legend-item {
+        flex-direction: column;
+        align-items: center;
+        margin: 0 5px;
+    }
+    
+    .legend-color {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
 }
 
 /* Gallery Section */

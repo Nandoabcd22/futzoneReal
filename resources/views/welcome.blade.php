@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <link rel="shortcut icon" href="{{ asset('assets/icon/iconfix.png') }}">
-        
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <title>Futzone</title>
@@ -99,8 +99,8 @@
                           <h5 class="card-title">Lapangan 1 - Lantai Vinyl ukuran large 38m x 18m </h5>
                           <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp100.000/jam</span> <small>(pagi-siang)</small><br>
-                              <span class="price-tag">Rp135.000/jam</span> <small>(malam)</small>
+                              <span class="price-tag">Rp100.000/jam</span> <small>(07.00-16.00)</small><br>
+                              <span class="price-tag">Rp135.000/jam</span> <small>(16.00-22)</small>
                           </div>
                       </div>
                   </div>
@@ -252,6 +252,7 @@
                         <thead class="bg-success text-white">
                             <tr>
                                 <th></th>
+                                <th>07.00</th>
                                 <th>08.00</th>
                                 <th>09.00</th>
                                 <th>10.00</th>
@@ -266,7 +267,6 @@
                                 <th>19.00</th>
                                 <th>20.00</th>
                                 <th>21.00</th>
-                                <th>22.00</th>
                             </tr>
                         </thead>
                         <tbody>
