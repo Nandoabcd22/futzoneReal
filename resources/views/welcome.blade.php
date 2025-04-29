@@ -233,176 +233,269 @@
         </section>
         <!-- End Booking Info Section -->
 
-        <!-- Calendar Button Section -->
-        <section class="py-3">
-            <div class="container">
-                <div class="text-center">
-                    <button class="btn btn-outline-success">Kalender</button>
+<!-- Schedule Section -->
+<section id="jadwal-lapangan" class="py-5">
+    <div class="container">
+        <!-- Section Title -->
+        <h2 class="section-title">Jadwal Lapangan</h2>
+        
+        <!-- Calendar Header -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h4>Kalender</h4>
+                <div class="filter-date">
+                    <label for="date-picker">Tanggal:</label>
+                    <input type="date" class="date-picker" id="date-picker" value="2025-04-28">
                 </div>
             </div>
-        </section>
-        <!-- End Calendar Button Section -->
+            <div class="selected-date-display" id="selected-date-display">
+                Jadwal untuk: <span id="formatted-date">28 April 2025</span>
+            </div>
+        </div>
         
-        <!-- Schedule Section -->
-        <section id="jadwal-lapangan" class="py-5">
-            <div class="container">
-                <h2 class="text-center mb-4">Jadwal Lapangan</h2>
-                <div class="table-responsive">
-                    <table class="table table-bordered schedule-table">
-                        <thead class="bg-success text-white">
-                            <tr>
-                                <th></th>
-                                <th>07.00</th>
-                                <th>08.00</th>
-                                <th>09.00</th>
-                                <th>10.00</th>
-                                <th>11.00</th>
-                                <th>12.00</th>
-                                <th>13.00</th>
-                                <th>14.00</th>
-                                <th>15.00</th>
-                                <th>16.00</th>
-                                <th>17.00</th>
-                                <th>18.00</th>
-                                <th>19.00</th>
-                                <th>20.00</th>
-                                <th>21.00</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="bg-success text-white">Lapangan 1</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-success text-white">Lapangan 2</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-success text-white">Lapangan 3</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-success text-white">Lapangan 4</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-success text-white">Lapangan 5</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-success text-white">Lapangan 6</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-success text-white">Lapangan 7</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <!-- Legend -->
+        <div class="schedule-legend">
+            <div class="legend-container">
+                <div class="legend-item">
+                    <span class="legend-color available"></span>
+                    <span class="legend-text">Tersedia</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color booked"></span>
+                    <span class="legend-text">Terisi</span>
                 </div>
             </div>
-        </section>
-        <!-- End Schedule Section -->
+        </div>
+            
+        <!-- Schedule Table -->
+        <div class="table-responsive-container">
+            <div class="table-responsive">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>07.00</th>
+                            <th>08.00</th>
+                            <th>09.00</th>
+                            <th>10.00</th>
+                            <th>11.00</th>
+                            <th>12.00</th>
+                            <th>13.00</th>
+                            <th>14.00</th>
+                            <th>15.00</th>
+                            <th>16.00</th>
+                            <th>17.00</th>
+                            <th>18.00</th>
+                            <th>19.00</th>
+                            <th>20.00</th>
+                            <th>21.00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="field-name">Lapangan 1</td>
+                            <td class="time-slot" data-field="1" data-time="07.00"></td>
+                            <td class="time-slot" data-field="1" data-time="08.00"></td>
+                            <td class="time-slot" data-field="1" data-time="09.00"></td>
+                            <td class="time-slot booked-cell" data-field="1" data-time="10.00">
+                                <span class="booked-info">Tim A</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="1" data-time="11.00">
+                                <span class="booked-info">Tim A</span>
+                            </td>
+                            <td class="time-slot" data-field="1" data-time="12.00"></td>
+                            <td class="time-slot" data-field="1" data-time="13.00"></td>
+                            <td class="time-slot" data-field="1" data-time="14.00"></td>
+                            <td class="time-slot" data-field="1" data-time="15.00"></td>
+                            <td class="time-slot" data-field="1" data-time="16.00"></td>
+                            <td class="time-slot booked-cell" data-field="1" data-time="17.00">
+                                <span class="booked-info">Tim B</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="1" data-time="18.00">
+                                <span class="booked-info">Tim B</span>
+                            </td>
+                            <td class="time-slot" data-field="1" data-time="19.00"></td>
+                            <td class="time-slot" data-field="1" data-time="20.00"></td>
+                            <td class="time-slot" data-field="1" data-time="21.00"></td>
+                        </tr>
+                        <tr>
+                            <td class="field-name">Lapangan 2</td>
+                            <td class="time-slot" data-field="2" data-time="07.00"></td>
+                            <td class="time-slot" data-field="2" data-time="08.00"></td>
+                            <td class="time-slot" data-field="2" data-time="09.00"></td>
+                            <td class="time-slot" data-field="2" data-time="10.00"></td>
+                            <td class="time-slot" data-field="2" data-time="11.00"></td>
+                            <td class="time-slot" data-field="2" data-time="12.00"></td>
+                            <td class="time-slot" data-field="2" data-time="13.00"></td>
+                            <td class="time-slot" data-field="2" data-time="14.00"></td>
+                            <td class="time-slot booked-cell" data-field="2" data-time="15.00">
+                                <span class="booked-info">Tim C</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="2" data-time="16.00">
+                                <span class="booked-info">Tim C</span>
+                            </td>
+                            <td class="time-slot" data-field="2" data-time="17.00"></td>
+                            <td class="time-slot" data-field="2" data-time="18.00"></td>
+                            <td class="time-slot booked-cell" data-field="2" data-time="19.00">
+                                <span class="booked-info">Tim D</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="2" data-time="20.00">
+                                <span class="booked-info">Tim D</span>
+                            </td>
+                            <td class="time-slot" data-field="2" data-time="21.00"></td>
+                        </tr>
+                        <tr>
+                            <td class="field-name">Lapangan 3</td>
+                            <td class="time-slot" data-field="3" data-time="07.00"></td>
+                            <td class="time-slot booked-cell" data-field="3" data-time="08.00">
+                                <span class="booked-info">Tim E</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="3" data-time="09.00">
+                                <span class="booked-info">Tim E</span>
+                            </td>
+                            <td class="time-slot" data-field="3" data-time="10.00"></td>
+                            <td class="time-slot" data-field="3" data-time="11.00"></td>
+                            <td class="time-slot" data-field="3" data-time="12.00"></td>
+                            <td class="time-slot" data-field="3" data-time="13.00"></td>
+                            <td class="time-slot" data-field="3" data-time="14.00"></td>
+                            <td class="time-slot" data-field="3" data-time="15.00"></td>
+                            <td class="time-slot" data-field="3" data-time="16.00"></td>
+                            <td class="time-slot" data-field="3" data-time="17.00"></td>
+                            <td class="time-slot" data-field="3" data-time="18.00"></td>
+                            <td class="time-slot" data-field="3" data-time="19.00"></td>
+                            <td class="time-slot" data-field="3" data-time="20.00"></td>
+                            <td class="time-slot" data-field="3" data-time="21.00"></td>
+                        </tr>
+                        <tr>
+                            <td class="field-name">Lapangan 4</td>
+                            <td class="time-slot" data-field="4" data-time="07.00"></td>
+                            <td class="time-slot" data-field="4" data-time="08.00"></td>
+                            <td class="time-slot" data-field="4" data-time="09.00"></td>
+                            <td class="time-slot" data-field="4" data-time="10.00"></td>
+                            <td class="time-slot" data-field="4" data-time="11.00"></td>
+                            <td class="time-slot" data-field="4" data-time="12.00"></td>
+                            <td class="time-slot booked-cell" data-field="4" data-time="13.00">
+                                <span class="booked-info">Tim F</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="4" data-time="14.00">
+                                <span class="booked-info">Tim F</span>
+                            </td>
+                            <td class="time-slot" data-field="4" data-time="15.00"></td>
+                            <td class="time-slot" data-field="4" data-time="16.00"></td>
+                            <td class="time-slot" data-field="4" data-time="17.00"></td>
+                            <td class="time-slot" data-field="4" data-time="18.00"></td>
+                            <td class="time-slot" data-field="4" data-time="19.00"></td>
+                            <td class="time-slot" data-field="4" data-time="20.00"></td>
+                            <td class="time-slot" data-field="4" data-time="21.00"></td>
+                        </tr>
+                        <tr>
+                            <td class="field-name">Lapangan 5</td>
+                            <td class="time-slot" data-field="5" data-time="07.00"></td>
+                            <td class="time-slot" data-field="5" data-time="08.00"></td>
+                            <td class="time-slot" data-field="5" data-time="09.00"></td>
+                            <td class="time-slot" data-field="5" data-time="10.00"></td>
+                            <td class="time-slot" data-field="5" data-time="11.00"></td>
+                            <td class="time-slot" data-field="5" data-time="12.00"></td>
+                            <td class="time-slot" data-field="5" data-time="13.00"></td>
+                            <td class="time-slot" data-field="5" data-time="14.00"></td>
+                            <td class="time-slot" data-field="5" data-time="15.00"></td>
+                            <td class="time-slot" data-field="5" data-time="16.00"></td>
+                            <td class="time-slot booked-cell" data-field="5" data-time="17.00">
+                                <span class="booked-info">Tim G</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="5" data-time="18.00">
+                                <span class="booked-info">Tim G</span>
+                            </td>
+                            <td class="time-slot" data-field="5" data-time="19.00"></td>
+                            <td class="time-slot" data-field="5" data-time="20.00"></td>
+                            <td class="time-slot" data-field="5" data-time="21.00"></td>
+                        </tr>
+                        <tr>
+                            <td class="field-name">Lapangan 6</td>
+                            <td class="time-slot" data-field="6" data-time="07.00"></td>
+                            <td class="time-slot" data-field="6" data-time="08.00"></td>
+                            <td class="time-slot" data-field="6" data-time="09.00"></td>
+                            <td class="time-slot booked-cell" data-field="6" data-time="10.00">
+                                <span class="booked-info">Tim H</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="6" data-time="11.00">
+                                <span class="booked-info">Tim H</span>
+                            </td>
+                            <td class="time-slot" data-field="6" data-time="12.00"></td>
+                            <td class="time-slot" data-field="6" data-time="13.00"></td>
+                            <td class="time-slot" data-field="6" data-time="14.00"></td>
+                            <td class="time-slot" data-field="6" data-time="15.00"></td>
+                            <td class="time-slot" data-field="6" data-time="16.00"></td>
+                            <td class="time-slot" data-field="6" data-time="17.00"></td>
+                            <td class="time-slot" data-field="6" data-time="18.00"></td>
+                            <td class="time-slot booked-cell" data-field="6" data-time="19.00">
+                                <span class="booked-info">Tim I</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="6" data-time="20.00">
+                                <span class="booked-info">Tim I</span>
+                            </td>
+                            <td class="time-slot" data-field="6" data-time="21.00"></td>
+                        </tr>
+                        <tr>
+                            <td class="field-name">Lapangan 7</td>
+                            <td class="time-slot booked-cell" data-field="7" data-time="07.00">
+                                <span class="booked-info">Tim J</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="7" data-time="08.00">
+                                <span class="booked-info">Tim J</span>
+                            </td>
+                            <td class="time-slot" data-field="7" data-time="09.00"></td>
+                            <td class="time-slot" data-field="7" data-time="10.00"></td>
+                            <td class="time-slot" data-field="7" data-time="11.00"></td>
+                            <td class="time-slot" data-field="7" data-time="12.00"></td>
+                            <td class="time-slot" data-field="7" data-time="13.00"></td>
+                            <td class="time-slot" data-field="7" data-time="14.00"></td>
+                            <td class="time-slot" data-field="7" data-time="15.00"></td>
+                            <td class="time-slot" data-field="7" data-time="16.00"></td>
+                            <td class="time-slot booked-cell" data-field="7" data-time="17.00">
+                                <span class="booked-info">Tim K</span>
+                            </td>
+                            <td class="time-slot booked-cell" data-field="7" data-time="18.00">
+                                <span class="booked-info">Tim K</span>
+                            </td>
+                            <td class="time-slot" data-field="7" data-time="19.00"></td>
+                            <td class="time-slot" data-field="7" data-time="20.00"></td>
+                            <td class="time-slot" data-field="7" data-time="21.00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const datePicker = document.getElementById('date-picker');
+    const formattedDateElement = document.getElementById('formatted-date');
+    
+    // Function to format date in Indonesian format
+    function formatDateIndonesian(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
         
+        return `${day} ${month} ${year}`;
+    }
+    
+    // Initialize with current date
+    formattedDateElement.textContent = formatDateIndonesian(datePicker.value);
+    
+    // Update when date changes
+    datePicker.addEventListener('change', function() {
+        formattedDateElement.textContent = formatDateIndonesian(this.value);
+        console.log(`Schedule updated for: ${this.value}`);
+    });
+});
+</script>
         <!-- Gallery Section -->
         <section id="gallery" class="py-5">
             <div class="container">
