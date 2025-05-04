@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Field extends Model
+class RegularBooking extends Model
 {
     use HasFactory;
 
@@ -15,11 +15,14 @@ class Field extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'description',
-        'image_url',
-        'price_per_hour',
-        'is_available',
+        'user_id',
+        'day_of_week',
+        'start_date',
+        'end_date',
+        'time_start',
+        'duration',
+        'duration_months',
+        'status'
     ];
 
     /**
@@ -28,12 +31,20 @@ class Field extends Model
      * @var array
      */
     protected $casts = [
-        'price_per_hour' => 'float',
-        'is_available' => 'boolean',
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
 
     /**
-     * Get the bookings for the field.
+     * Get the user that owns the regular booking.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the individual bookings associated with this regular booking.
      */
     public function bookings()
     {

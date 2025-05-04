@@ -17,10 +17,10 @@ class LoginController extends Controller
     // Proses login
     public function login(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
+        // Validasi form login
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:8',
         ]);
         
         // Set credentials dengan tambahan opsi untuk hash driver

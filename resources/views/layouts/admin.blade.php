@@ -255,11 +255,7 @@
                         <i class="fas fa-chart-bar"></i> LAPORAN
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('admin.password') }}" class="{{ request()->routeIs('admin.password') ? 'active' : '' }}">
-                        <i class="fas fa-lock"></i> UBAH PASSWORD
-                    </a>
-                </li>
+           
                 <li>
                     <a href="#" id="logout-btn">
                         <i class="fas fa-sign-out-alt"></i> LOGOUT

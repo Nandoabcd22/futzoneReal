@@ -3,92 +3,73 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Booking;
 use App\Models\Field;
+use App\Models\TimeSlot;
+use App\Models\MembershipPackage;
 
 class BookingController extends Controller
 {
     /**
-     * Show the booking creation form.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\View\View
-     */
-    public function create(Request $request)
-    {
-        $fieldId = $request->input('field');
-        $time = $request->input('time');
-        $date = $request->input('date', date('Y-m-d'));
-
-        return view('users.booking.create', compact('fieldId', 'time', 'date'));
-    }
-
-    /**
-     * Store a new booking.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'field_id' => 'required|numeric',
-            'date' => 'required|date',
-            'time_start' => 'required|string',
-            'duration' => 'required|numeric|min:1|max:5',
-        ]);
-
-        // In a real application, you would validate availability and create the booking
-        // Here we'll just redirect with a success message
-
-        // Calculate price
-        $hourlyRate = 150000; // Base price per hour
-        $price = $hourlyRate * $request->duration;
-
-        // Parse time
-        $timeStart = str_replace('.00', '', $request->time_start);
-        $timeEnd = $timeStart + $request->duration;
-
-        // In a real application, you would store the booking in the database
-        // For example:
-        // $booking = new Booking;
-        // $booking->user_id = Auth::id();
-        // $booking->field_id = $request->field_id;
-        // $booking->date = $request->date;
-        // ... and so on
-        // $booking->save();
-
-        return redirect()->route('user.pesanan')->with('success', 'Booking berhasil! Menunggu konfirmasi admin.');
-    }
-
-    /**
-     * Show the regular booking page.
-     *
-     * @return \Illuminate\View\View
+     * Halaman booking reguler.
      */
     public function showReguler()
-    {
-        return view('users.booking.reguler');
-    }
+{
+    $fields = Field::all();  // Ambil semua lapangan
+    $timeSlots = TimeSlot::where('is_active', true)->get(); // Ambil slot waktu yang aktif
+
+    return view('users.booking.reguler', compact('fields', 'timeSlots'));
+}
 
     /**
-     * Show the membership booking page.
-     *
-     * @return \Illuminate\View\View
+     * Halaman form booking (pilih field dan slot waktu).
+     */
+    public function showForm($id)
+{
+    $field = Field::findOrFail($id);  // Ambil lapangan berdasarkan ID
+    $daysOfWeek = [
+        'monday' => 'Senin',
+        'tuesday' => 'Selasa',
+        'wednesday' => 'Rabu',
+        'thursday' => 'Kamis',
+        'friday' => 'Jumat',
+        'saturday' => 'Sabtu',
+        'sunday' => 'Minggu',
+    ];
+
+    $timeSlots = TimeSlot::where('is_active', true)->get();  // Ambil slot waktu yang aktif
+
+    return view('users.booking.form', compact('field', 'daysOfWeek', 'timeSlots'));
+}
+
+    /**
+     * Halaman booking membership.
      */
     public function showMembership()
     {
-        return view('users.booking.membership');
+        $fields = Field::all();
+        $packages = MembershipPackage::where('is_active', true)->get();
+
+        return view('users.booking.membership', compact('fields', 'packages'));
     }
 
     /**
-     * Show the event booking page.
-     *
-     * @return \Illuminate\View\View
+     * Halaman booking event.
      */
     public function showEvent()
     {
-        return view('users.booking.event');
+        $fields = Field::all();
+
+        return view('users.booking.event', compact('fields'));
+    }
+
+    // Tambahan untuk cek slot (jika diperlukan di frontend)
+    public function checkAvailability(Request $request)
+    {
+        // Logika pengecekan slot
+    }
+
+    public function getAvailableTimeSlots()
+    {
+        return TimeSlot::where('is_active', true)->get();
     }
 }
