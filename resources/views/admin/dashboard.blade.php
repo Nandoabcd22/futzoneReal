@@ -1,16 +1,18 @@
 <!-- resources/views/admin/dashboard.blade.php -->
+
 @extends('layouts.admin')
 
 @section('title', 'Admin Dashboard')
 
 @section('content')
     <div class="dashboard-cards">
+        <!-- Card Data Customer -->
         <div class="dashboard-card card-customer">
             <div class="card-info">
-                <h3>15</h3>
+                <h3>{{ $customerCount }}</h3>  <!-- Display the actual count of customers -->
                 <p>Data Customer</p>
                 <div class="more-info">
-                    <a href="{{ route('admin.data.customer') }}">more info »</a>
+                    <a href="{{ route('admin.dataCustomer') }}">more info »</a>  <!-- Use the correct route name -->
                 </div>
             </div>
             <div class="card-icon">
@@ -18,12 +20,13 @@
             </div>
         </div>
         
+        <!-- Card Data Lapangan -->
         <div class="dashboard-card card-lapangan">
             <div class="card-info">
-                <h3>15</h3>
+                <h3>{{ $fieldCount }}</h3>  <!-- Display the actual count of fields -->
                 <p>Data Lapangan</p>
                 <div class="more-info">
-                    <a href="{{ route('admin.data.lapangan') }}">more info »</a>
+                    <a href="{{ route('admin.dataLapangan') }}">more info »</a>  <!-- Use the correct route name -->
                 </div>
             </div>
             <div class="card-icon">
@@ -31,12 +34,13 @@
             </div>
         </div>
         
+        <!-- Card Data Transaksi -->
         <div class="dashboard-card card-transaksi">
             <div class="card-info">
-                <h3>15</h3>
-                <p>Data Transaksi / Boking</p>
+                <h3>{{ $bookingCount }}</h3>  <!-- Display the actual count of bookings -->
+                <p>Data Transaksi / Booking</p>
                 <div class="more-info">
-                    <a href="{{ route('admin.transaksi') }}">more info »</a>
+                    <a href="{{ route('admin.transaksi') }}">more info »</a>  <!-- Use the correct route name -->
                 </div>
             </div>
             <div class="card-icon">
@@ -44,6 +48,6 @@
             </div>
         </div>
     </div>
-    
-    <!-- You can add additional dashboard content here -->
+
+    <!-- Additional content for dashboard can be added here -->
 @endsection
