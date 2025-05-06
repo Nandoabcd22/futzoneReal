@@ -50,7 +50,7 @@
 
     <!-- Login Form -->
     <div class="login-form">
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login.process') }}">
             @csrf
             <div class="form-group">
                 <input type="email" name="email" placeholder="Masukkan E-mail" required>

@@ -51,16 +51,12 @@ class LoginController extends Controller
         
         // Jika gagal
         
-    }
+    
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
-<<<<<<< HEAD
     }
 
-=======
-}
->>>>>>> 2467f850399edaf692270b32139c212837d4716e
     // Logout
     public function logout(Request $request)
     {
