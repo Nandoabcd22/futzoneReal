@@ -1,46 +1,42 @@
 <!-- resources/views/admin/dashboard.blade.php -->
-
 @extends('layouts.admin')
 
 @section('title', 'Admin Dashboard')
 
 @section('content')
     <div class="dashboard-cards">
-        <!-- Card Data Customer -->
         <div class="dashboard-card card-customer">
             <div class="card-info">
-                <h3>{{ $customerCount }}</h3>  <!-- Display the actual count of customers -->
+                <h3>15</h3>
                 <p>Data Customer</p>
                 <div class="more-info">
-                    <a href="{{ route('admin.dataCustomer') }}">more info »</a>  <!-- Use the correct route name -->
+                    <a href="{{ route('admin.data.customer') }}">more info »</a>
                 </div>
             </div>
             <div class="card-icon">
                 <i class="fas fa-users"></i>
             </div>
         </div>
-        
-        <!-- Card Data Lapangan -->
+
         <div class="dashboard-card card-lapangan">
             <div class="card-info">
-                <h3>{{ $fieldCount }}</h3>  <!-- Display the actual count of fields -->
+                <h3>15</h3>
                 <p>Data Lapangan</p>
                 <div class="more-info">
-                    <a href="{{ route('admin.dataLapangan') }}">more info »</a>  <!-- Use the correct route name -->
+                    <a href="{{ route('admin.data.lapangan') }}">more info »</a>
                 </div>
             </div>
             <div class="card-icon">
                 <i class="fas fa-exchange-alt"></i>
             </div>
         </div>
-        
-        <!-- Card Data Transaksi -->
+
         <div class="dashboard-card card-transaksi">
             <div class="card-info">
-                <h3>{{ $bookingCount }}</h3>  <!-- Display the actual count of bookings -->
-                <p>Data Transaksi / Booking</p>
+                <h3>15</h3>
+                <p>Data Transaksi / Boking</p>
                 <div class="more-info">
-                    <a href="{{ route('admin.transaksi') }}">more info »</a>  <!-- Use the correct route name -->
+                    <a href="{{ route('admin.transaksi') }}">more info »</a>
                 </div>
             </div>
             <div class="card-icon">
@@ -49,5 +45,5 @@
         </div>
     </div>
 
-    <!-- Additional content for dashboard can be added here -->
+    <!-- You can add additional dashboard content here -->
 @endsection

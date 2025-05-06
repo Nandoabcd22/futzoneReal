@@ -28,6 +28,7 @@
         border: 1px solid #28a745;
         text-align: center;
         padding: 10px;
+        position: relative;
     }
     
     .field-schedule th {
@@ -57,6 +58,7 @@
     
     .available {
         background-color: #f8f9fa;
+        color: black;
     }
     
     .filter-date {
@@ -71,6 +73,34 @@
         border: 1px solid #ced4da;
         border-radius: 5px;
     }
+
+    /* Add styling for the availability status outside the table */
+    .status-legend {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .status-label {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .available-label {
+        background-color: #28a745;
+        color: white;
+        border-radius: 5px;
+    }
+
+    .booked-label {
+        background-color: #dc3545;
+        color: white;
+        border-radius: 5px;
+    }
 </style>
 @endsection
 
@@ -82,7 +112,18 @@
         <h4>Kalender</h4>
         <div class="filter-date">
             <label>Tanggal:</label>
-            <input type="date" class="date-picker" id="date-picker" value="{{ date('Y-m-d') }}">
+            <!-- Ensure the date picker value is set correctly based on the selected date -->
+            <input type="date" class="date-picker" id="date-picker" value="{{ request('date', date('Y-m-d')) }}">
+        </div>
+    </div>
+
+    <!-- Availability Status Legend -->
+    <div class="status-legend">
+        <div class="status-label available-label">
+            <span>✔ Tersedia</span>
+        </div>
+        <div class="status-label booked-label">
+            <span>❌ Terisi</span>
         </div>
     </div>
     
@@ -91,28 +132,27 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>08.00</th>
-                    <th>09.00</th>
-                    <th>10.00</th>
-                    <th>11.00</th>
-                    <th>12.00</th>
-                    <th>13.00</th>
-                    <th>14.00</th>
-                    <th>15.00</th>
-                    <th>16.00</th>
-                    <th>17.00</th>
+                    @for ($j = 7; $j <= 23; $j++) <!-- Jam sampai 23:00 -->
+                        <th>{{ $j }}.00</th>
+                    @endfor
                 </tr>
             </thead>
             <tbody>
                 @for ($i = 1; $i <= 7; $i++)
                 <tr>
                     <td class="field-name">Lapangan {{ $i }}</td>
-                    @for ($j = 8; $j <= 17; $j++)
+                    @for ($j = 7; $j <= 23; $j++) <!-- Jam sampai 23:00 -->
                         @php
-                            $isBooked = isset($bookings[$i][$j]) ? true : false;
-                            $cellClass = $isBooked ? 'booking-cell booked' : 'booking-cell available';
+                            $isBooked = isset($bookings[$i][$j]);
+                            $statusClass = $isBooked ? 'booked-label' : 'available-label';
+                            $statusText = $isBooked ? 'Terisi' : 'Tersedia';
+                            $teamName = $isBooked ? $bookings[$i][$j] : ''; // Display team name if booked
                         @endphp
-                        <td class="{{ $cellClass }}" data-field="{{ $i }}" data-time="{{ $j }}"></td>
+                        <td class="booking-cell {{ $isBooked ? 'booked' : 'available' }}" data-field="{{ $i }}" data-time="{{ $j }}">
+                            @if($teamName)
+                                <div class="team-name">{{ $teamName }}</div> <!-- Display team name if booked -->
+                            @endif
+                        </td>
                     @endfor
                 </tr>
                 @endfor
@@ -128,8 +168,9 @@
         // Initialize date picker
         const datePicker = document.getElementById('date-picker');
         datePicker.addEventListener('change', function() {
-            // Redirect to same page with date parameter
-            window.location.href = '{{ route("user.jadwal") }}?date=' + this.value;
+            const selectedDate = this.value;  // Get the selected date
+            const baseUrl = window.location.origin; // Get the base URL of the current page
+            window.location.href = baseUrl + '/jadwal-lapangan?date=' + selectedDate; // Redirect to update the schedule with the selected date
         });
         
         // Make booking cells clickable
