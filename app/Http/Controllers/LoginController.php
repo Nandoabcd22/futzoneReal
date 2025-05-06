@@ -17,10 +17,10 @@ class LoginController extends Controller
     // Proses login
     public function login(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
+        // Validasi form login
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:8',
         ]);
         
         // Set credentials dengan tambahan opsi untuk hash driver
@@ -50,11 +50,17 @@ class LoginController extends Controller
         }
         
         // Jika gagal
+        
+    }
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
+<<<<<<< HEAD
     }
 
+=======
+}
+>>>>>>> 2467f850399edaf692270b32139c212837d4716e
     // Logout
     public function logout(Request $request)
     {

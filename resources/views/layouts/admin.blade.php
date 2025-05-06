@@ -235,6 +235,7 @@
         <!-- Sidebar Menu -->
         <aside class="sidebar">
             <ul class="sidebar-menu">
+<<<<<<< HEAD
                 <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fas fa-th-large"></i> DASHBOARD</a></li>
                 <li><a href="{{ route('admin.dataCustomer') }}" class="{{ request()->routeIs('admin.dataCustomer') ? 'active' : '' }}"><i class="fas fa-users"></i> DATA CUSTOMER</a></li>
                 <li><a href="{{ route('admin.dataLapangan') }}" class="{{ request()->routeIs('admin.dataLapangan') ? 'active' : '' }}"><i class="fas fa-futbol"></i> DATA LAPANGAN</a></li>
@@ -242,6 +243,39 @@
                 <li><a href="{{ route('admin.laporan') }}" class="{{ request()->routeIs('admin.laporan') ? 'active' : '' }}"><i class="fas fa-chart-bar"></i> LAPORAN</a></li>
                 <li><a href="{{ route('admin.passwordForm') }}" class="{{ request()->routeIs('admin.passwordForm') ? 'active' : '' }}"><i class="fas fa-lock"></i> UBAH PASSWORD</a></li>
                 <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> LOGOUT</a></li>
+=======
+                <li>
+                    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-th-large"></i> DASHBOARD
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.data.customer') }}" class="{{ request()->routeIs('admin.data.customer') ? 'active' : '' }}">
+                        <i class="fas fa-users"></i> DATA CUSTOMER
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.data.lapangan') }}" class="{{ request()->routeIs('admin.data.lapangan') ? 'active' : '' }}">
+                        <i class="fas fa-futbol"></i> DATA LAPANGAN
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.transaksi') }}" class="{{ request()->routeIs('admin.transaksi') ? 'active' : '' }}">
+                        <i class="fas fa-book"></i> TRANSAKSI / BOOK
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.laporan') }}" class="{{ request()->routeIs('admin.laporan') ? 'active' : '' }}">
+                        <i class="fas fa-chart-bar"></i> LAPORAN
+                    </a>
+                </li>
+           
+                <li>
+                    <a href="#" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> LOGOUT
+                    </a>
+                </li>
+>>>>>>> 2467f850399edaf692270b32139c212837d4716e
             </ul>
             
             <div class="footer-text">praktis, mudah, bisa<br>boking dimanapun futzone.</div>
