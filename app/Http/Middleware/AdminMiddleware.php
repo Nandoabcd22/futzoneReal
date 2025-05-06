@@ -10,12 +10,11 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        // Cek jika user login dan memiliki role admin
-        if (Auth::check() && Auth::user()->role == 'admin') {
+        if (Auth::check() && Auth::user()->role === 'admin') {
             return $next($request);
         }
-        
-        // Jika bukan admin, redirect ke login
-        return redirect('/login')->with('error', 'Anda tidak memiliki akses sebagai admin.');
+
+        // Redirect jika bukan admin
+        return redirect('/')->with('error', 'You are not authorized to access the admin area.');
     }
 }

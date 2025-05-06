@@ -44,6 +44,8 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
         Route::get('/membership', [BookingController::class, 'showMembership'])->name('membership');
         Route::get('/event', [BookingController::class, 'showEvent'])->name('event');
         Route::get('/form/{id}', [BookingController::class, 'showForm'])->name('form');
+
+        Route::get('/create', [BookingController::class, 'create'])->name('create');
     });
 });
 
