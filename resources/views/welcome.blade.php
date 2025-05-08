@@ -49,18 +49,19 @@
         <!-- End Navbar -->
         
         <!-- Hero Section -->
-        <section id="hero" class="d-flex align-items-center">
-            <div class="container text-white">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <h3>Welcome To</h3>
-                        <h1 class="display-3 fw-bold mb-4">FutZone</h1>
-                        <p class="lead mb-4">Mudah, Praktis dan anda dapat melihat ketersediaan jadwal, memilih lapangan, serta melakukan pembayaran secara digital tanpa perlu datang langsung ke lokasi.</p>
-                        <a href="#" class="btn btn-success btn-lg" id="heroBookingBtn">Booking</a>
-                    </div>
-                </div>
+<section id="hero" class="d-flex align-items-center justify-content-center">
+    <div class="container text-center text-white">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <h3>Welcome To</h3>
+                <h1 class="display-3 fw-bold mb-4">FutZone</h1>
+                <p class="lead mb-4">Mudah, Praktis dan anda dapat melihat ketersediaan jadwal, memilih lapangan, serta melakukan pembayaran secara digital tanpa perlu datang langsung ke lokasi.</p>
+                <a href="#" class="btn btn-success btn-lg" id="heroBookingBtn">Booking</a>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+
         <!-- End Hero Section -->
         
        <!-- About Section -->

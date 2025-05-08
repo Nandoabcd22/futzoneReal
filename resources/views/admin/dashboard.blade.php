@@ -17,7 +17,7 @@
                 <i class="fas fa-users"></i>
             </div>
         </div>
-        
+
         <div class="dashboard-card card-lapangan">
             <div class="card-info">
                 <h3>15</h3>
@@ -30,7 +30,7 @@
                 <i class="fas fa-exchange-alt"></i>
             </div>
         </div>
-        
+
         <div class="dashboard-card card-transaksi">
             <div class="card-info">
                 <h3>15</h3>
@@ -44,6 +44,6 @@
             </div>
         </div>
     </div>
-    
+
     <!-- You can add additional dashboard content here -->
 @endsection

@@ -31,158 +31,103 @@ body {
     padding: 6px 16px;
 }
 
-    /* Hero Section */
-    #hero {
-        background-image: url("../image/bg1.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-        height: calc(100vh - 70px);
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 0;
-        overflow: hidden; /* Prevents any potential overflow issues */
-    }
+/* Hero Section */
+#hero {
+    background-image: url("../image/bg1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: calc(100vh - 70px);
+    position: relative;
+    display: flex;
+    align-items: center; /* Vertically centers the content */
+    justify-content: center; /* Horizontally centers the content */
+    margin-bottom: 0;
+    overflow: hidden; /* Prevents any potential overflow issues */
+}
 
-    #hero::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
-        z-index: 1;
-    }
+/* Menambahkan layer transparan hitam di atas gambar latar belakang */
+#hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Layer transparan hitam, sesuaikan opasitasnya */
+    z-index: 1;
+}
 
-    #hero .container {
-        position: relative;
-        z-index: 2;
-        text-align: center;
-        max-width: 1000px;
-        padding: 0 20px;
-        animation: fadeIn 1.2s ease-out;
-    }
+/* Pastikan kontainer teks berada di atas background */
+#hero .container {
+    position: relative;
+    z-index: 2;
+    text-align: center; /* Ensures the text inside the container is centered */
+    padding: 0 20px;
+}
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+/* Tampilan teks header */
+#hero h3 {
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #ffffff;
+    letter-spacing: 3px;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+}
 
-    #hero h3 {
-        font-weight: 500;
-        margin-bottom: 10px;
-        color: #ffffff;
-        letter-spacing: 3px;
-        font-size: 1.8rem;
-        text-transform: uppercase;
-        position: relative;
-        display: inline-block;
-    }
+#hero h1 {
+    font-weight: 800;
+    font-size: 6rem;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6);
+    letter-spacing: 4px;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    position: relative;
+}
 
-    #hero h3::after {
-        content: "";
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 2px;
-        background-color: #22c55e;
-    }
+#hero p {
+    max-width: 650px;
+    margin: 0 auto 2.5rem auto;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    color: #f0f0f0;
+    font-weight: 300;
+}
 
-    #hero h1 {
-        font-weight: 800;
-        font-size: 6rem;
-        text-transform: uppercase;
-        text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6);
-        letter-spacing: 4px;
-        color: white;
-        margin-top: 20px;
-        margin-bottom: 30px;
-        position: relative;
-    }
+/* Tombol booking */
+#hero .btn-booking {
+    background-color: #22c55e;
+    color: white;
+    padding: 14px 48px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+    letter-spacing: 1px;
+    border: 2px solid transparent;
+}
 
-    #hero p {
-        max-width: 650px;
-        margin: 0 auto 2.5rem auto;
-        font-size: 1.2rem;
-        line-height: 1.7;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-        color: #f0f0f0;
-        font-weight: 300;
-    }
+#hero .btn-booking:hover {
+    background-color: #16a34a;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.5);
+}
 
-    #hero .btn-booking {
-        background-color: #22c55e;
-        color: white;
-        padding: 14px 48px;
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 1.1rem;
-        text-transform: uppercase;
-        text-decoration: none;
-        display: inline-block;
-        margin-top: 20px;
-        transition: all 0.4s ease;
-        box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
-        letter-spacing: 1px;
-        border: 2px solid transparent;
-    }
+#hero .btn-booking:active {
+    transform: translateY(-2px);
+}
 
-    #hero .btn-booking:hover {
-        background-color: #16a34a;
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(34, 197, 94, 0.5);
-    }
-
-    #hero .btn-booking:active {
-        transform: translateY(-2px);
-    }
-
-    /* Media queries for better responsiveness */
-    @media (max-width: 992px) {
-        #hero h1 {
-            font-size: 5rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        #hero h3 {
-            font-size: 1.5rem;
-        }
-        
-        #hero h1 {
-            font-size: 4rem;
-        }
-        
-        #hero p {
-            font-size: 1.1rem;
-        }
-    }
-
-    @media (max-width: 576px) {
-        #hero h3 {
-            font-size: 1.3rem;
-        }
-        
-        #hero h1 {
-            font-size: 3rem;
-            letter-spacing: 2px;
-        }
-        
-        #hero p {
-            font-size: 1rem;
-            max-width: 100%;
-        }
-        
-        #hero .btn-booking {
-            padding: 12px 36px;
-            font-size: 1rem;
-        }
-    }
 
 /* About Section */
 #about {
@@ -413,423 +358,133 @@ body {
         margin-right: -5px;
     }
 }
-
-    /* Schedule Section Styles */
-    #jadwal-lapangan {
-        padding: 60px 0;
-        background-color: #f8f9fa;
-    }
-    
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 15px;
-    }
-    
-    /* Section Title */
-    .section-title {
-        font-weight: 700;
-        font-size: 30px;
-        text-align: center;
-        margin-bottom: 30px;
-        color: #22c55e;
-        position: relative;
-        padding-bottom: 12px;
-    }
-    
-    .section-title:after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 70px;
-        height: 3px;
-        background-color: #22c55e;
-    }
-    
-    /* Calendar and Legend Container */
-    .calendar-legend-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 20px;
-        margin-bottom: 25px;
-        flex-wrap: wrap;
-    }
-    
-    /* Calendar Container */
-    .calendar-container {
-        background-color: white;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        flex: 1;
-        min-width: 280px;
-        max-width: 450px;
-    }
-    
-    .calendar-header {
-        margin-bottom: 15px;
-    }
-    
-    .calendar-header h4 {
-        font-size: 18px;
-        font-weight: 600;
-        color: #22c55e;
-        margin: 0 0 10px 0;
-    }
-    
-    .filter-date {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .filter-date label {
-        font-weight: 500;
-        color: #555;
-    }
-    
-    .date-picker {
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 14px;
-        color: #333;
-        background-color: white;
-        width: 100%;
-    }
-    
-    .selected-date-display {
-        font-size: 15px;
-        color: #666;
-        margin-top: 8px;
-    }
-    
-    #formatted-date {
-        font-weight: 600;
-        color: #22c55e;
-    }
-    
-    /* Schedule Legend */
-    .schedule-legend {
-        background-color: white;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        flex: 1;
-        min-width: 250px;
-        max-width: 350px;
-    }
-    
-    .legend-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-    
-    .legend-color {
-        display: inline-block;
-        width: 18px;
-        height: 18px;
-        margin-right: 8px;
-        border-radius: 4px;
-    }
-    
-    .legend-color.available {
-        background-color: white;
-        border: 2px solid #22c55e;
-    }
-    
-    .legend-color.booked {
-        background-color: #dc3545;
-    }
-    
-    .legend-text {
-        font-size: 14px;
-        color: #333;
-        font-weight: 500;
-    }
-    
-    /* Table Container */
-    .table-responsive-container {
-        width: 100%;
-        overflow-x: auto;
-    }
-    
-    /* Schedule Table */
-    .table-responsive {
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        background-color: white;
-        width: 100%;
-    }
-    
-    .schedule-table {
-        margin-bottom: 0;
-        border-collapse: separate;
-        border-spacing: 0;
-        width: 100%;
-    }
-    
-    .schedule-table th, 
-    .schedule-table td {
-        text-align: center;
-        padding: 12px 8px;
-        border: 1px solid #e0e7e3;
-        font-size: 14px;
-        vertical-align: middle;
-    }
-    
-    .schedule-table thead th {
-        background-color: #22c55e;
-        color: white;
-        font-weight: 600;
-        border-color: #1c9d4b;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-    
-    .field-name {
-        background-color: #22c55e;
-        color: white;
-        font-weight: 600;
-        white-space: nowrap;
-        position: sticky;
-        left: 0;
-        z-index: 5;
-        border-color: #1c9d4b !important;
-    }
-    
-    /* Time Slots */
-    .time-slot {
-        width: 60px;
-        height: 50px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    
-    .time-slot:hover:not(.booked-cell) {
-        background-color: rgba(34, 197, 94, 0.1);
-    }
-    
-    .time-slot.booked-cell {
-        background-color: #dc3545;
-        color: white;
-    }
-    
-    .booked-info {
-        font-size: 12px;
-        font-weight: 600;
-        color: white;
-    }
-    
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-        .calendar-legend-wrapper {
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .calendar-container,
-        .schedule-legend {
-            min-width: 100%;
-        }
-        
-        .legend-item {
-            margin: 5px 0;
-        }
-    }
-
-    
-/* Schedule Section Styles */
-#jadwal-lapangan {
-    padding: 80px 0;
-    background-color: #f8f9fa;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Section Title */
-.section-title {
-    font-weight: 700;
-    font-size: 32px;
-    position: relative;
-    padding-bottom: 15px;
+  
+/* Center the Jadwal Lapangan section headers and content */
+#jadwal-lapangan h1,
+#jadwal-lapangan h2,
+#jadwal-lapangan .kalender-section {
     text-align: center;
-    margin: 0 0 30px 0;
-    color: #22c55e;
     width: 100%;
+    margin: 0 auto;
 }
 
-.section-title:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 3px;
-    background-color: #22c55e;
-}
-
-/* Calendar Container */
-.calendar-container {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    margin-bottom: 30px;
-    width: 100%;
-    max-width: 1000px;
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.calendar-header h4 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #22c55e;
-    margin: 0;
-}
-
-.filter-date {
-    display: flex;
-    align-items: center;
-}
-
-.filter-date label {
-    margin-right: 10px;
-    font-weight: 500;
-    color: #555;
-}
-
-.date-picker {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    color: #333;
-    background-color: white;
-}
-
-.selected-date-display {
-    font-size: 16px;
-    color: #666;
-    margin-top: 5px;
-}
-
-#formatted-date {
-    font-weight: 600;
-    color: #22c55e;
-}
-
-/* Schedule Legend */
-.schedule-legend {
-    margin-bottom: 30px;
+/* Center the date selection elements */
+#jadwal-lapangan .tanggal-container {
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
+    gap: 10px;
+    margin: 15px auto;
 }
 
-.legend-container {
+/* Center the legend (Tersedia/Terisi) section */
+#jadwal-lapangan .legend-container {
     display: flex;
-    background-color: white;
-    border-radius: 8px;
-    padding: 10px 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 30px;
+    margin: 20px auto;
 }
 
-.legend-item {
+/* Style for each legend item */
+#jadwal-lapangan .legend-item {
     display: flex;
     align-items: center;
-    margin: 0 15px;
+    gap: 8px;
 }
 
-.legend-color {
-    display: inline-block;
+/* Colors for the legend indicators */
+#jadwal-lapangan .tersedia-box {
     width: 20px;
     height: 20px;
-    margin-right: 8px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+#jadwal-lapangan .terisi-box {
+    width: 20px;
+    height: 20px;
+    background-color: #e74c3c;
+}
+
+#jadwal-lapangan .legend-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    min-width: 120px;
+}
+
+#jadwal-lapangan .legend-color {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
     border-radius: 4px;
 }
 
-.legend-color.available {
+#jadwal-lapangan .legend-color.available {
     background-color: white;
     border: 2px solid #22c55e;
+    box-shadow: 0 2px 5px rgba(34, 197, 94, 0.2);
 }
 
-.legend-color.booked {
+#jadwal-lapangan .legend-color.booked {
     background-color: #dc3545;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
 }
 
-.legend-text {
-    font-size: 14px;
+#jadwal-lapangan .legend-text {
+    font-size: 15px;
     color: #333;
     font-weight: 500;
 }
 
-/* Table Container for centering */
-.table-responsive-container {
+/* Table Container */
+#jadwal-lapangan .table-responsive-container {
     width: 100%;
-    display: flex;
-    justify-content: center;
+    overflow-x: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
 /* Schedule Table */
-.table-responsive {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    max-width: 100%;
-    overflow-x: auto;
-}
-
-.schedule-table {
-    margin-bottom: 0;
+#jadwal-lapangan .schedule-table {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
+    background-color: white;
+    margin-bottom: 0;
 }
 
-.schedule-table th, 
-.schedule-table td {
+#jadwal-lapangan .schedule-table th, 
+#jadwal-lapangan .schedule-table td {
     text-align: center;
-    padding: 15px 8px;
-    border: 1px solid #e0e7e3;
+    padding: 16px 10px;
     font-size: 14px;
     vertical-align: middle;
-    position: relative;
+    height: 60px;
+    border: 1px solid #e5e7eb;
 }
 
-.schedule-table thead th {
+#jadwal-lapangan .schedule-table thead th {
     background-color: #22c55e;
     color: white;
     font-weight: 600;
-    border-color: #1c9d4b;
     position: sticky;
     top: 0;
     z-index: 10;
-    padding: 12px 8px;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    border: 1px solid #1ea755;
 }
 
-.field-name {
+#jadwal-lapangan .field-name {
     background-color: #22c55e;
     color: white;
     font-weight: 600;
@@ -837,61 +492,77 @@ body {
     position: sticky;
     left: 0;
     z-index: 5;
-    border-color: #1c9d4b !important;
+    border: 1px solid #1ea755 !important;
     padding: 0 15px;
+    text-align: center;
 }
 
 /* Time Slots */
-.time-slot {
-    width: 60px;
-    height: 50px;
+#jadwal-lapangan .time-slot {
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
+    background-color: #ffffff;
+    min-width: 70px;
+    position: relative;
 }
 
-.time-slot:hover:not(.booked-cell) {
+#jadwal-lapangan .time-slot:hover:not(.booked-cell) {
     background-color: rgba(34, 197, 94, 0.1);
 }
 
-.time-slot.booked-cell {
+#jadwal-lapangan .time-slot.booked-cell {
     background-color: #dc3545;
     color: white;
 }
 
-.booked-info {
-    font-size: 12px;
+#jadwal-lapangan .available-cell {
+    border: 2px solid #22c55e;
+    background-color: rgba(34, 197, 94, 0.05);
+}
+
+#jadwal-lapangan .booked-info {
+    font-size: 13px;
     font-weight: 600;
     color: white;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 992px) {
-    .calendar-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .filter-date {
-        margin-top: 10px;
-    }
-    
-    .schedule-table {
-        font-size: 13px;
-    }
+/* Hover Effect for Available Slots */
+#jadwal-lapangan .time-slot:not(.booked-cell):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(34, 197, 94, 0.15);
+    z-index: 2;
 }
 
+/* Zebra Striping for Table */
+#jadwal-lapangan .schedule-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-    .schedule-legend {
-        flex-wrap: wrap;
+    #jadwal-lapangan .controls-content {
+        flex-direction: column;
     }
     
-    .legend-container {
+    #jadwal-lapangan .date-section,
+    #jadwal-lapangan .legend-section {
+        width: 100%;
+    }
+    
+    #jadwal-lapangan .legend-container {
         flex-wrap: wrap;
         justify-content: center;
     }
     
-    .legend-item {
-        margin: 5px 10px;
+    #jadwal-lapangan .legend-item {
+        margin: 5px;
+        flex-basis: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 992px) {
+    #jadwal-lapangan .schedule-table {
+        min-width: 800px;
     }
 }
 
