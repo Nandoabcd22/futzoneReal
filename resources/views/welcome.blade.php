@@ -15,11 +15,10 @@
  
 
     <body>
-        
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="#">  
                     <h2 class="fw-bold text-success">FutZone</h2>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +35,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#lapangan-tersedia">LAPANGAN</a>
                         </li>
-                        <li class="nav-item">
+                        <li clas    s="nav-item">
                             <a class="nav-link" href="#" id="bookingLink">BOOKING</a>
                         </li>
                     </ul>
@@ -638,5 +637,781 @@ function smoothScrollTo(targetPosition, duration = 800) {
                 }
             });
         </script>
+    
+    {{-- CHATBOX --}}<!-- Add this HTML code in your body section --><!-- Chat Widget -->
+    <div class="futzone-chat-widget">
+      <div class="chat-widget-container">
+        <div class="chat-widget-header">
+          <div class="header-left">
+            <div class="online-indicator"></div>
+            <div class="header-icon">⚽</div>
+            <h4>FutZone AI</h4>
+          </div>
+          <div class="header-actions">
+            <button class="minimize-btn" id="minimizeChat">_</button>
+            <button class="close-btn" id="closeChat">×</button>
+          </div>
+        </div>
+        
+        <div class="chat-widget-body" id="chatMessages">
+          <div class="chat-date-divider">
+            <span>Hari Ini</span>
+          </div>
+          
+          <div class="chat-message bot-message">
+            <div class="message-bubble">
+              <p id="welcomeMessage"></p>
+              <span class="message-time">10:03 AM</span>
+            </div>
+          </div>
+          
+          <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        
+        <div class="quick-replies-container">
+          <div class="quick-replies">
+            <button class="quick-reply-btn" data-message="Cara booking lapangan?"><i class="fas fa-calendar-check"></i> Booking</button>
+            <button class="quick-reply-btn" data-message="Promo"><i class="fas fa-tags"></i> Promo</button>
+            <button class="quick-reply-btn" data-message="Jam operasional"><i class="fas fa-clock"></i> Jam</button>
+            <button class="quick-reply-btn" data-message="Lokasi FutZone"><i class="fas fa-map-marker-alt"></i> Lokasi</button>
+            <button class="quick-reply-btn" data-message="Harga lapangan"><i class="fas fa-money-bill"></i> Harga</button>
+          </div>
+        </div>
+        
+        <div class="chat-widget-footer">
+          <div class="message-input-container">
+            <input type="text" id="messageInput" placeholder="Ketik pesan Anda..." class="message-input">
+          </div>
+          <button class="send-message-btn" id="sendMessage">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="chat-widget-button" id="toggleChat">
+        <div class="chat-icon">
+          <i class="fas fa-comments"></i>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Chat Widget Styles -->
+    <style>
+      .futzone-chat-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .chat-widget-container {
+        width: 350px;
+        height: 450px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transform-origin: bottom right;
+        transform: scale(0);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        border: 3px solid #15803d; /* Added green border */
+      }
+      
+      .chat-widget-container.active {
+        transform: scale(1);
+        opacity: 1;
+      }
+      
+      .chat-widget-header {
+        background: white;
+        color: #333;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .online-indicator {
+        width: 10px;
+        height: 10px;
+        background-color: #10b981;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.5);
+      }
+      
+      .header-icon {
+        font-size: 18px;
+      }
+      
+      .header-left h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 16px;
+        color: #333;
+      }
+      
+      .header-actions {
+        display: flex;
+        gap: 5px;
+      }
+      
+      .header-actions button {
+        background: #f3f4f6;
+        border: none;
+        color: #333;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      
+      .header-actions button:hover {
+        background: #e5e7eb;
+      }
+      
+      .chat-widget-body {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background-color: #f9fafb;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .chat-date-divider {
+        text-align: center;
+        margin: 10px 0;
+        position: relative;
+      }
+      
+      .chat-date-divider:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+        background: #e5e7eb;
+        z-index: 1;
+      }
+      
+      .chat-date-divider span {
+        background: #f9fafb;
+        padding: 0 10px;
+        font-size: 12px;
+        color: #9ca3af;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .chat-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        max-width: 80%;
+      }
+      
+      .bot-message {
+        align-self: flex-start;
+      }
+      
+      .user-message {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+      }
+      
+      .message-bubble {
+        background: white;
+        border-radius: 18px;
+        padding: 10px 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        position: relative;
+      }
+      
+      .bot-message .message-bubble {
+        border-top-left-radius: 4px;
+      }
+      
+      .user-message .message-bubble {
+        background: #dcfce7;
+        border-top-right-radius: 4px;
+      }
+      
+      .message-bubble p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      
+      .message-time {
+        font-size: 10px;
+        color: #9ca3af;
+        display: block;
+        margin-top: 5px;
+        text-align: right;
+      }
+      
+      .typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 10px 15px;
+        background: #f3f4f6;
+        border-radius: 18px;
+        width: fit-content;
+        margin-top: 5px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      
+      .typing-indicator.active {
+        opacity: 1;
+      }
+      
+      .typing-indicator span {
+        width: 6px;
+        height: 6px;
+        background: #9ca3af;
+        border-radius: 50%;
+        display: inline-block;
+        animation: typing 1.5s infinite ease-in-out;
+      }
+      
+      .typing-indicator span:nth-child(1) {
+        animation-delay: 0s;
+      }
+      
+      .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      
+      @keyframes typing {
+        0%, 60%, 100% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-5px);
+        }
+      }
+      
+      .chat-widget-footer {
+        padding: 15px;
+        background: white;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .message-input-container {
+        flex: 1;
+        position: relative;
+        background: #f3f4f6;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+      
+      .message-input {
+        width: 100%;
+        border: none;
+        padding: 10px 15px;
+        background: transparent;
+        outline: none;
+        font-size: 14px;
+      }
+      
+      .send-message-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #15803d;
+        border: none;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      
+      .send-message-btn:hover {
+        background: #166534;
+      }
+      
+      /* New stop button style */
+      .stop-message-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #ef4444;
+        border: none;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      
+      .stop-message-btn:hover {
+        background: #dc2626;
+      }
+      
+      .chat-widget-button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: #15803d;
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        z-index: 9998;
+      }
+      
+      .chat-widget-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      }
+      
+      .chat-icon {
+        font-size: 24px;
+      }
+      
+      /* Quick reply buttons - Fixed at bottom */
+      .quick-replies-container {
+        position: sticky;
+        bottom: 0;
+        background-color: rgba(249, 250, 251, 0.95);
+        padding: 10px;
+        border-top: 1px solid #e5e7eb;
+        z-index: 10;
+      }
+      
+      .quick-replies {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, auto);
+        gap: 6px;
+        max-width: 100%;
+      }
+      
+      .quick-reply-btn {
+        background-color: white;
+        border: 1px solid #15803d;
+        color: #15803d;
+        padding: 6px 8px;
+        border-radius: 16px;
+        font-size: 11px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        white-space: nowrap;
+      }
+      
+      .quick-reply-btn i {
+        font-size: 10px;
+      }
+      
+      .quick-reply-btn:hover {
+        background-color: #dcfce7;
+      }
+      
+      /* Animation for chat button */
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+      }
+      
+      .chat-widget-button {
+        animation: pulse 2s infinite;
+      }
+      
+      /* Responsive styles */
+      @media (max-width: 480px) {
+        .chat-widget-container {
+          width: 100%;
+          height: 100%;
+          border-radius: 0;
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          z-index: 10000;
+        }
+        
+        .chat-widget-button {
+          bottom: 20px;
+          right: 20px;
+        }
+      }
+      
+      /* Disable input during response */
+      .message-input:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+    </style>
+    
+    <!-- JavaScript for Chat Widget -->
+    <script>
+      // Konfigurasi AI Chatbot
+      const chatbotConfig = {
+        // Ganti ini dengan URL API AI Anda
+        apiEndpoint: 'https://api.example.com/v1/chat/completions',
+        // Kunci API Anda (dalam produksi, simpan di server backend, jangan di frontend)
+        apiKey: 'YOUR_API_KEY',
+        // Instruksi sistem untuk mengontrol perilaku dan pengetahuan chatbot
+        systemPrompt: `
+          Anda adalah asisten virtual FutZone, tempat penyewaan lapangan futsal terbaik.
+          
+          Informasi tentang FutZone:
+          - Lokasi: Jl. Tidar No.17, Kloncing, Karangrejo, Kec. Sumbersari, Kabupaten Jember, Jawa Timur 68124
+          - Telepon: 0895-3654-42639
+          - Jam operasional: 07.00 - 23.30 setiap hari (Minggu: 07.00 - 23.00)
+          
+          Peraturan FutZone:
+          - Untuk setiap pemesanan diharapkan register akun kemudian login
+          - Harga sewa lapangan:
+            * Pagi-Siang: Rp 85.000/jam
+            * Sore-Malam: Rp 95.000/jam
+          - Setiap pemesanan diwajibkan melakukan DP 50%
+          - Konformasi pembatalan maksimal 24 jam sebelum bermain, jika lebih maka DP akan hangus
+          - Untuk booking event skala besar minimal dilakukan 1 minggu sebelumnya
+          - Tersedia 7 lapangan: 5 lapangan standar, 2 lapangan rumput vinyl dan lebih lebar
+          
+          Promo dan Membership:
+          - Booking reguler: Setiap 10 kali pemesanan akan mendapatkan gratis sesi 1 jam dengan pilihan lapangan dan waktu bebas
+          - Membership: Berlaku pada minimal 4 kali/jam dalam 1 bulan, konsumen mendapatkan diskon 10% dari total biaya
+          - FutZone tidak menyediakan penyewaan atribut futsal
+          
+          Cara Booking:
+          1. Register dan login di website futzone.id
+          2. Pilih lapangan dan jadwal yang tersedia
+          3. Lakukan pembayaran DP minimal 50%
+          4. Konfirmasi pembayaran via WhatsApp 0895-3654-42639
+          
+          Fasilitas:
+          - Kamar mandi & ruang ganti
+          - Kantin dan area tunggu
+          - Free WiFi
+          - Tempat parkir luas
+          
+          Jawab pertanyaan pelanggan dengan ramah, informatif, dan sesuai konteks percakapan.
+          Jika ada pertanyaan di luar informasi yang tersedia, sarankan untuk menghubungi nomor WhatsApp kami.
+        `,
+        // History untuk menyimpan konteks percakapan
+        conversationHistory: []
+      };
+    
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggleChatBtn = document.getElementById('toggleChat');
+        const chatContainer = document.querySelector('.chat-widget-container');
+        const closeBtn = document.getElementById('closeChat');
+        const minimizeBtn = document.getElementById('minimizeChat');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const chatMessages = document.getElementById('chatMessages');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        
+        // Update tanggal dan waktu sekarang
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateString = now.toLocaleDateString('id-ID', options);
+        
+        // Update tanggal di divider
+        const dateDivider = document.querySelector('.chat-date-divider span');
+        dateDivider.textContent = dateString;
+        
+        // Animasi teks berjalan untuk welcome message
+        const welcomeText = "Selamat datang di FutZone AI! Kami siap membantu Anda menemukan lapangan futsal terbaik. Ada yang bisa kami bantu hari ini?";
+        
+        // Variabel untuk melacak apakah chat sudah pernah dibuka
+        let chatOpened = false;
+        
+        // Variabel untuk mengontrol animasi typing
+        let isTyping = false;
+        let stopTyping = false;
+        let typingAnimation = null;
+        
+        // Fungsi animasi teks dengan kecepatan acak untuk efek lebih alami
+        function animateText(element, text) {
+          return new Promise((resolve) => {
+            // Reset stop flag
+            stopTyping = false;
+            
+            // Set typing flag
+            isTyping = true;
+            
+            // Disable input during typing
+            messageInput.disabled = true;
+            
+            // Change send button to stop button
+            sendMessageBtn.innerHTML = '<i class="fas fa-stop"></i>';
+            sendMessageBtn.classList.remove('send-message-btn');
+            sendMessageBtn.classList.add('stop-message-btn');
+            
+            // Tampilkan indikator loading terlebih dahulu
+            const typingIndicator = document.querySelector('.typing-indicator');
+            typingIndicator.classList.add('active');
+            
+            // Delay sebelum mulai mengetik (simulasi loading)
+            const loadingTimeout = setTimeout(() => {
+              // Sembunyikan indikator loading
+              typingIndicator.classList.remove('active');
+              
+              let index = 0;
+              element.textContent = '';
+              
+              function typeNextChar() {
+                if (index < text.length && !stopTyping) {
+                  // Kecepatan acak untuk efek lebih natural
+                  const speed = Math.random() * 30 + 20; // 20-50ms
+                  
+                  element.textContent += text.charAt(index);
+                  index++;
+                  typingAnimation = setTimeout(typeNextChar, speed);
+                } else {
+                  // Reset typing state
+                  isTyping = false;
+                  
+                  // Re-enable input
+                  messageInput.disabled = false;
+                  
+                  // Change stop button back to send button
+                  sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                  sendMessageBtn.classList.remove('stop-message-btn');
+                  sendMessageBtn.classList.add('send-message-btn');
+                  
+                  // Focus back to input
+                  messageInput.focus();
+                  
+                  resolve();
+                }
+              }
+              
+              typeNextChar();
+            }, 1000); // Loading selama 1 detik
+            
+            // If stop is pressed during loading phase
+            sendMessageBtn.onclick = function() {
+              if (isTyping) {
+                clearTimeout(loadingTimeout);
+                clearTimeout(typingAnimation);
+                stopTyping = true;
+                isTyping = false;
+                
+                // Sembunyikan indikator loading
+                typingIndicator.classList.remove('active');
+                
+                // Re-enable input
+                messageInput.disabled = false;
+                
+                // Change stop button back to send button
+                sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                sendMessageBtn.classList.remove('stop-message-btn');
+                sendMessageBtn.classList.add('send-message-btn');
+                
+                // Focus back to input
+                messageInput.focus();
+                
+                // Reset click handler
+                sendMessageBtn.onclick = sendMessage;
+                
+                resolve();
+              }
+            };
+          });
+        }
+        
+        // Toggle chat widget
+        toggleChatBtn.addEventListener('click', function() {
+          chatContainer.classList.add('active');
+          toggleChatBtn.style.display = 'none'; // Sembunyikan tombol saat chat dibuka
+          
+          // Jika chat belum pernah dibuka sebelumnya
+          if (!chatOpened) {
+            // Animasi typing untuk welcome message
+            animateText(welcomeMessage, welcomeText);
+            chatOpened = true;
+          }
+        });
+        
+        // Close chat widget
+        closeBtn.addEventListener('click', function() {
+          chatContainer.classList.remove('active');
+          // Tampilkan kembali tombol toggle saat chat ditutup
+          toggleChatBtn.style.display = 'flex';
+        });
+        
+        // Minimize chat widget
+        minimizeBtn.addEventListener('click', function() {
+          chatContainer.classList.remove('active');
+          // Tampilkan kembali tombol toggle saat chat diminimize
+          toggleChatBtn.style.display = 'flex';
+        });
+        
+        // Fungsi untuk mendapatkan waktu sekarang
+        function getCurrentTime() {
+          const now = new Date();
+          const hours = now.getHours() % 12 || 12;
+          const minutes = now.getMinutes().toString().padStart(2, '0');
+          const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+          return `${hours}:${minutes} ${ampm}`;
+        }
+        
+        // Fungsi untuk mengirim pesan
+        function sendMessage() {
+          // If currently typing, this function acts as stop button
+          if (isTyping) {
+            stopTyping = true;
+            return;
+          }
+          
+          const messageText = messageInput.value.trim();
+          if (messageText === '') return;
+          
+          // Get current time
+          const timeString = getCurrentTime();
+          
+          // Create user message
+          const userMessage = document.createElement('div');
+          userMessage.className = 'chat-message user-message';
+          userMessage.innerHTML = `
+            <div class="message-bubble">
+              <p>${messageText}</p>
+              <span class="message-time">${timeString}</span>
+            </div>
+          `;
+          
+          // Add message to chat
+          chatMessages.appendChild(userMessage);
+          
+          // Clear input
+          messageInput.value = '';
+          
+          // Scroll to bottom
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          
+          // Dapatkan respons - untuk demo gunakan getDemoResponse
+          const botResponse = getDemoResponse(messageText);
+          
+          // Create bot response element
+          const botMessage = document.createElement('div');
+          botMessage.className = 'chat-message bot-message';
+          const botMessageContent = document.createElement('div');
+          botMessageContent.className = 'message-bubble';
+          
+          const responseText = document.createElement('p');
+          botMessageContent.appendChild(responseText);
+          
+          const timeElement = document.createElement('span');
+          timeElement.className = 'message-time';
+          timeElement.textContent = timeString;
+          botMessageContent.appendChild(timeElement);
+          
+          botMessage.appendChild(botMessageContent);
+          chatMessages.appendChild(botMessage);
+          
+          // Animasi typing untuk respons bot
+          animateText(responseText, botResponse).then(() => {
+            // Scroll to bottom setelah animasi selesai
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          });
+        }
+        
+        // DEMO MODE - Simulasi respons tanpa API
+        function getDemoResponse(userMessage) {
+          userMessage = userMessage.toLowerCase();
+          
+          if (userMessage.includes('booking') || userMessage.includes('pesan') || userMessage.includes('cara')) {
+            return "Untuk booking lapangan di FutZone, silakan ikuti langkah berikut:\n\n1. Register dan login di website kami\n2. Pilih lapangan dan jadwal yang tersedia\n3. Lakukan pembayaran DP minimal 50%\n4. Konfirmasi pembayaran via WhatsApp 0895-3654-42639\n\nPerlu diingat bahwa pembatalan harus dilakukan maksimal 24 jam sebelum jadwal bermain.";
+          }
+          else if (userMessage.includes('harga') || userMessage.includes('biaya') || userMessage.includes('tarif')) {
+            return "Harga sewa lapangan FutZone:\n\n- Pagi-Siang: Rp 85.000/jam\n- Sore-Malam: Rp 95.000/jam\n\nTersedia 7 lapangan (5 standar dan 2 lapangan rumput vinyl yang lebih lebar).";
+          }
+          else if (userMessage.includes('jam') || userMessage.includes('buka') || userMessage.includes('operasional')) {
+            return "FutZone buka setiap hari dengan jadwal berikut:\n\n- Senin - Sabtu: 07.00 - 23.30 WIB\n- Minggu: 07.00 - 23.00 WIB\n\nSilakan booking lebih awal untuk mendapatkan jadwal terbaik!";
+          }
+          else if (userMessage.includes('lokasi') || userMessage.includes('alamat') || userMessage.includes('dimana')) {
+            return "FutZone berlokasi di Jl. Tidar No.17, Kloncing, Karangrejo, Kec. Sumbersari, Kabupaten Jember, Jawa Timur 68124.\n\nUntuk reservasi, silakan hubungi kami di 0895-3654-42639.";
+          }
+          else if (userMessage.includes('promo') || userMessage.includes('diskon') || userMessage.includes('membership')) {
+            return "Promo FutZone:\n\n1. Booking reguler: Setiap 10 kali pemesanan mendapatkan gratis 1 jam\n2. Membership: Minimal 4 jam/bulan dapatkan diskon 10% untuk semua pemesanan";
+          }
+          else {
+            return "Terima kasih telah menghubungi FutZone. Ada yang bisa kami bantu terkait pemesanan lapangan futsal? Untuk informasi lebih lanjut, silakan hubungi kami di WhatsApp 0895-3654-42639.";
+          }
+        }
+        
+        // Send message on button click
+        sendMessageBtn.addEventListener('click', sendMessage);
+        
+        // Send message on Enter key
+        messageInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter' && !isTyping) {
+            sendMessage();
+          }
+        });
+        
+        // Quick reply buttons
+        const quickReplyButtons = document.querySelectorAll('.quick-reply-btn');
+        quickReplyButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            // Only proceed if not currently typing
+            if (!isTyping) {
+              const message = this.getAttribute('data-message');
+              messageInput.value = message;
+              sendMessage();
+            }
+          });
+        });
+        
+        // Selalu tampilkan toggle button saat halaman dimuat
+        toggleChatBtn.style.display = 'flex';
+      });
+    </script>
     </body>
 </html>
