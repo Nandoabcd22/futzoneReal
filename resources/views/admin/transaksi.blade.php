@@ -1,4 +1,3 @@
-
 <!-- resources/views/admin/transaksi.blade.php -->
 @extends('layouts.admin')
 
@@ -18,25 +17,92 @@
                         <th>Tanggal</th>
                         <th>Waktu</th>
                         <th>Status</th>
+                        <th>Bukti Pembayaran</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Sample data, replace with actual data from database -->
+                    @foreach($bookings as $booking)
                     <tr>
-                        <td>1</td>
-                        <td>John Doe</td>
-                        <td>Lapangan A</td>
-                        <td>21-04-2025</td>
-                        <td>19:00 - 21:00</td>
-                        <td><span class="badge bg-warning">Pending</span></td>
+                        <td>{{ $booking->id }}</td>
+                        <td>{{ $booking->customer?->name ?? 'N/A' }}</td>
+                        <td>{{ $booking->field?->nama ?? 'N/A' }}</td>
+                        <td>{{ $booking->tanggal ? $booking->tanggal->format('d-m-Y') : 'N/A' }}</td>
                         <td>
-                            <button class="btn btn-sm btn-success">Konfirmasi</button>
-                            <button class="btn btn-sm btn-danger">Tolak</button>
+                            {{ $booking->jam_mulai ? \Carbon\Carbon::parse($booking->jam_mulai)->format('H:i') : 'N/A' }} - 
+                            {{ $booking->jam_selesai ? \Carbon\Carbon::parse($booking->jam_selesai)->format('H:i') : 'N/A' }}
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ $booking->status == 'pending' ? 'warning' : ($booking->status == 'confirmed' ? 'success' : 'danger') }}">
+                                {{ ucfirst($booking->status ?? 'N/A') }}
+                            </span>
+                        </td>
+                        <td>
+                            @if($booking->payment_proof)
+                                <a href="{{ Storage::url($booking->payment_proof) }}" target="_blank" class="btn btn-sm btn-info">Lihat Bukti</a>
+                            @else
+                                Belum Ada
+                            @endif
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" 
+                                    data-bs-target="#editBookingStatusModal{{ $booking->id }}">
+                                Edit Status
+                            </button>
                         </td>
                     </tr>
+
+                    <!-- Edit Booking Status Modal -->
+                    <div class="modal fade" id="editBookingStatusModal{{ $booking->id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Status Booking #{{ $booking->id }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form action="{{ route('admin.booking.update.status', $booking->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="status{{ $booking->id }}" class="form-label">Status Booking</label>
+                                            <select class="form-select" id="status{{ $booking->id }}" name="status" required>
+                                                <option value="pending" {{ $booking->status === 'pending' ? 'selected' : '' }}>
+                                                    Pending
+                                                </option>
+                                                <option value="confirmed" {{ $booking->status === 'confirmed' ? 'selected' : '' }}>
+                                                    Confirmed
+                                                </option>
+                                                <option value="cancelled" {{ $booking->status === 'cancelled' ? 'selected' : '' }}>
+                                                    Cancelled
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Show validation errors in modals if any
+    @if($errors->any())
+        var errorMessages = '';
+        @foreach($errors->all() as $error)
+            errorMessages += '{{ $error }}\n';
+        @endforeach
+        alert(errorMessages);
+    @endif
+</script>
+@endpush

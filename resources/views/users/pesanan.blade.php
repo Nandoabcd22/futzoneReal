@@ -7,7 +7,7 @@
         gap: 10px;
         margin-bottom: 20px;
     }
-    
+
     .customer-tab {
         background-color: #ffc107;
         color: white;
@@ -17,11 +17,11 @@
         cursor: pointer;
         font-weight: bold;
     }
-    
+
     .customer-tab.active {
         background-color: #28a745;
     }
-    
+
     .order-status {
         background-color: #ffc107;
         color: white;
@@ -31,7 +31,7 @@
         font-weight: bold;
         margin-bottom: 20px;
     }
-    
+
     .orders-table {
         width: 100%;
         border-collapse: collapse;
@@ -40,24 +40,24 @@
         border-radius: 10px;
         overflow: hidden;
     }
-    
+
     .orders-table th, .orders-table td {
         border: 1px solid #dee2e6;
         padding: 12px;
         text-align: center;
     }
-    
+
     .orders-table th {
         background-color: #f8f9fa;
         color: #333;
     }
-    
+
     .note {
         color: #333;
         margin-top: 10px;
         margin-bottom: 20px;
     }
-    
+
     .history-tab {
         background-color: #ffc107;
         color: white;
@@ -68,11 +68,11 @@
         font-weight: bold;
         margin-bottom: 20px;
     }
-    
+
     .tab-content {
         display: none;
     }
-    
+
     .tab-content.active {
         display: block;
     }
@@ -83,14 +83,13 @@
 <h3 class="mb-3">Pesanan / Riwayat</h3>
 
 <div class="customer-tabs">
-    <button class="customer-tab active" id="reguler-tab">CUSTOMER REGULER</button>
-    <button class="customer-tab" id="membership-tab">CUSTOMER MEMBERSHIP</button>
-    <button class="customer-tab" id="event-tab">CUSTOMER EVENT</button>
+    <button class="customer-tab active" data-type="reguler">CUSTOMER REGULER</button>
+    <button class="customer-tab" data-type="membership">CUSTOMER MEMBERSHIP</button>
+    <button class="customer-tab" data-type="event">CUSTOMER EVENT</button>
 </div>
 
-<div id="pending-orders">
+<div id="pending-orders" class="tab-content active">
     <div class="order-status">SEDANG DIPESAN</div>
-    
     <div class="table-responsive">
         <table class="orders-table">
             <thead>
@@ -105,42 +104,17 @@
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody>
-                @if(isset($pendingOrders) && count($pendingOrders) > 0)
-                    @foreach($pendingOrders as $index => $order)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $order->user_name }}</td>
-                        <td>{{ $order->date_formatted }}</td>
-                        <td>{{ $order->field_name }}</td>
-                        <td>{{ $order->duration }} jam</td>
-                        <td>{{ $order->time_start }} - {{ $order->time_end }}</td>
-                        <td>{{ $order->price_formatted }}</td>
-                        <td>{{ $order->status }}</td>
-                    </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td>1</td>
-                        <td>Cristiano Ronaldo</td>
-                        <td>21-04-2025</td>
-                        <td>Lapangan 2</td>
-                        <td>2 jam</td>
-                        <td>15.00 - 17.00</td>
-                        <td>Rp 300.000</td>
-                        <td>Menunggu Konfirmasi</td>
-                    </tr>
-                @endif
+            <tbody id="pending-orders-body">
+                <tr><td colspan="8" class="text-center">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
-    
-    <p class="note">NB: harap tunggu validasi oleh admin max 1x24 jam</p>
+    <p class="note">NB: Harap tunggu validasi oleh admin max 1x24 jam</p>
 </div>
 
 <button class="history-tab" id="history-button">RIWAYAT</button>
 
-<div id="completed-orders">
+<div id="completed-orders" style="display: none;">
     <div class="table-responsive">
         <table class="orders-table">
             <thead>
@@ -155,52 +129,8 @@
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody>
-                @if(isset($completedOrders) && count($completedOrders) > 0)
-                    @foreach($completedOrders as $index => $order)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $order->user_name }}</td>
-                        <td>{{ $order->date_formatted }}</td>
-                        <td>{{ $order->field_name }}</td>
-                        <td>{{ $order->duration }} jam</td>
-                        <td>{{ $order->time_start }} - {{ $order->time_end }}</td>
-                        <td>{{ $order->price_formatted }}</td>
-                        <td>{{ $order->status }}</td>
-                    </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td>1</td>
-                        <td>Cristiano Ronaldo</td>
-                        <td>18-04-2025</td>
-                        <td>Lapangan 1</td>
-                        <td>2 jam</td>
-                        <td>09.00 - 11.00</td>
-                        <td>Rp 300.000</td>
-                        <td>Selesai</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Cristiano Ronaldo</td>
-                        <td>15-04-2025</td>
-                        <td>Lapangan 3</td>
-                        <td>3 jam</td>
-                        <td>12.00 - 15.00</td>
-                        <td>Rp 450.000</td>
-                        <td>Selesai</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Cristiano Ronaldo</td>
-                        <td>10-04-2025</td>
-                        <td>Lapangan 5</td>
-                        <td>2 jam</td>
-                        <td>17.00 - 19.00</td>
-                        <td>Rp 350.000</td>
-                        <td>Selesai</td>
-                    </tr>
-                @endif
+            <tbody id="completed-orders-body">
+                <tr><td colspan="8" class="text-center">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -209,51 +139,91 @@
 
 @section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Customer type tabs
-        const regulerTab = document.getElementById('reguler-tab');
-        const membershipTab = document.getElementById('membership-tab');
-        const eventTab = document.getElementById('event-tab');
-        
-        regulerTab.addEventListener('click', function() {
-            regulerTab.classList.add('active');
-            membershipTab.classList.remove('active');
-            eventTab.classList.remove('active');
-            
-            // You can add AJAX request here to load data based on the selected tab
-            // For example, to load regular customer data
-            // loadOrders('regular');
-        });
-        
-        membershipTab.addEventListener('click', function() {
-            membershipTab.classList.add('active');
-            regulerTab.classList.remove('active');
-            eventTab.classList.remove('active');
-            
-            // loadOrders('membership');
-        });
-        
-        eventTab.addEventListener('click', function() {
-            eventTab.classList.add('active');
-            regulerTab.classList.remove('active');
-            membershipTab.classList.remove('active');
-            
-            // loadOrders('event');
-        });
-        
-        // History toggle function
-        const historyButton = document.getElementById('history-button');
-        const completedOrders = document.getElementById('completed-orders');
-        
-        historyButton.addEventListener('click', function() {
-            if (completedOrders.style.display === 'none') {
-                completedOrders.style.display = 'block';
-                historyButton.textContent = 'SEMBUNYIKAN RIWAYAT';
-            } else {
-                completedOrders.style.display = 'none';
-                historyButton.textContent = 'RIWAYAT';
-            }
+document.addEventListener('DOMContentLoaded', function() {
+    const customerTabs = document.querySelectorAll('.customer-tab');
+    const historyButton = document.getElementById('history-button');
+    const completedOrdersDiv = document.getElementById('completed-orders');
+
+    let currentType = 'reguler';
+    loadOrders(currentType);
+
+    customerTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            customerTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentType = this.dataset.type;
+            loadOrders(currentType);
         });
     });
+
+    historyButton.addEventListener('click', () => {
+        const isVisible = completedOrdersDiv.style.display === 'block';
+        completedOrdersDiv.style.display = isVisible ? 'none' : 'block';
+        historyButton.textContent = isVisible ? 'RIWAYAT' : 'SEMBUNYIKAN RIWAYAT';
+    });
+
+    function loadOrders(customerType) {
+        document.getElementById('pending-orders-body').innerHTML = '<tr><td colspan="8" class="text-center">Memuat data...</td></tr>';
+        document.getElementById('completed-orders-body').innerHTML = '<tr><td colspan="8" class="text-center">Memuat data...</td></tr>';
+
+        fetch(`/api/orders/${customerType}`)
+            .then(res => res.ok ? res.json() : Promise.reject('Gagal memuat data'))
+            .then(data => {
+                updateTable('pending-orders-body', data.pendingOrders);
+                updateTable('completed-orders-body', data.completedOrders);
+            })
+            .catch(() => {
+                document.getElementById('pending-orders-body').innerHTML = '<tr><td colspan="8" class="text-center">Gagal memuat data</td></tr>';
+                document.getElementById('completed-orders-body').innerHTML = '<tr><td colspan="8" class="text-center">Gagal memuat data</td></tr>';
+            });
+    }
+
+    function updateTable(tableId, orders) {
+        const tableBody = document.getElementById(tableId);
+        if (!orders || orders.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="8" class="text-center">Tidak ada data</td></tr>`;
+            return;
+        }
+
+        tableBody.innerHTML = orders.map((order, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${order.user_name}</td>
+                <td>${formatDate(order.booking_date)}</td>
+                <td>${order.field_name}</td>
+                <td>${order.duration} jam</td>
+                <td>${formatTime(order.start_time)} - ${formatTime(order.end_time)}</td>
+                <td>Rp ${formatNumber(order.total_price)}</td>
+                <td>${formatStatus(order.status)}</td>
+            </tr>
+        `).join('');
+    }
+
+    function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        return `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
+    }
+
+    function formatTime(timeStr) {
+        return timeStr?.substring(0, 5) ?? '-';
+    }
+
+    function formatNumber(num) {
+        return num.toLocaleString('id-ID');
+    }
+
+    function formatStatus(status) {
+        switch(status) {
+            case 'pending':
+                return 'Menunggu Konfirmasi';
+            case 'completed':
+                return 'Selesai';
+            case 'cancelled':
+                return 'Dibatalkan';
+            default:
+                return status;
+        }
+    }
+});
 </script>
 @endsection

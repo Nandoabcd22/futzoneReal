@@ -2,70 +2,71 @@
 
 namespace App\Models;
 
-use Faker\Provider\ar_EG\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Booking extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'user_id',
-        'field_id',
-        'regular_booking_id',
-        'booking_date',
-        'time_start',
-        'duration',
-        'price',
+        'lapangan_id',
+        'tanggal',
+        'jam_mulai',
+        'jam_selesai',
+        'total_harga',
         'status',
-        'payment_id'
+        'jenis_booking',
+        'payment_proof',
+        'payment_bank',
+        'payment_date'
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
-        'booking_date' => 'date',
-        'price' => 'float',
+        'tanggal' => 'date',
+        'jam_mulai' => 'datetime:H:i:s',
+        'jam_selesai' => 'datetime:H:i:s',
+        'total_harga' => 'decimal:2',
+        'jenis_booking' => 'string',
+        'payment_date' => 'datetime'
     ];
 
     /**
-     * Get the user that owns the booking.
+     * Get the start time.
      */
+    protected function jamMulai(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? date('H:i:s', strtotime($value)) : null,
+            set: fn ($value) => $value ? date('H:i:s', strtotime($value)) : null
+        );
+    }
+
+    /**
+     * Get the end time.
+     */
+    protected function jamSelesai(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? date('H:i:s', strtotime($value)) : null,
+            set: fn ($value) => $value ? date('H:i:s', strtotime($value)) : null
+        );
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the field that is booked.
-     */
     public function field()
     {
-        return $this->belongsTo(Field::class);
+        return $this->belongsTo(Lapangan::class, 'lapangan_id');
     }
 
-    /**
-     * Get the regular booking that this booking belongs to.
-     */
-    public function regularBooking()
+    public function customer()
     {
-        return $this->belongsTo(RegularBooking::class);
-    }
-
-    /**
-     * Get the payment associated with this booking.
-     */
-    public function payment()
-    {
-        return $this->belongsTo(Payment::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

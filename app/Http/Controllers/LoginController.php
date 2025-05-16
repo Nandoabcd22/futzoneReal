@@ -36,16 +36,16 @@ class LoginController extends Controller
             // Pengecekan khusus jika email adalah 'sofyanpriyaachmadi@gmail.com'
             if (Auth::user()->email === 'sofyanpriyaachmadi@gmail.com') {
                 // Jika email sama, arahkan ke halaman admin
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.dashboard')->with('login_success', true);
             }
             
             // Check user role dan redirect sesuai dengan role-nya
             if (Auth::user()->role === 'admin') {
                 // Redirect ke halaman admin
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.dashboard')->with('login_success', true);
             } else { 
                 // Redirect ke halaman user jika bukan admin
-                return redirect()->route('user.profile');
+                return redirect()->route('user.profile')->with('login_success', true);
             }
         }
         

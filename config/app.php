@@ -165,9 +165,13 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
+        // Add Intervention Image Service Provider
+        App\Providers\ImageServiceProvider::class,
+        //Intervention\Image\ImageServiceProvider::class,
     ])->toArray(),
 
     /*

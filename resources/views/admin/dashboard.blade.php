@@ -7,7 +7,7 @@
     <div class="dashboard-cards">
         <div class="dashboard-card card-customer">
             <div class="card-info">
-                <h3>15</h3>
+                <h3>{{ $customerCount }}</h3>
                 <p>Data Customer</p>
                 <div class="more-info">
                     <a href="{{ route('admin.data.customer') }}">more info »</a>
@@ -20,7 +20,7 @@
 
         <div class="dashboard-card card-lapangan">
             <div class="card-info">
-                <h3>15</h3>
+                <h3>{{ $lapanganCount }}</h3>
                 <p>Data Lapangan</p>
                 <div class="more-info">
                     <a href="{{ route('admin.data.lapangan') }}">more info »</a>
@@ -33,7 +33,7 @@
 
         <div class="dashboard-card card-transaksi">
             <div class="card-info">
-                <h3>15</h3>
+                <h3>{{ $transactionCount }}</h3>
                 <p>Data Transaksi / Boking</p>
                 <div class="more-info">
                     <a href="{{ route('admin.transaksi') }}">more info »</a>

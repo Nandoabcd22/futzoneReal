@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Booking;
+use App\Models\Lapangan;
 
 class UserController extends Controller
 {
@@ -59,19 +60,16 @@ class UserController extends Controller
     public function jadwal(Request $request)
     {
         $date = $request->input('date', date('Y-m-d'));
-        
-        // In a real application, you would fetch bookings from the database
-        // For this example, we'll create some sample data
-        $bookings = [
-            1 => [9 => true, 10 => true],  // Lapangan 1 booked at 9:00 and 10:00
-            2 => [11 => true, 12 => true], // Lapangan 2 booked at 11:00 and 12:00
-            3 => [12 => true, 13 => true, 14 => true], // Lapangan 3 booked at 12:00, 13:00, and 14:00
-            4 => [8 => true, 9 => true, 14 => true, 15 => true], // Lapangan 4
-            5 => [15 => true, 16 => true, 17 => true], // Lapangan 5
-            7 => [8 => true, 9 => true, 10 => true, 15 => true, 16 => true], // Lapangan 7
-        ];
 
-        return view('users.jadwal', compact('bookings', 'date'));
+        $bookings = Booking::with(['user', 'field'])
+            ->whereDate('tanggal', $date)
+            ->where('status', 'confirmed')
+            ->orderBy('jam_mulai')
+            ->get();
+
+        $fields = Lapangan::orderBy('id')->get();
+
+        return view('users.jadwal', compact('bookings', 'fields', 'date'));
     }
 
     /**

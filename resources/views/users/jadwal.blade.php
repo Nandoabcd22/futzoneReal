@@ -8,8 +8,6 @@
         padding: 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-bottom: 30px;
-        position: relative;
-        z-index: 2;
     }
     
     .calendar-header {
@@ -17,113 +15,201 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
+        background-color: #28a745;
+        padding: 15px;
+        border-radius: 10px;
+        color: white;
     }
     
+    .calendar-header h4 {
+        margin: 0;
+        font-weight: bold;
+    }
+
     .field-schedule {
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 1px;
     }
     
     .field-schedule th, .field-schedule td {
-        border: 1px solid #28a745;
+        border: 1px solid #e0e0e0;
         text-align: center;
-        padding: 10px;
+        padding: 8px 4px;
         position: relative;
+        height: 70px;
+        width: 80px;
+        vertical-align: middle;
     }
     
-    .field-schedule th {
+    .field-schedule thead th {
         background-color: #28a745;
         color: white;
+        font-weight: bold;
+        height: auto;
+        padding: 12px 4px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
     
     .field-name {
         background-color: #28a745;
         color: white;
         font-weight: bold;
+        width: 120px;
+        position: sticky;
+        left: 0;
+        z-index: 20;
+    }
+
+    .field-name.header-corner {
+        z-index: 30;
     }
     
     .booking-cell {
         cursor: pointer;
-        position: relative;
+        transition: all 0.2s ease;
     }
     
-    .booking-cell:hover {
-        background-color: rgba(40, 167, 69, 0.2);
+    .booking-cell.available:hover {
+        background-color: rgba(40, 167, 69, 0.1);
+        transform: scale(1.02);
     }
     
     .booked {
         background-color: #dc3545;
         color: white;
+        font-size: 12px;
+        padding: 8px;
+        border-radius: 4px;
     }
     
     .available {
-        background-color: #f8f9fa;
-        color: black;
+        background-color: #ffffff;
     }
     
     .filter-date {
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
+        gap: 15px;
     }
     
     .date-picker {
         padding: 8px 15px;
-        border: 1px solid #ced4da;
+        border: 2px solid #ffffff;
         border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-weight: bold;
     }
 
-    /* Add styling for the availability status outside the table */
+    .date-picker::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+
     .status-legend {
-        margin-bottom: 20px;
+        margin: 0 0 20px;
         display: flex;
         gap: 15px;
         align-items: center;
+        padding: 10px 15px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
     }
 
     .status-label {
         display: inline-flex;
         align-items: center;
-        padding: 5px 10px;
-        font-size: 14px;
-        font-weight: bold;
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 500;
+        border-radius: 20px;
     }
 
     .available-label {
         background-color: #28a745;
         color: white;
-        border-radius: 5px;
     }
 
     .booked-label {
         background-color: #dc3545;
         color: white;
-        border-radius: 5px;
+    }
+
+    .booker-name {
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: white;
+    }
+
+    .booking-time {
+        font-size: 11px;
+        opacity: 0.9;
+        color: white;
+    }
+
+    .table-responsive {
+        max-height: 700px;
+        overflow: auto;
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
+    }
+
+    /* Custom scrollbar */
+    .table-responsive::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #28a745;
+        border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: #218838;
+    }
+
+    @media (max-width: 768px) {
+        .calendar-header {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-date {
+            width: 100%;
+            justify-content: center;
+        }
     }
 </style>
 @endsection
 
 @section('content')
-<h3 class="mb-3">Jadwal Lapangan</h3>
-
 <div class="calendar-container">
     <div class="calendar-header">
-        <h4>Kalender</h4>
+        <h4>Jadwal Lapangan</h4>
         <div class="filter-date">
-            <label>Tanggal:</label>
-            <!-- Ensure the date picker value is set correctly based on the selected date -->
-            <input type="date" class="date-picker" id="date-picker" value="{{ request('date', date('Y-m-d')) }}">
+            <label>Pilih Tanggal:</label>
+            <input type="date" class="date-picker" id="date-picker" value="{{ $date }}">
         </div>
     </div>
 
-    <!-- Availability Status Legend -->
     <div class="status-legend">
         <div class="status-label available-label">
-            <span>✔ Tersedia</span>
+            <span>✓ Tersedia</span>
         </div>
         <div class="status-label booked-label">
-            <span>❌ Terisi</span>
+            <span>✕ Terisi</span>
         </div>
     </div>
     
@@ -131,31 +217,42 @@
         <table class="field-schedule">
             <thead>
                 <tr>
-                    <th></th>
-                    @for ($j = 7; $j <= 23; $j++) <!-- Jam sampai 23:00 -->
-                        <th>{{ $j }}.00</th>
+                    <th class="field-name header-corner">Lapangan</th>
+                    @for ($j = 7; $j <= 22; $j++)
+                        <th>{{ sprintf("%02d", $j) }}:00</th>
                     @endfor
                 </tr>
             </thead>
             <tbody>
-                @for ($i = 1; $i <= 7; $i++)
+                @foreach($fields as $field)
                 <tr>
-                    <td class="field-name">Lapangan {{ $i }}</td>
-                    @for ($j = 7; $j <= 23; $j++) <!-- Jam sampai 23:00 -->
+                    <td class="field-name">{{ $field->nama }}</td>
+                    @for ($hour = 7; $hour <= 22; $hour++)
                         @php
-                            $isBooked = isset($bookings[$i][$j]);
-                            $statusClass = $isBooked ? 'booked-label' : 'available-label';
-                            $statusText = $isBooked ? 'Terisi' : 'Tersedia';
-                            $teamName = $isBooked ? $bookings[$i][$j] : ''; // Display team name if booked
+                            $booking = $bookings->first(function($booking) use ($field, $hour) {
+                                $startHour = (int)date('H', strtotime($booking->jam_mulai));
+                                $endHour = (int)date('H', strtotime($booking->jam_selesai));
+                                return $booking->lapangan_id == $field->id && 
+                                       $hour >= $startHour && 
+                                       $hour < $endHour;
+                            });
+                            $isBooked = $booking !== null;
                         @endphp
-                        <td class="booking-cell {{ $isBooked ? 'booked' : 'available' }}" data-field="{{ $i }}" data-time="{{ $j }}">
-                            @if($teamName)
-                                <div class="team-name">{{ $teamName }}</div> <!-- Display team name if booked -->
+                        <td class="booking-cell {{ $isBooked ? 'booked' : 'available' }}" 
+                            data-field="{{ $field->id }}" 
+                            data-time="{{ $hour }}"
+                            @if($isBooked) title="{{ $booking->user->name }} ({{ date('H:i', strtotime($booking->jam_mulai)) }} - {{ date('H:i', strtotime($booking->jam_selesai)) }})" @endif>
+                            @if($isBooked)
+                                <div class="booker-name">{{ $booking->user->name }}</div>
+                                <div class="booking-time">
+                                    {{ date('H:i', strtotime($booking->jam_mulai)) }} - 
+                                    {{ date('H:i', strtotime($booking->jam_selesai)) }}
+                                </div>
                             @endif
                         </td>
                     @endfor
                 </tr>
-                @endfor
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -165,23 +262,19 @@
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize date picker
         const datePicker = document.getElementById('date-picker');
+        
         datePicker.addEventListener('change', function() {
-            const selectedDate = this.value;  // Get the selected date
-            const baseUrl = window.location.origin; // Get the base URL of the current page
-            window.location.href = baseUrl + '/jadwal-lapangan?date=' + selectedDate; // Redirect to update the schedule with the selected date
+            const selectedDate = this.value;
+            window.location.href = '{{ route("user.jadwal") }}?date=' + selectedDate;
         });
         
-        // Make booking cells clickable
         const bookingCells = document.querySelectorAll('.booking-cell.available');
         bookingCells.forEach(cell => {
             cell.addEventListener('click', function() {
                 const field = this.getAttribute('data-field');
                 const time = this.getAttribute('data-time');
-                const date = document.getElementById('date-picker').value;
-                
-                // Redirect to booking page with parameters
+                const date = datePicker.value;
                 window.location.href = '{{ route("user.booking.create") }}?field=' + field + '&time=' + time + '&date=' + date;
             });
         });

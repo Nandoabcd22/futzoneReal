@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBookingsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,12 +16,17 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('time_slot_id')->constrained()->onDelete('cascade');
+            $table->foreignId('field_id')->constrained()->onDelete('cascade');
+            $table->string('booking_type');
             $table->date('booking_date');
             $table->time('start_time');
             $table->time('end_time');
+            $table->integer('duration');
             $table->decimal('total_price', 10, 2);
-            $table->enum('status', ['pending', 'confirmed', 'canceled'])->default('pending');
+            $table->decimal('dp_amount', 10, 2);
+            $table->string('payment_method');
+            $table->string('payment_proof');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
@@ -35,4 +40,4 @@ class CreateBookingsTable extends Migration
     {
         Schema::dropIfExists('bookings');
     }
-}
+};

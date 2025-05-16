@@ -3,108 +3,232 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\RegularBooking;
-use App\Models\Field;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Booking;
 use App\Models\TimeSlot;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use App\Models\Lapangan;
 
-class RegularBookingController extends Controller
+class RegulerBookingController extends Controller
 {
-    public function index()
+    public function showBookingForm()
     {
-        $fields = Field::all();
+        // Fetch all active fields
+        $fields = Lapangan::where('status', 'tersedia')->get();
+        
+        // Debug: Log image paths
+        \Log::info('Fields Debug', [
+            'fields_count' => $fields->count(),
+            'fields_data' => $fields->map(function($field) {
+                return [
+                    'id' => $field->id,
+                    'nama' => $field->nama,
+                    'image' => $field->image,
+                    'full_image_path' => $field->image ? asset('storage/' . $field->image) : null
+                ];
+            })
+        ]);
+        
         return view('users.booking.reguler', compact('fields'));
     }
 
-    public function showBookingForm()
+    public function processBooking(Request $request)
     {
-        return view('users.booking.form');
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'field_id' => 'required|exists:fields,id',
-            'day_of_week' => 'required|integer|between:1,7',
-            'start_date' => 'required|date|after_or_equal:today',
-            'time_start' => 'required',
-            'duration' => 'required|integer|min:1|max:5',
-            'duration_months' => 'required|integer|min:1|max:12',
-        ]);
-
-        $startDate = Carbon::parse($validated['start_date']);
-        $endDate = $startDate->copy()->addMonths($validated['duration_months'])->subDay();
-
-        $regularBooking = RegularBooking::create([
-            'user_id' => Auth::id(),
-            'day_of_week' => $validated['day_of_week'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $endDate,
-            'time_start' => $validated['time_start'],
-            'duration' => $validated['duration'],
-            'duration_months' => $validated['duration_months'],
-            'status' => 'pending',
-        ]);
-
-        $this->generateIndividualBookings($regularBooking, $validated['field_id']);
-
-        return redirect()->route('user.pesanan')->with('success', 'Booking reguler berhasil dibuat! Silakan lakukan pembayaran untuk mengkonfirmasi.');
-    }
-
-    private function getAvailableTimeSlots()
-    {
-        return [
-            '08:00' => '08:00',
-            '09:00' => '09:00',
-            '10:00' => '10:00',
-            '11:00' => '11:00',
-            '12:00' => '12:00',
-            '13:00' => '13:00',
-            '14:00' => '14:00',
-            '15:00' => '15:00',
-            '16:00' => '16:00',
-            '17:00' => '17:00',
-            '18:00' => '18:00',
-            '19:00' => '19:00',
-            '20:00' => '20:00',
-            '21:00' => '21:00',
-            '22:00' => '22:00',
-        ];
-    }
-
-    private function generateIndividualBookings($regularBooking, $fieldId)
-    {
-        $startDate = Carbon::parse($regularBooking->start_date);
-        $endDate = Carbon::parse($regularBooking->end_date);
-        $dayOfWeek = $regularBooking->day_of_week;
-
-        $currentDate = $startDate->copy();
-        while ($currentDate->dayOfWeek != $dayOfWeek % 7) { // Sesuaikan karena Carbon: 0=minggu
-            $currentDate->addDay();
-        }
-
-        while ($currentDate->lte($endDate)) {
-            Booking::create([
-                'user_id' => $regularBooking->user_id,
-                'field_id' => $fieldId,
-                'regular_booking_id' => $regularBooking->id,
-                'booking_date' => $currentDate->format('Y-m-d'),
-                'time_start' => $regularBooking->time_start,
-                'duration' => $regularBooking->duration,
-                'status' => 'pending',
-                'price' => $this->calculatePrice($fieldId, $regularBooking->duration),
+        try {
+            // Validasi data booking
+            $validated = $request->validate([
+                'lapangan_id' => 'required|integer',
+                'jenis_booking' => 'required|in:reguler,membership,event',
+                'tanggal' => 'required|date',
+                'waktu' => 'required',
+                'durasi' => 'required|integer|min:1|max:12',
             ]);
 
-            $currentDate->addWeeks(1);
+            // Check if the time slot is available
+            $isAvailable = $this->checkTimeSlotAvailability(
+                $validated['lapangan_id'],
+                $validated['tanggal'],
+                $validated['waktu'],
+                $validated['durasi']
+            );
+
+            if (!$isAvailable) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Jadwal sudah dipesan. Silakan pilih waktu lain.'
+                ], 422);
+            }
+
+            // Calculate start and end times
+            $startTime = $validated['waktu'];
+            $endTime = date('H:i:s', strtotime($startTime . ' + ' . $validated['durasi'] . ' hours'));
+
+            // Get the field price
+            $field = Lapangan::findOrFail($validated['lapangan_id']);
+            $hour = (int)date('H', strtotime($startTime));
+            $price = ($hour >= 17) ? $field->harga_malam : $field->harga_siang;
+            $totalPrice = $price * $validated['durasi'];
+
+            // Create booking
+            $booking = new Booking([
+                'user_id' => auth()->id(),
+                'lapangan_id' => $validated['lapangan_id'],
+                'tanggal' => $validated['tanggal'],
+                'jam_mulai' => $startTime,
+                'jam_selesai' => $endTime,
+                'total_harga' => $totalPrice,
+                'status' => 'pending',
+                'jenis_booking' => $validated['jenis_booking']
+            ]);
+
+            $booking->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking berhasil dibuat',
+                'total_price' => 'Rp ' . number_format($totalPrice, 0, ',', '.'),
+                'dp_amount' => 'Rp ' . number_format($totalPrice * 0.5, 0, ',', '.')
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Booking error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memproses booking. Silakan coba lagi.'
+            ], 500);
         }
     }
 
-    private function calculatePrice($fieldId, $duration)
+    public function processPayment(Request $request)
     {
-        $field = Field::findOrFail($fieldId);
-        $pricePerHour = $field->price_per_hour;
-        return $pricePerHour * $duration;
+        try {
+            DB::beginTransaction();
+
+            // Validate the request
+            $validated = $request->validate([
+                'bank' => 'required|string|in:bri,bca,dana,shopeepay,mandiri',
+                'payment_proof' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            // Get the latest pending booking for the current user
+            $booking = Booking::where('user_id', auth()->id())
+                            ->where('status', 'pending')
+                            ->latest()
+                            ->first();
+
+            if (!$booking) {
+                throw new \Exception('Data booking tidak ditemukan. Silakan ulangi proses booking.');
+            }
+
+            // Verifikasi file upload
+            if (!$request->hasFile('payment_proof') || !$request->file('payment_proof')->isValid()) {
+                throw new \Exception('File bukti pembayaran tidak valid.');
+            }
+
+            // Generate unique filename with user ID and timestamp
+            $user = auth()->user();
+            $originalFileName = $request->file('payment_proof')->getClientOriginalName();
+            $extension = $request->file('payment_proof')->getClientOriginalExtension();
+            $uniqueFileName = $user->id . '_' . time() . '_payment_proof.' . $extension;
+
+            // Define storage paths
+            $storagePath = 'payment_proofs/' . date('Y/m');
+            
+            // Store the file
+            $proofPath = $request->file('payment_proof')->storeAs(
+                $storagePath, 
+                $uniqueFileName, 
+                'public'
+            );
+
+            if (!$proofPath) {
+                throw new \Exception('Gagal mengunggah bukti pembayaran.');
+            }
+
+            // Delete old payment proof if exists
+            if ($booking->payment_proof) {
+                // Use Storage facade to delete old file
+                Storage::disk('public')->delete($booking->payment_proof);
+            }
+
+            // Update booking with payment information
+            $booking->update([
+                'payment_proof' => $proofPath, // Save only the path
+                'payment_bank' => $validated['bank'],
+                'payment_date' => now(),
+                'status' => 'pending_confirmation'
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pembayaran berhasil! Mohon tunggu konfirmasi dari admin.',
+                'booking_id' => $booking->id,
+                'payment_proof_url' => asset('storage/' . $proofPath)
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Data yang dimasukkan tidak valid.',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Payment Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function checkTimeSlotAvailability($fieldId, $date, $startTime, $duration)
+    {
+        try {
+            $startDateTime = Carbon::parse($date . ' ' . $startTime);
+            $endDateTime = $startDateTime->copy()->addHours($duration);
+
+            // Check for overlapping bookings
+            $overlappingBookings = Booking::where('lapangan_id', $fieldId)
+                ->where('tanggal', $date)
+                ->where(function ($query) use ($startDateTime, $endDateTime) {
+                    $query->whereBetween('jam_mulai', [$startDateTime->format('H:i:s'), $endDateTime->format('H:i:s')])
+                        ->orWhereBetween('jam_selesai', [$startDateTime->format('H:i:s'), $endDateTime->format('H:i:s')])
+                        ->orWhere(function ($q) use ($startDateTime, $endDateTime) {
+                            $q->where('jam_mulai', '<=', $startDateTime->format('H:i:s'))
+                                ->where('jam_selesai', '>=', $endDateTime->format('H:i:s'));
+                        });
+                })
+                ->where('status', '!=', 'cancelled')
+                ->exists();
+
+            return !$overlappingBookings;
+        } catch (\Exception $e) {
+            Log::error('Error checking time slot availability: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    private function getPricePerHour($jenisBooking)
+    {
+        $prices = [
+            'reguler' => 100000,
+            'membership' => 80000, // Diskon 20%
+            'event' => 90000, // Diskon 10%
+        ];
+
+        Log::info('Getting price per hour', [
+            'jenisBooking' => $jenisBooking,
+            'price' => $prices[$jenisBooking] ?? 100000
+        ]);
+
+        return $prices[$jenisBooking] ?? 100000;
     }
 }

@@ -5,245 +5,368 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FutZone - Booking Lapangan Sepak Bola</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
+        :root {
+            --primary-color: #28a745;
+            --sidebar-bg: #f8f9fa;
+            --sidebar-hover: #e9e9e9;
+            --sidebar-active: #28a745;
+            --sidebar-active-text: white;
         }
-        
-        .header {
-            background-color: #28a745;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        .main-header {
+            background-color: var(--primary-color);
             color: white;
             padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
-        
-        .container-fluid {
-            padding: 0;
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: transform 0.3s ease;
         }
-        
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+        }
+
         .sidebar {
-            background-color: white;
-            height: 100vh;
-            padding: 20px;
-            border-right: 1px solid #e9ecef;
-            position: sticky;
-            top: 0;
+            width: 270px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            transition: all 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
         }
-        
-        .main-content {
-            padding: 0;
-            background-color: white;
-            min-height: 100vh;
-            position: relative;
+
+        .sidebar.collapsed {
+            width: 80px;
             overflow: hidden;
         }
-        
-        .content-area {
-            padding: 20px;
-            position: relative;
-            z-index: 3;
+
+        .sidebar.collapsed .sidebar-menu a span {
+            display: none;
         }
-        
-        .logo {
-            font-weight: bold;
-            font-size: 24px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #333;
+
+        .sidebar.collapsed .sidebar-menu a {
+            justify-content: center;
+            padding: 12px 0;
         }
-        
-        .nav-link {
-            color: #6c757d;
-            padding: 10px 0;
-            text-decoration: none;
-            display: block;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            color: #28a745;
-        }
-        
-        .dropdown-menu {
+
+        .sidebar.collapsed .sidebar-menu i {
+            margin-right: 0;
             width: 100%;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            list-style: none;
             padding: 0;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            border: 1px solid #e9ecef;
+            margin: 0;
         }
-        
-        .dropdown-item {
-            padding: 10px 15px;
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
         }
-        
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #28a745;
-        }
-        
-        .dropdown-toggle::after {
-            float: right;
-            margin-top: 8px;
-        }
-        
-        .green-shape {
-            position: absolute;
-            background-color: #28a745;
-            border-radius: 25px;
-            z-index: 1;
-        }
-        
-        .shape-1 {
-            width: 300px;
-            height: 300px;
-            transform: rotate(45deg);
-            top: 100px;
-            left: -100px;
-        }
-        
-        .shape-2 {
-            width: 150px;
-            height: 150px;
-            transform: rotate(45deg);
-            top: 50px;
-            right: 200px;
-        }
-        
-        .shape-3 {
-            width: 250px;
-            height: 250px;
-            transform: rotate(45deg);
-            bottom: 50px;
-            right: -50px;
-        }
-        
-        .user-info {
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
             color: #333;
-            font-weight: bold;
-            text-align: right;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 10px;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
         }
-        
-        .soccer-ball {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            z-index: 2;
+
+        .sidebar-menu a span {
+            margin-left: 10px;
         }
-        
-        .ball-1 {
-            top: 100px;
-            right: 100px;
+
+        .sidebar-menu a:hover {
+            background-color: var(--sidebar-hover);
+            border-left-color: var(--primary-color);
         }
-        
-        .ball-2 {
-            bottom: 100px;
-            left: 100px;
+
+        .sidebar-menu a.active {
+            background-color: var(--sidebar-active);
+            color: var(--sidebar-active-text);
+            border-left-color: #2E7D32;
         }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
         }
-        
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+
+        .content-wrapper {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            margin-left: 270px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
             color: white;
-            font-weight: bold;
             font-size: 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 250px;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .sidebar-toggle {
+                display: none;
+            }
+        }
+
+        .sidebar.collapsed + .content-wrapper {
+            margin-left: 80px;
+        }
+
+        .sidebar-menu a.logout-link {
+            color: #dc3545;
+        }
+
+        .sidebar.collapsed .sidebar-menu a.logout-link i {
+            color: #dc3545;
+        }
+
+        .sidebar-menu a.logout-link:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left-color: #dc3545;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 60px);
         }
     </style>
     @yield('styles')
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     @yield('header-scripts')
 </head>
 <body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for login success
+            @if(session('login_success'))
+                Swal.fire({
+                    title: 'Login Berhasil!',
+                    html: `
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="mb-3">
+                                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                            </div>
+                            <p>Selamat datang, {{ Auth::user()->name }}!</p>
+                            <small>Anda berhasil masuk ke Akun Pengguna</small>
+                        </div>
+                    `,
+                    icon: 'success',
+                    confirmButtonColor: '#28a745',
+                    confirmButtonText: 'Lanjutkan',
+                    customClass: {
+                        popup: 'swal-custom-popup',
+                        title: 'swal-custom-title'
+                    },
+                    didOpen: () => {
+                        const popup = document.querySelector('.swal2-popup');
+                        popup.style.borderRadius = '20px';
+                        popup.style.padding = '20px';
+                    }
+                });
+            @endif
+        });
+    </script>
     <!-- Header -->
-    <div class="header">
-        <div class="header-content">
-            <div class="header-logo">
-                <img src="https://cdn-icons-png.flaticon.com/512/53/53283.png" width="30" height="30" alt="Soccer Ball">
-                FutZone
-            </div>
-            <div class="user-info" style="color: white;">
-                {{ Auth::user()->name ?? 'CRISTIANO RONALDO' }}
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                </svg>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('user/profile') ? 'active' : '' }}" href="{{ route('user.profile') }}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('user/jadwal') ? 'active' : '' }}" href="{{ route('user.jadwal') }}">Jadwal Lapangan</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="bookingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Booking
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="bookingDropdown">
-                            <li><a class="dropdown-item" href="{{ route('user.booking.reguler') }}">Booking Reguler</a></li>
-                            <li><a class="dropdown-item" href="{{ route('user.booking.membership') }}">Booking Membership</a></li>
-                            <li><a class="dropdown-item" href="{{ route('user.booking.event') }}">Booking Event</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('user/pesanan') ? 'active' : '' }}" href="{{ route('user.pesanan') }}">Pesanan / Riwayat</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('user/password') ? 'active' : '' }}" href="{{ route('user.password') }}">Ubah Password</a>
-                    </li>
-                    <li class="nav-item mt-5">
-                        <a class="nav-link text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Content Area -->
-            <div class="col-md-9 col-lg-10 main-content">
-                <!-- Green shapes -->
-                <div class="green-shape shape-1"></div>
-                <div class="green-shape shape-2"></div>
-                <div class="green-shape shape-3"></div>
-
-                <!-- Soccer balls -->
-                <img src="https://cdn-icons-png.flaticon.com/512/53/53283.png" class="soccer-ball ball-1" alt="Soccer Ball">
-                <img src="https://cdn-icons-png.flaticon.com/512/53/53283.png" class="soccer-ball ball-2" alt="Soccer Ball">
-
-                <div class="content-area">
-                    @yield('content')
+    <header class="main-header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <button class="mobile-menu-toggle me-3" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button class="sidebar-toggle me-3" id="sidebarToggle">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <a href="{{ route('user.profile') }}" class="brand text-white">FutZone</a>
+                </div>
+                <div>
+                    <a href="{{ route('logout') }}" 
+                       class="logout-btn me-3 logout-link"
+                       onclick="event.preventDefault(); showLogoutConfirmation();">
+                        Logout
+                    </a>
+                    <form id="sidebar-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    <span class="text-light">|</span>
+                    <span class="ms-3 text-light">{{ Auth::user()->name }}</span>
                 </div>
             </div>
         </div>
+    </header>
+
+    <div class="main-content">
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="{{ route('user.profile') }}"
+                       class="{{ request()->routeIs('user.profile') ? 'active' : '' }}">
+                        <i class="fas fa-user"></i> <span>PROFILE</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.jadwal') }}"
+                       class="{{ request()->routeIs('user.jadwal') ? 'active' : '' }}">
+                        <i class="fas fa-calendar-alt"></i> <span>JADWAL LAPANGAN</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.booking.reguler') }}"
+                       class="{{ request()->routeIs('user.booking.reguler') ? 'active' : '' }}">
+                        <i class="fas fa-futbol"></i> <span>BOOKING</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.pesanan') }}"
+                       class="{{ request()->routeIs('user.pesanan') ? 'active' : '' }}">
+                        <i class="fas fa-list-alt"></i> <span>PESANAN / RIWAYAT</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.password') }}"
+                       class="{{ request()->routeIs('user.password') ? 'active' : '' }}">
+                        <i class="fas fa-lock"></i> <span>UBAH PASSWORD</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('logout') }}" 
+                       class="logout-link"
+                       onclick="event.preventDefault(); showLogoutConfirmation();">
+                        <i class="fas fa-sign-out-alt"></i> <span>LOGOUT</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="content-wrapper">
+            @yield('content')
+        </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar toggle functionality
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+
+            // Mobile menu toggle
+            mobileMenuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+            });
+
+            // Sidebar collapse toggle
+            sidebarToggle.addEventListener('click', function() {
+                const isCollapsed = sidebar.classList.toggle('collapsed');
+                
+                // Update toggle icon
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-chevron-left', !isCollapsed);
+                icon.classList.toggle('fa-chevron-right', isCollapsed);
+
+                // Save preference in localStorage
+                localStorage.setItem('sidebarCollapsed', isCollapsed);
+            });
+
+            // Close sidebar when clicking outside (mobile)
+            document.addEventListener('click', function(event) {
+                if (!sidebar.contains(event.target) && 
+                    !mobileMenuToggle.contains(event.target) && 
+                    !sidebarToggle.contains(event.target)) {
+                    sidebar.classList.remove('show');
+                }
+            });
+
+            // Restore sidebar state from localStorage
+            const savedCollapsedState = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (savedCollapsedState) {
+                sidebar.classList.add('collapsed');
+                const icon = sidebarToggle.querySelector('i');
+                icon.classList.remove('fa-chevron-left');
+                icon.classList.add('fa-chevron-right');
+            }
+
+            // Logout confirmation function
+            window.showLogoutConfirmation = function() {
+                Swal.fire({
+                    title: 'Konfirmasi Logout',
+                    html: 'Apakah Anda yakin ingin keluar dari akun? <br><small>Semua sesi aktif akan ditutup.</small>',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#dc3545',
+                    confirmButtonText: 'Ya, Logout',
+                    cancelButtonText: 'Batal',
+                    customClass: {
+                        popup: 'swal-custom-popup',
+                        title: 'swal-custom-title'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('sidebar-logout-form').submit();
+                    }
+                });
+            };
+        });
+    </script>
 
     @yield('scripts')
 </body>

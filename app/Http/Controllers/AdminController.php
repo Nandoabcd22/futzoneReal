@@ -75,4 +75,189 @@ class AdminController extends Controller
 
         return back()->with('success', 'Password berhasil diubah');
     }
+
+    // Konfirmasi Booking
+    public function confirmBooking(Request $request)
+    {
+        \Log::info('Confirm Booking Request', [
+            'request_data' => $request->all(),
+            'user_id' => auth()->id(),
+            'ip_address' => $request->ip()
+        ]);
+
+        try {
+            // More comprehensive validation
+            $validated = $request->validate([
+                'booking_id' => [
+                    'required', 
+                    'integer', 
+                    'exists:bookings,id'
+                ]
+            ]);
+
+            // Find the booking with additional checks
+            $booking = Booking::where('id', $validated['booking_id'])
+                ->where('status', 'pending')
+                ->firstOrFail();
+            
+            // Additional validation
+            if (!$booking->payment_proof) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bukti pembayaran belum diunggah'
+                ], 400);
+            }
+
+            // Update booking status
+            $booking->status = 'confirmed';
+            $booking->save();
+
+            // Log the status change
+            \Log::info('Booking Confirmed', [
+                'booking_id' => $booking->id,
+                'admin_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking berhasil dikonfirmasi',
+                'booking_id' => $booking->id,
+                'new_status' => $booking->status
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors
+            \Log::error('Confirm Booking Validation Error', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal: ' . implode(', ', array_flatten($e->errors()))
+            ], 422);
+        } catch (\Exception $e) {
+            // Log the full error
+            \Log::error('Confirm Booking Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengkonfirmasi booking: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Tolak Booking
+    public function rejectBooking(Request $request)
+    {
+        \Log::info('Reject Booking Request', [
+            'request_data' => $request->all(),
+            'user_id' => auth()->id(),
+            'ip_address' => $request->ip()
+        ]);
+
+        try {
+            // More comprehensive validation
+            $validated = $request->validate([
+                'booking_id' => [
+                    'required', 
+                    'integer', 
+                    'exists:bookings,id'
+                ]
+            ]);
+
+            // Find the booking with additional checks
+            $booking = Booking::where('id', $validated['booking_id'])
+                ->where('status', 'pending')
+                ->firstOrFail();
+
+            // Update booking status
+            $booking->status = 'cancelled';
+            $booking->save();
+
+            // Log the status change
+            \Log::info('Booking Rejected', [
+                'booking_id' => $booking->id,
+                'admin_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking berhasil ditolak',
+                'booking_id' => $booking->id,
+                'new_status' => $booking->status
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors
+            \Log::error('Reject Booking Validation Error', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal: ' . implode(', ', array_flatten($e->errors()))
+            ], 422);
+        } catch (\Exception $e) {
+            // Log the full error
+            \Log::error('Reject Booking Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menolak booking: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Update Booking Status
+    public function updateBookingStatus(Request $request, $bookingId)
+    {
+        try {
+            // Validate the request
+            $validated = $request->validate([
+                'status' => [
+                    'required', 
+                    'in:pending,confirmed,cancelled'
+                ]
+            ]);
+
+            // Find the booking
+            $booking = Booking::findOrFail($bookingId);
+
+            // Update booking status
+            $booking->status = $validated['status'];
+            $booking->save();
+
+            // Log the status change
+            \Log::info('Booking Status Updated', [
+                'booking_id' => $booking->id,
+                'old_status' => $booking->getOriginal('status'),
+                'new_status' => $booking->status,
+                'admin_id' => auth()->id()
+            ]);
+
+            // Redirect back with success message
+            return redirect()->route('admin.transaksi')
+                ->with('success', "Status booking #$bookingId berhasil diubah menjadi {$booking->status}");
+        } catch (\Exception $e) {
+            // Log the full error
+            \Log::error('Update Booking Status Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
+            // Redirect back with error message
+            return redirect()->back()
+                ->withErrors(['error' => 'Gagal mengubah status booking: ' . $e->getMessage()])
+                ->withInput();
+        }
+    }
 }
