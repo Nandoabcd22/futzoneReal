@@ -4,49 +4,130 @@
 @section('title', 'Laporan')
 
 @section('content')
-    <h2>Laporan</h2>
-    <div class="card">
+<div class="container-fluid">
+    <h1 class="mt-4">Laporan Transaksi</h1>
+    
+    <div class="card mb-4">
         <div class="card-body">
-            <!-- Laporan content will go here -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Dari</span>
-                        <input type="date" class="form-control">
+            <form action="{{ route('admin.laporan') }}" method="GET">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="dari" class="form-label">Dari</label>
+                        <input type="date" class="form-control" id="dari" name="dari" value="{{ $startDate ?? '' }}">
+                    </div>
+                    <div class="col-md-5">
+                        <label for="sampai" class="form-label">Sampai</label>
+                        <input type="date" class="form-control" id="sampai" name="sampai" value="{{ $endDate ?? '' }}">
+                    </div>
+                    <div class="col-md-2 align-self-end">
+                        <button type="submit" class="btn btn-primary">Tampilkan Laporan</button>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Sampai</span>
-                        <input type="date" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <button class="btn btn-primary mb-3">Tampilkan Laporan</button>
-            
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tanggal</th>
-                        <th>Customer</th>
-                        <th>Lapangan</th>
-                        <th>Durasi</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Sample data, replace with actual data from database -->
-                    <tr>
-                        <td>1</td>
-                        <td>21-04-2025</td>
-                        <td>John Doe</td>
-                        <td>Lapangan A</td>
-                        <td>2 jam</td>
-                        <td>Rp 300.000</td>
-                    </tr>
-                </tbody>
-            </table>
+            </form>
         </div>
     </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Daftar Transaksi Terkonfirmasi
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tanggal</th>
+                            <th>Customer</th>
+                            <th>Lapangan</th>
+                            <th>Durasi</th>
+                            <th>Total</th>
+                            <th>Bukti Pembayaran</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $totalRevenue = 0 @endphp
+                        @foreach($bookings as $booking)
+                        <tr>
+                            <td>{{ $booking->id }}</td>
+                            <td>{{ \Carbon\Carbon::parse($booking->tanggal)->format('d-m-Y') }}</td>
+                            <td>{{ $booking->customer?->name ?? 'N/A' }}</td>
+                            <td>{{ $booking->field?->nama ?? 'N/A' }}</td>
+                            <td>
+                                @php
+                                    $startTime = \Carbon\Carbon::parse($booking->jam_mulai);
+                                    $endTime = \Carbon\Carbon::parse($booking->jam_selesai);
+                                    $duration = $startTime->diffInHours($endTime);
+                                @endphp
+                                {{ $duration }} jam
+                            </td>
+                            <td>Rp {{ number_format($booking->total_harga, 0, ',', '.') }}</td>
+                            <td>
+                                @if($booking->payment_proof)
+                                    <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal" 
+                                       data-bs-target="#paymentProofModal{{ $booking->id }}">
+                                        Lihat Bukti
+                                    </a>
+                                @else
+                                    Belum Ada
+                                @endif
+                            </td>
+                            @php $totalRevenue += $booking->total_harga @endphp
+                        </tr>
+
+                        <!-- Payment Proof Modal -->
+                        @if($booking->payment_proof)
+                        <div class="modal fade" id="paymentProofModal{{ $booking->id }}" tabindex="-1" aria-labelledby="paymentProofModalLabel{{ $booking->id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="paymentProofModalLabel{{ $booking->id }}">Bukti Pembayaran Booking #{{ $booking->id }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img src="{{ asset('storage/' . $booking->payment_proof) }}" 
+                                             alt="Bukti Pembayaran" 
+                                             class="img-fluid" 
+                                             style="max-width: 100%; max-height: 500px; object-fit: contain;">
+                                        <div class="mt-3">
+                                            <strong>Bank:</strong> {{ $booking->payment_bank ?? 'Tidak Tersedia' }}<br>
+                                            <strong>Tanggal Pembayaran:</strong> {{ $booking->payment_date ? \Carbon\Carbon::parse($booking->payment_date)->format('d-m-Y H:i:s') : 'Tidak Tersedia' }}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="{{ asset('storage/' . $booking->payment_proof) }}" 
+                                           target="_blank" 
+                                           class="btn btn-primary">
+                                            Buka Gambar Terpisah
+                                        </a>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="5" class="text-right">Total Pendapatan</th>
+                            <th>Rp {{ number_format($totalRevenue, 0, ',', '.') }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "order": [[0, "desc"]]
+        });
+    });
+</script>
+@endpush

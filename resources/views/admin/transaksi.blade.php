@@ -39,7 +39,10 @@
                         </td>
                         <td>
                             @if($booking->payment_proof)
-                                <a href="{{ Storage::url($booking->payment_proof) }}" target="_blank" class="btn btn-sm btn-info">Lihat Bukti</a>
+                                <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal" 
+                                   data-bs-target="#paymentProofModal{{ $booking->id }}">
+                                    Lihat Bukti
+                                </a>
                             @else
                                 Belum Ada
                             @endif
@@ -87,6 +90,38 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Payment Proof Modal -->
+                    @if($booking->payment_proof)
+                    <div class="modal fade" id="paymentProofModal{{ $booking->id }}" tabindex="-1" aria-labelledby="paymentProofModalLabel{{ $booking->id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="paymentProofModalLabel{{ $booking->id }}">Bukti Pembayaran Booking #{{ $booking->id }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <img src="{{ asset('storage/' . $booking->payment_proof) }}" 
+                                         alt="Bukti Pembayaran" 
+                                         class="img-fluid" 
+                                         style="max-width: 100%; max-height: 500px; object-fit: contain;">
+                                    <div class="mt-3">
+                                        <strong>Bank:</strong> {{ $booking->payment_bank ?? 'Tidak Tersedia' }}<br>
+                                        <strong>Tanggal Pembayaran:</strong> {{ $booking->payment_date ? \Carbon\Carbon::parse($booking->payment_date)->format('d-m-Y H:i:s') : 'Tidak Tersedia' }}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{{ asset('storage/' . $booking->payment_proof) }}" 
+                                       target="_blank" 
+                                       class="btn btn-primary">
+                                        Buka Gambar Terpisah
+                                    </a>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     @endforeach
                 </tbody>
             </table>

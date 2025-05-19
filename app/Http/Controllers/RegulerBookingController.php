@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\Lapangan;
+use Illuminate\Support\Facades\Schema;
 
 class RegulerBookingController extends Controller
 {
@@ -37,6 +38,12 @@ class RegulerBookingController extends Controller
 
     public function processBooking(Request $request)
     {
+        \Log::info('Booking Request Data:', [
+            'all_data' => $request->all(),
+            'user_id' => auth()->id(),
+            'is_authenticated' => auth()->check()
+        ]);
+
         try {
             // Validasi data booking
             $validated = $request->validate([
@@ -47,6 +54,8 @@ class RegulerBookingController extends Controller
                 'durasi' => 'required|integer|min:1|max:12',
             ]);
 
+            \Log::info('Validated Booking Data:', $validated);
+
             // Check if the time slot is available
             $isAvailable = $this->checkTimeSlotAvailability(
                 $validated['lapangan_id'],
@@ -56,6 +65,13 @@ class RegulerBookingController extends Controller
             );
 
             if (!$isAvailable) {
+                \Log::warning('Time slot not available', [
+                    'field_id' => $validated['lapangan_id'],
+                    'date' => $validated['tanggal'],
+                    'time' => $validated['waktu'],
+                    'duration' => $validated['durasi']
+                ]);
+
                 return response()->json([
                     'success' => false,
                     'message' => 'Jadwal sudah dipesan. Silakan pilih waktu lain.'
@@ -79,12 +95,18 @@ class RegulerBookingController extends Controller
                 'tanggal' => $validated['tanggal'],
                 'jam_mulai' => $startTime,
                 'jam_selesai' => $endTime,
+                'duration' => $validated['durasi'],
                 'total_harga' => $totalPrice,
-                'status' => 'pending',
-                'jenis_booking' => $validated['jenis_booking']
+                'jenis_booking' => $validated['jenis_booking'],
+                'status' => 'pending'
             ]);
 
             $booking->save();
+
+            \Log::info('Booking Created Successfully', [
+                'booking_id' => $booking->id,
+                'total_price' => $totalPrice
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -93,11 +115,27 @@ class RegulerBookingController extends Controller
                 'dp_amount' => 'Rp ' . number_format($totalPrice * 0.5, 0, ',', '.')
             ]);
 
-        } catch (\Exception $e) {
-            \Log::error('Booking error: ' . $e->getMessage());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Booking Validation Error', [
+                'errors' => $e->errors(),
+                'input' => $request->all()
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat memproses booking. Silakan coba lagi.'
+                'message' => 'Data booking tidak valid',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            \Log::error('Booking Error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'input' => $request->all()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memproses booking: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -159,7 +197,7 @@ class RegulerBookingController extends Controller
                 'payment_proof' => $proofPath, // Save only the path
                 'payment_bank' => $validated['bank'],
                 'payment_date' => now(),
-                'status' => 'pending_confirmation'
+                'status' => 'waiting_confirmation'
             ]);
 
             DB::commit();
@@ -189,13 +227,139 @@ class RegulerBookingController extends Controller
         }
     }
 
+    public function processDPPayment(Request $request)
+    {
+        try {
+            // Begin database transaction
+            DB::beginTransaction();
+
+            // Validate the request
+            $validated = $request->validate([
+                'booking_id' => 'required|exists:bookings,id',
+                'bank' => 'required|string',
+                'payment_proof' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            ]);
+
+            // Find the booking with additional checks
+            $booking = Booking::findOrFail($validated['booking_id']);
+
+            // Verify file upload
+            if (!$request->hasFile('payment_proof') || !$request->file('payment_proof')->isValid()) {
+                throw new \Exception('File bukti pembayaran tidak valid.');
+            }
+
+            // Generate unique filename
+            $user = auth()->user();
+            $extension = $request->file('payment_proof')->getClientOriginalExtension();
+            $uniqueFileName = $user->id . '_' . time() . '_dp_proof.' . $extension;
+
+            // Define storage path
+            $storagePath = 'dp_payment_proofs/' . date('Y/m');
+            
+            // Store the file
+            $proofPath = $request->file('payment_proof')->storeAs(
+                $storagePath, 
+                $uniqueFileName, 
+                'public'
+            );
+
+            if (!$proofPath) {
+                throw new \Exception('Gagal mengunggah bukti pembayaran.');
+            }
+
+            // Calculate DP amount (50% of total price)
+            $dpAmount = $booking->total_price / 2;
+
+            // Prepare update data with safe column names
+            $updateData = [
+                'status' => 'waiting_confirmation'
+            ];
+
+            // Dynamically add columns if they exist
+            $columns = Schema::getColumnListing('bookings');
+            
+            if (in_array('payment_proof', $columns)) {
+                $updateData['payment_proof'] = $proofPath;
+            }
+            
+            if (in_array('payment_bank', $columns)) {
+                $updateData['payment_bank'] = $validated['bank'];
+            }
+            
+            if (in_array('payment_date', $columns)) {
+                $updateData['payment_date'] = now();
+            }
+            
+            if (in_array('dp_amount', $columns)) {
+                $updateData['dp_amount'] = $dpAmount;
+            }
+
+            // Update booking with payment information
+            $booking->update($updateData);
+
+            // Commit the transaction
+            DB::commit();
+
+            // Log the successful payment
+            \Log::info('DP Payment Processed', [
+                'booking_id' => $booking->id,
+                'user_id' => $user->id,
+                'dp_amount' => $dpAmount,
+                'bank' => $validated['bank']
+            ]);
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Pembayaran DP berhasil! Mohon tunggu konfirmasi dari admin.',
+                'booking_id' => $booking->id,
+                'total_price' => 'Rp ' . number_format($booking->total_price, 0, ',', '.'),
+                'dp_amount' => 'Rp ' . number_format($dpAmount, 0, ',', '.'),
+                'payment_proof_url' => asset('storage/' . $proofPath)
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Rollback the transaction
+            DB::rollback();
+
+            // Log validation errors
+            \Log::error('DP Payment Validation Error', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+
+            // Return validation error response
+            return response()->json([
+                'success' => false,
+                'message' => 'Data yang dimasukkan tidak valid.',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            // Rollback the transaction
+            DB::rollback();
+
+            // Log the error
+            \Log::error('DP Payment Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
+            // Return error response
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     private function checkTimeSlotAvailability($fieldId, $date, $startTime, $duration)
     {
         try {
             $startDateTime = Carbon::parse($date . ' ' . $startTime);
             $endDateTime = $startDateTime->copy()->addHours($duration);
 
-            // Check for overlapping bookings
             $overlappingBookings = Booking::where('lapangan_id', $fieldId)
                 ->where('tanggal', $date)
                 ->where(function ($query) use ($startDateTime, $endDateTime) {
