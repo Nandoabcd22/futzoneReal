@@ -10,6 +10,10 @@ class Booking extends Model
 {
     use HasFactory;
 
+    // Valid booking statuses
+    const VALID_STATUSES = ['pending', 'waiting_confirmation', 'confirmed', 'cancelled'];
+
+    // Update fillable attributes to include new columns
     protected $fillable = [
         'user_id',
         'lapangan_id',
@@ -68,5 +72,14 @@ class Booking extends Model
     public function customer()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Mutator for status to ensure only valid statuses are set
+    public function setStatusAttribute($value)
+    {
+        if (!in_array($value, self::VALID_STATUSES)) {
+            throw new \InvalidArgumentException("Invalid booking status: $value");
+        }
+        $this->attributes['status'] = $value;
     }
 }

@@ -47,12 +47,12 @@ class LapanganController extends Controller
                 }
 
                 $storagePath = 'lapangan/' . date('Y/m');
-                $uniqueFileName = uniqid('lapangan_') . '.' . $processedImage['extension'];
+                $uniqueFileName = uniqid('lapangan_') . '.jpg';
                 
                 // Store processed image
                 $imagePath = Storage::disk('public')->put(
                     $storagePath . '/' . $uniqueFileName, 
-                    $processedImage['image']
+                    $processedImage['image']->toString()
                 );
 
                 $validated['image'] = $storagePath . '/' . $uniqueFileName;
@@ -105,11 +105,11 @@ class LapanganController extends Controller
             // Resize image while maintaining aspect ratio
             $processedImage->scale(width: 800);
 
-            // Compress image
-            $processedImage->encode($extension, 75);
+            // Convert to JPEG with compression
+            $jpegImage = $processedImage->toJpeg(quality: 75);
 
             return [
-                'image' => $processedImage->toJpeg(),
+                'image' => $jpegImage,
                 'extension' => 'jpg' // Always convert to jpg for consistency
             ];
 
@@ -149,12 +149,12 @@ class LapanganController extends Controller
                 }
 
                 $storagePath = 'lapangan/' . date('Y/m');
-                $uniqueFileName = uniqid('lapangan_') . '.' . $processedImage['extension'];
+                $uniqueFileName = uniqid('lapangan_') . '.jpg';
                 
                 // Store processed image
                 $imagePath = Storage::disk('public')->put(
                     $storagePath . '/' . $uniqueFileName, 
-                    $processedImage['image']
+                    $processedImage['image']->toString()
                 );
 
                 $validated['image'] = $storagePath . '/' . $uniqueFileName;

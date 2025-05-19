@@ -8,26 +8,56 @@
             justify-content: flex-start;
             margin-top: 30px;
             overflow-x: auto;
+            overflow-y: hidden;
             padding-bottom: 20px;
             gap: 20px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #28a745 #f0f0f0;
+            cursor: grab;
+            scroll-behavior: smooth;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: pan-x;
+        }
+
+        .field-container:active {
+            cursor: grabbing;
+        }
+
+        .field-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .field-container::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+
+        .field-container::-webkit-scrollbar-thumb {
+            background-color: #28a745;
+            border-radius: 4px;
         }
 
         .field-card {
             flex: 0 0 auto;
             width: 300px;
+            min-width: 300px;
             background-color: white;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             margin-bottom: 30px;
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
             z-index: 10;
+            scroll-snap-align: center;
         }
 
         .field-card:hover {
-            transform: translateY(-5px);
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         .field-image {
@@ -351,6 +381,36 @@
             .time-slots {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .field-container {
+                padding-bottom: 30px;
+            }
+
+            .field-card {
+                width: 280px;
+                min-width: 280px;
+            }
+        }
+
+        /* Optional: Add navigation buttons for better accessibility */
+        .scroll-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .scroll-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .scroll-btn:hover {
+            background-color: #218838;
         }
     </style>
 @endsection
@@ -361,15 +421,7 @@
     <div class="field-container" id="fieldContainer">
         @foreach($fields as $field)
             <div class="field-card">
-                @php
-                    // Determine image path with fallback
-                    $imagePath = $field->image ? 
-                        (Storage::disk('public')->exists($field->image) ? 
-                            asset('storage/' . $field->image) : 
-                            asset('assets/image/default-field.jpg')) : 
-                        asset('assets/image/default-field.jpg');
-                @endphp
-                <img src="{{ $imagePath }}" alt="Lapangan {{ $field->nama }}" class="field-image">
+                <img src="{{ asset('storage/' . $field->image) }}" alt="{{ $field->nama }}" class="field-image">
                 <h2 class="field-title">{{ $field->nama }}</h2>
                 <p class="field-description">
                     {{ $field->deskripsi }}<br>
@@ -914,6 +966,52 @@
         // Initialize form when page loads
         document.addEventListener('DOMContentLoaded', function () {
             updateDurasiOptions();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const fieldContainer = document.getElementById('fieldContainer');
+
+            // Cursor-based scrolling
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            fieldContainer.addEventListener('mousedown', (e) => {
+                isDown = true;
+                fieldContainer.classList.add('active');
+                startX = e.pageX - fieldContainer.offsetLeft;
+                scrollLeft = fieldContainer.scrollLeft;
+            });
+
+            fieldContainer.addEventListener('mouseleave', () => {
+                isDown = false;
+                fieldContainer.classList.remove('active');
+            });
+
+            fieldContainer.addEventListener('mouseup', () => {
+                isDown = false;
+                fieldContainer.classList.remove('active');
+            });
+
+            fieldContainer.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - fieldContainer.offsetLeft;
+                const walk = (x - startX) * 2; // Multiply by 2 to increase scroll speed
+                fieldContainer.scrollLeft = scrollLeft - walk;
+            });
+
+            // Touch support for mobile devices
+            fieldContainer.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].pageX - fieldContainer.offsetLeft;
+                scrollLeft = fieldContainer.scrollLeft;
+            });
+
+            fieldContainer.addEventListener('touchmove', (e) => {
+                const x = e.touches[0].pageX - fieldContainer.offsetLeft;
+                const walk = (x - startX) * 2;
+                fieldContainer.scrollLeft = scrollLeft - walk;
+            });
         });
     </script>
 @endsection

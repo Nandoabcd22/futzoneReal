@@ -43,9 +43,25 @@ class AdminController extends Controller
     }
 
     // Laporan
-    public function laporan()
+    public function laporan(Request $request)
     {
-        return view('admin.laporan');
+        // Get date range from request, default to empty if not provided
+        $startDate = $request->input('dari');
+        $endDate = $request->input('sampai');
+
+        // Query confirmed bookings
+        $query = Booking::where('status', 'confirmed')
+            ->with(['customer', 'field']);
+
+        // Apply date range filter if both start and end dates are provided
+        if ($startDate && $endDate) {
+            $query->whereBetween('tanggal', [$startDate, $endDate]);
+        }
+
+        // Get the filtered bookings
+        $bookings = $query->get();
+
+        return view('admin.laporan', compact('bookings', 'startDate', 'endDate'));
     }
 
     // Form Ubah Password
@@ -235,11 +251,12 @@ class AdminController extends Controller
             $booking->status = $validated['status'];
             $booking->save();
 
-            // Log the status change
+            // Log the status change with more details
             \Log::info('Booking Status Updated', [
                 'booking_id' => $booking->id,
                 'old_status' => $booking->getOriginal('status'),
                 'new_status' => $booking->status,
+                'status_length' => strlen($booking->status),
                 'admin_id' => auth()->id()
             ]);
 

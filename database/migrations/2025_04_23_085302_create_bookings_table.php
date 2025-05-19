@@ -26,7 +26,7 @@ return new class extends Migration
             $table->decimal('dp_amount', 10, 2);
             $table->string('payment_method');
             $table->string('payment_proof');
-            $table->string('status')->default('pending');
+            $table->enum('status', ['pending', 'waiting_confirmation', 'confirmed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }
