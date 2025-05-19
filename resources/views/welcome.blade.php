@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const month = monthNames[date.getMonth()];
         const year = date.getFullYear();
         
-        return `${day} ${month} ${year}`;
+        return ${day} ${month} ${year};
     }
     
     // Initialize with current date
@@ -492,7 +492,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update when date changes
     datePicker.addEventListener('change', function() {
         formattedDateElement.textContent = formatDateIndonesian(this.value);
-        console.log(`Schedule updated for: ${this.value}`);
+        console.log(Schedule updated for: ${this.value});
     });
 });
 </script>
@@ -1300,7 +1300,7 @@ function smoothScrollTo(targetPosition, duration = 800) {
           const hours = now.getHours() % 12 || 12;
           const minutes = now.getMinutes().toString().padStart(2, '0');
           const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
-          return `${hours}:${minutes} ${ampm}`;
+          return ${hours}:${minutes} ${ampm};
         }
         
         // Fungsi untuk mengirim pesan

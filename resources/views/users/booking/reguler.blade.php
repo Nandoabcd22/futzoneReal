@@ -5,16 +5,40 @@
     <style>
         .field-container {
             display: flex;
-            justify-content: flex-start;
+            flex-wrap: nowrap;
+            width: 100%;
+            max-width: 100%;
             margin-top: 30px;
             overflow-x: auto;
+            overflow-y: hidden;
             padding-bottom: 20px;
-            gap: 20px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: #28a745 #f0f0f0;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+            z-index: 10;
+        }
+
+        .field-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .field-container::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+
+        .field-container::-webkit-scrollbar-thumb {
+            background-color: #28a745;
+            border-radius: 4px;
         }
 
         .field-card {
             flex: 0 0 auto;
             width: 300px;
+            min-width: 280px;
+            scroll-snap-align: center;
+            margin-right: 10px;
             background-color: white;
             border-radius: 15px;
             padding: 20px;
@@ -343,6 +367,16 @@
         }
 
         @media (max-width: 768px) {
+            .field-container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .field-card {
+                width: 250px;
+                min-width: 250px;
+            }
+
             .modal-content, .payment-modal-content {
                 width: 95%;
                 margin: 15% auto;
@@ -350,6 +384,17 @@
 
             .time-slots {
                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .field-container {
+                gap: 10px;
+            }
+
+            .field-card {
+                width: 220px;
+                min-width: 220px;
             }
         }
     </style>

@@ -28,8 +28,9 @@
 
     .field-schedule {
         width: 100%;
+        min-width: 1200px; /* Ensure horizontal scroll */
         border-collapse: separate;
-        border-spacing: 1px;
+        border-spacing: 0;
     }
     
     .field-schedule th, .field-schedule td {
@@ -50,17 +51,16 @@
         padding: 12px 4px;
         position: sticky;
         top: 0;
-        z-index: 10;
+        z-index: 25;
     }
     
     .field-name {
-        background-color: #28a745;
-        color: white;
-        font-weight: bold;
-        width: 120px;
         position: sticky;
         left: 0;
-        z-index: 20;
+        background-color: #28a745;
+        color: white;
+        z-index: 30;
+        min-width: 150px;
     }
 
     .field-name.header-corner {
@@ -154,13 +154,26 @@
     }
 
     .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        position: relative;
         max-height: 700px;
-        overflow: auto;
         border-radius: 10px;
         border: 1px solid #e0e0e0;
     }
 
-    /* Custom scrollbar */
+    .field-schedule thead {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+    }
+
+    .field-schedule thead th:first-child {
+        z-index: 30;
+    }
+
+    /* Scrollbar styling */
     .table-responsive::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -189,6 +202,10 @@
         .filter-date {
             width: 100%;
             justify-content: center;
+        }
+
+        .field-schedule {
+            min-width: 1000px;
         }
     }
 </style>

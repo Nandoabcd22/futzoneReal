@@ -19,7 +19,9 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f5f5;
-            overflow-x: hidden;
+            overflow-x: auto;
+            width: 100%;
+            max-width: 100%;
         }
 
         .main-header {
@@ -130,6 +132,9 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             margin-left: 270px;
             transition: all 0.3s ease;
+            width: calc(100% - 310px);
+            max-width: calc(100% - 310px);
+            overflow-x: auto;
         }
 
         .mobile-menu-toggle {
@@ -153,6 +158,8 @@
 
             .content-wrapper {
                 margin-left: 0;
+                width: 100%;
+                max-width: 100%;
             }
 
             .mobile-menu-toggle {
@@ -166,6 +173,8 @@
 
         .sidebar.collapsed + .content-wrapper {
             margin-left: 80px;
+            width: calc(100% - 120px);
+            max-width: calc(100% - 120px);
         }
 
         .sidebar-menu a.logout-link {
