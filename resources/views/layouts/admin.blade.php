@@ -364,9 +364,6 @@
                     <a href="{{ route('admin.dashboard') }}" class="brand">FutZone</a>
                 </div>
                 <div>
-                    <a href="{{ route('logout') }}" class="logout-btn me-3 logout-link">
-                        Logout
-                    </a>
                     <form id="sidebar-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -401,7 +398,13 @@
                 <li>
                     <a href="{{ route('admin.transaksi') }}"
                         class="{{ request()->routeIs('admin.transaksi') ? 'active' : '' }}">
-                        <i class="fas fa-exchange-alt"></i> <span>TRANSAKSI</span>
+                        <i class="fas fa-exchange-alt"></i> <span>VALIDASI</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.pelunasan.index') }}" class="{{ request()->routeIs('admin.pelunasan.*') ? 'active' : '' }}">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Pelunasan</span>
                     </a>
                 </li>
                 <li>
@@ -410,6 +413,7 @@
                         <i class="fas fa-file-alt"></i> <span>LAPORAN</span>
                     </a>
                 </li>
+
                 <li>
                     <a href="{{ route('logout') }}" 
                        class="logout-link"
@@ -434,8 +438,6 @@
         <div class="bg-shape shape3"></div>
     </div>
 
-    <img src="{{ asset('img/soccer-ball.png') }}" alt="Soccer Ball" class="soccer-ball">
-
     <!-- Logout Confirmation Modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -458,8 +460,10 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Check for login success
@@ -586,6 +590,9 @@
     </script>
 
     @stack('scripts')
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 </body>
 
 </html>

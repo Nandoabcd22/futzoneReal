@@ -19,9 +19,7 @@
                         <label for="sampai" class="form-label">Sampai</label>
                         <input type="date" class="form-control" id="sampai" name="sampai" value="{{ $endDate ?? '' }}">
                     </div>
-                    <div class="col-md-2 align-self-end">
-                        <button type="submit" class="btn btn-primary">Tampilkan Laporan</button>
-                    </div>
+                    
                 </div>
             </form>
         </div>
@@ -43,7 +41,8 @@
                             <th>Lapangan</th>
                             <th>Durasi</th>
                             <th>Total</th>
-                            <th>Bukti Pembayaran</th>
+                            <th>Bukti DP</th>
+                            <th>Bukti Pelunasan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,8 +65,18 @@
                             <td>
                                 @if($booking->payment_proof)
                                     <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal" 
-                                       data-bs-target="#paymentProofModal{{ $booking->id }}">
-                                        Lihat Bukti
+                                       data-bs-target="#dpPaymentProofModal{{ $booking->id }}">
+                                        Lihat Bukti DP
+                                    </a>
+                                @else
+                                    Belum Ada
+                                @endif
+                            </td>
+                            <td>
+                                @if($booking->pelunasan && $booking->pelunasan->payment_proof)
+                                    <a href="#" class="btn btn-sm btn-success" data-bs-toggle="modal" 
+                                       data-bs-target="#pelunasanPaymentProofModal{{ $booking->id }}">
+                                        Lihat Bukti Pelunasan
                                     </a>
                                 @else
                                     Belum Ada
@@ -76,27 +85,59 @@
                             @php $totalRevenue += $booking->total_harga @endphp
                         </tr>
 
-                        <!-- Payment Proof Modal -->
+                        <!-- DP Payment Proof Modal -->
                         @if($booking->payment_proof)
-                        <div class="modal fade" id="paymentProofModal{{ $booking->id }}" tabindex="-1" aria-labelledby="paymentProofModalLabel{{ $booking->id }}" aria-hidden="true">
+                        <div class="modal fade" id="dpPaymentProofModal{{ $booking->id }}" tabindex="-1" aria-labelledby="dpPaymentProofModalLabel{{ $booking->id }}" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="paymentProofModalLabel{{ $booking->id }}">Bukti Pembayaran Booking #{{ $booking->id }}</h5>
+                                        <h5 class="modal-title" id="dpPaymentProofModalLabel{{ $booking->id }}">Bukti Pembayaran DP Booking #{{ $booking->id }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body text-center">
                                         <img src="{{ asset('storage/' . $booking->payment_proof) }}" 
-                                             alt="Bukti Pembayaran" 
+                                             alt="Bukti Pembayaran DP" 
                                              class="img-fluid" 
                                              style="max-width: 100%; max-height: 500px; object-fit: contain;">
                                         <div class="mt-3">
                                             <strong>Bank:</strong> {{ $booking->payment_bank ?? 'Tidak Tersedia' }}<br>
-                                            <strong>Tanggal Pembayaran:</strong> {{ $booking->payment_date ? \Carbon\Carbon::parse($booking->payment_date)->format('d-m-Y H:i:s') : 'Tidak Tersedia' }}
+                                            <strong>Tanggal Pembayaran DP:</strong> {{ $booking->payment_date ? \Carbon\Carbon::parse($booking->payment_date)->format('d-m-Y H:i:s') : 'Tidak Tersedia' }}
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <a href="{{ asset('storage/' . $booking->payment_proof) }}" 
+                                           target="_blank" 
+                                           class="btn btn-primary">
+                                            Buka Gambar Terpisah
+                                        </a>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
+                        <!-- Pelunasan Payment Proof Modal -->
+                        @if($booking->pelunasan && $booking->pelunasan->payment_proof)
+                        <div class="modal fade" id="pelunasanPaymentProofModal{{ $booking->id }}" tabindex="-1" aria-labelledby="pelunasanPaymentProofModalLabel{{ $booking->id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="pelunasanPaymentProofModalLabel{{ $booking->id }}">Bukti Pembayaran Pelunasan Booking #{{ $booking->id }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img src="{{ asset('storage/dp_payments/' . $booking->pelunasan->payment_proof) }}" 
+                                             alt="Bukti Pembayaran Pelunasan" 
+                                             class="img-fluid" 
+                                             style="max-width: 100%; max-height: 500px; object-fit: contain;">
+                                        <div class="mt-3">
+                                            <strong>Bank:</strong> {{ $booking->pelunasan->payment_method ?? 'Tidak Tersedia' }}<br>
+                                            <strong>Tanggal Pembayaran Pelunasan:</strong> {{ $booking->pelunasan->paid_at ? \Carbon\Carbon::parse($booking->pelunasan->paid_at)->format('d-m-Y H:i:s') : 'Tidak Tersedia' }}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="{{ asset('storage/dp_payments/' . $booking->pelunasan->payment_proof) }}" 
                                            target="_blank" 
                                            class="btn btn-primary">
                                             Buka Gambar Terpisah

@@ -6,6 +6,8 @@
     <title>Register - FutZone</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="{{ asset('../assets/css/register.css') }}" rel="stylesheet">
+    
+
 </head>
 
 <body>

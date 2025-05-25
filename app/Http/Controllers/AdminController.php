@@ -277,4 +277,92 @@ class AdminController extends Controller
                 ->withInput();
         }
     }
+
+    // Pencarian Customer
+    public function searchCustomer(Request $request)
+    {
+        $query = $request->input('query');
+
+        $customers = User::where('email', 'NOT LIKE', '%admin%')
+            ->where(function($q) use ($query) {
+                $q->where('name', 'LIKE', "%{$query}%")
+                  ->orWhere('email', 'LIKE', "%{$query}%")
+                  ->orWhere('phone', 'LIKE', "%{$query}%");
+            })
+            ->get();
+
+        return response()->json($customers);
+    }
+
+    // Dapatkan Booking Customer
+    public function getCustomerBookings($userId)
+    {
+        $bookings = Booking::with(['lapangan'])
+            ->where('user_id', $userId)
+            ->whereIn('payment_status', ['pending', 'partial'])
+            ->get()
+            ->map(function($booking) {
+                return [
+                    'id' => $booking->id,
+                    'field' => [
+                        'name' => $booking->lapangan->name
+                    ],
+                    'tanggal' => $booking->tanggal->format('d M Y'),
+                    'total_harga' => $booking->total_harga,
+                    'remaining_amount' => $booking->remaining_amount ?? 0
+                ];
+            });
+
+        return response()->json($bookings);
+    }
+
+    // Proses Pelunasan
+    public function processSettlement(Request $request, $bookingId)
+    {
+        try {
+            $booking = Booking::findOrFail($bookingId);
+            
+            $validatedData = $request->validate([
+                'payment_amount' => 'required|numeric|min:0',
+                'payment_method' => 'required|string',
+                'payment_proof' => 'nullable|file|max:5120' // Maksimal 5MB
+            ]);
+            
+            // Proses pembayaran
+            $paymentAmount = $validatedData['payment_amount'];
+            
+            // Simpan bukti pembayaran jika ada
+            if ($request->hasFile('payment_proof')) {
+                $file = $request->file('payment_proof');
+                $filename = time() . '_' . $booking->id . '_settlement_proof.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('payment_proofs', $filename, 'public');
+                
+                $booking->payment_proof = $path;
+            }
+            
+            // Update sisa pembayaran
+            $booking->remaining_amount -= $paymentAmount;
+            
+            // Update status pembayaran
+            if ($booking->remaining_amount <= 0) {
+                $booking->payment_status = 'completed';
+            } else {
+                $booking->payment_status = 'partial';
+            }
+            
+            $booking->save();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Pelunasan berhasil diproses',
+                'remaining_amount' => $booking->remaining_amount,
+                'payment_status' => $booking->payment_status
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memproses pelunasan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

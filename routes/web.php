@@ -12,6 +12,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegulerBookingController;
 use App\Http\Controllers\Admin\LapanganController;
+use Illuminate\Support\Facades\Auth;
 
 
 /*
@@ -92,11 +93,57 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // New route for updating booking status
     Route::put('/booking/{bookingId}/status', [AdminController::class, 'updateBookingStatus'])
         ->name('booking.update.status');
+    Route::post('/admin/pelunasan/{id}', [PelunasanController::class, 'store'])->name('admin.pelunasan.dp');
+    Route::get('/admin/pelunasan', [PelunasanController::class, 'index'])->name('admin.pelunasan.index');
+
+
+    // Pelunasan Routes
+    Route::prefix('pelunasan')->name('pelunasan.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\PelunasanController::class, 'index'])->name('index');
+        Route::get('/{id}', [App\Http\Controllers\Admin\PelunasanController::class, 'detail'])->name('detail');
+        Route::post('/{id}/process', [App\Http\Controllers\Admin\PelunasanController::class, 'processSettlement'])->name('process');
+        // New route for pelunasan report
+        Route::get('/report', [App\Http\Controllers\Admin\PelunasanController::class, 'report'])->name('report');
+        // New route for DP payment
+        Route::post('/{id}/dp', [App\Http\Controllers\Admin\PelunasanController::class, 'processDpSettlement'])->name('dp');
+    });
+    
+
+    // Tambahkan route baru untuk pencarian customer dan pelunasan
+    Route::get('/search-customer', [AdminController::class, 'searchCustomer'])->name('search.customer');
+    Route::get('/customer-bookings/{userId}', [AdminController::class, 'getCustomerBookings'])->name('customer.bookings');
+    Route::post('/process-settlement/{bookingId}', [AdminController::class, 'processSettlement'])->name('process.settlement');
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/pesanan', [OrderController::class, 'index'])->name('pesanan');
     Route::get('/api/orders/{type}', [OrderController::class, 'getOrdersByType']);
+    Route::get('/api/confirmed-bookings', [OrderController::class, 'getConfirmedBookings'])->name('api.confirmed.bookings')
+        ->middleware('web');
+    
+    
+//     // New comprehensive debug route
+//     Route::get('/debug/bookings', function() {
+//         $user = Auth::user();
+//         $bookings = \App\Models\Booking::where('user_id', $user->id)->get();
+        
+//         return response()->json([
+//             'user_id' => $user->id,
+//             'user_name' => $user->name,
+//             'total_bookings' => $bookings->count(),
+//             'bookings' => $bookings->map(function($booking) {
+//                 return [
+//                     'id' => $booking->id,
+//                     'status' => $booking->status,
+//                     'jenis_booking' => $booking->jenis_booking,
+//                     'tanggal' => $booking->tanggal,
+//                     'jam_mulai' => $booking->jam_mulai,
+//                     'jam_selesai' => $booking->jam_selesai,
+//                     'total_harga' => $booking->total_harga
+//                 ];
+//             })
+//         ]);
+//     })->name('debug.bookings');
 });
 
 Route::prefix('booking')->group(function () {

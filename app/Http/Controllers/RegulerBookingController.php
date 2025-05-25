@@ -88,6 +88,9 @@ class RegulerBookingController extends Controller
             $price = ($hour >= 17) ? $field->harga_malam : $field->harga_siang;
             $totalPrice = $price * $validated['durasi'];
 
+            // Calculate DP amount (50% of total price)
+            $dpAmount = $totalPrice * 0.5;
+
             // Create booking
             $booking = new Booking([
                 'user_id' => auth()->id(),
@@ -97,6 +100,7 @@ class RegulerBookingController extends Controller
                 'jam_selesai' => $endTime,
                 'duration' => $validated['durasi'],
                 'total_harga' => $totalPrice,
+                'dp' => $dpAmount,
                 'jenis_booking' => $validated['jenis_booking'],
                 'status' => 'pending'
             ]);
@@ -105,14 +109,17 @@ class RegulerBookingController extends Controller
 
             \Log::info('Booking Created Successfully', [
                 'booking_id' => $booking->id,
-                'total_price' => $totalPrice
+                'total_price' => $totalPrice,
+                'dp_amount' => $dpAmount
             ]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Booking berhasil dibuat',
                 'total_price' => 'Rp ' . number_format($totalPrice, 0, ',', '.'),
-                'dp_amount' => 'Rp ' . number_format($totalPrice * 0.5, 0, ',', '.')
+                'total_price_raw' => $totalPrice,
+                'dp_amount' => 'Rp ' . number_format($dpAmount, 0, ',', '.'),
+                'dp_amount_raw' => $dpAmount
             ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -142,6 +149,12 @@ class RegulerBookingController extends Controller
 
     public function processPayment(Request $request)
     {
+        \Log::info('Payment Request Received', [
+            'request_data' => $request->all(),
+            'user_id' => auth()->id(),
+            'is_authenticated' => auth()->check()
+        ]);
+
         try {
             DB::beginTransaction();
 
@@ -156,6 +169,11 @@ class RegulerBookingController extends Controller
                             ->where('status', 'pending')
                             ->latest()
                             ->first();
+
+            \Log::info('Booking Found', [
+                'booking_exists' => $booking !== null,
+                'booking_details' => $booking ? $booking->toArray() : 'No booking found'
+            ]);
 
             if (!$booking) {
                 throw new \Exception('Data booking tidak ditemukan. Silakan ulangi proses booking.');
@@ -182,6 +200,12 @@ class RegulerBookingController extends Controller
                 'public'
             );
 
+            \Log::info('Payment Proof Uploaded', [
+                'original_filename' => $originalFileName,
+                'stored_filename' => $uniqueFileName,
+                'storage_path' => $proofPath
+            ]);
+
             if (!$proofPath) {
                 throw new \Exception('Gagal mengunggah bukti pembayaran.');
             }
@@ -192,37 +216,57 @@ class RegulerBookingController extends Controller
                 Storage::disk('public')->delete($booking->payment_proof);
             }
 
+            // Calculate DP amount (50% of total price)
+            $dpAmount = $booking->total_harga * 0.5;
+            $remainingAmount = $booking->total_harga - $dpAmount;
+
+            // Log detailed booking information before update
+            \Log::info('Payment Processing Details', [
+                'booking_id' => $booking->id,
+                'total_harga' => $booking->total_harga,
+                'dp_amount' => $dpAmount,
+                'remaining_amount' => $remainingAmount,
+                'payment_bank' => $validated['bank'],
+                'payment_proof_path' => $proofPath
+            ]);
+
             // Update booking with payment information
             $booking->update([
                 'payment_proof' => $proofPath, // Save only the path
                 'payment_bank' => $validated['bank'],
                 'payment_date' => now(),
+                'dp' => $dpAmount, // Changed from 'dp_amount' to 'dp'
+                'remaining_amount' => $remainingAmount,
+                'payment_status' => 'partial', // Set payment status to partial
                 'status' => 'waiting_confirmation'
+            ]);
+
+            // Log the update result
+            \Log::info('Booking Update Result', [
+                'booking_id' => $booking->id,
+                'updated_booking' => $booking->fresh()->toArray()
             ]);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Pembayaran berhasil! Mohon tunggu konfirmasi dari admin.',
-                'booking_id' => $booking->id,
-                'payment_proof_url' => asset('storage/' . $proofPath)
+                'message' => 'Pembayaran DP berhasil diproses',
+                'dp_amount' => 'Rp ' . number_format($dpAmount, 0, ',', '.'),
+                'remaining_amount' => 'Rp ' . number_format($remainingAmount, 0, ',', '.')
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            DB::rollback();
-            return response()->json([
-                'success' => false,
-                'message' => 'Data yang dimasukkan tidak valid.',
-                'errors' => $e->errors()
-            ], 422);
-
         } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('Payment Error: ' . $e->getMessage());
+            DB::rollBack();
+            \Log::error('Payment Processing Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Gagal memproses pembayaran: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -290,8 +334,8 @@ class RegulerBookingController extends Controller
                 $updateData['payment_date'] = now();
             }
             
-            if (in_array('dp_amount', $columns)) {
-                $updateData['dp_amount'] = $dpAmount;
+            if (in_array('dp', $columns)) {
+                $updateData['dp'] = $dpAmount;
             }
 
             // Update booking with payment information

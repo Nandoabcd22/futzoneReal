@@ -16,62 +16,140 @@ class OrderController extends Controller
 
     public function getOrdersByType($type)
     {
-        Log::info('Getting orders for type: ' . $type);
-        Log::info('User ID: ' . Auth::id());
+        try {
+            $user = Auth::user();
 
-        $pendingOrders = Booking::with(['field'])
-            ->where('user_id', Auth::id())
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            if (!$user) {
+                return response()->json([
+                    'error' => 'Autentikasi gagal',
+                    'message' => 'Pengguna tidak terautentikasi'
+                ], 401);
+            }
 
-        Log::info('Pending orders count: ' . $pendingOrders->count());
-        Log::info('Pending orders:', $pendingOrders->toArray());
+            // Validate booking type
+            $validTypes = ['reguler', 'membership', 'event'];
+            if (!in_array($type, $validTypes)) {
+                return response()->json([
+                    'error' => 'Tipe booking tidak valid',
+                    'message' => "Tipe booking '$type' tidak dikenali"
+                ], 400);
+            }
 
-        $completedOrders = Booking::with(['field'])
-            ->where('user_id', Auth::id())
-            ->whereIn('status', ['completed', 'cancelled'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+            // Current date for filtering
+            $currentDate = now()->toDateString();
 
-        Log::info('Completed orders count: ' . $completedOrders->count());
+            // Fetch pending orders (waiting for confirmation)
+            $pendingOrders = Booking::with(['field'])
+                ->where('user_id', $user->id)
+                ->whereIn('status', ['pending', 'waiting_confirmation'])
+                ->where('jenis_booking', $type)
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-        $pendingOrdersData = $pendingOrders->map(function ($booking) {
-            return [
-                'user_name' => auth()->user()->name,
-                'booking_date' => $booking->tanggal,
-                'field_name' => $booking->field->nama ?? 'Lapangan ' . $booking->lapangan_id,
-                'duration' => $this->calculateDuration($booking->jam_mulai, $booking->jam_selesai),
-                'start_time' => $booking->jam_mulai,
-                'end_time' => $booking->jam_selesai,
-                'total_price' => floatval($booking->total_harga),
-                'status' => $booking->status
-            ];
-        });
+            // Fetch confirmed and active orders (not yet completed)
+            $confirmedOrders = Booking::with(['field'])
+                ->where('user_id', $user->id)
+                ->whereIn('status', ['confirmed', 'booking_confirmed'])
+                ->where('jenis_booking', $type)
+                ->whereDate('tanggal', '>=', $currentDate)
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-        $completedOrdersData = $completedOrders->map(function ($booking) {
-            return [
-                'user_name' => auth()->user()->name,
-                'booking_date' => $booking->tanggal,
-                'field_name' => $booking->field->nama ?? 'Lapangan ' . $booking->lapangan_id,
-                'duration' => $this->calculateDuration($booking->jam_mulai, $booking->jam_selesai),
-                'start_time' => $booking->jam_mulai,
-                'end_time' => $booking->jam_selesai,
-                'total_price' => floatval($booking->total_harga),
-                'status' => $booking->status
-            ];
-        });
+            // Fetch completed orders (past confirmed orders)
+            $completedOrders = Booking::with(['field'])
+                ->where('user_id', $user->id)
+                ->whereIn('status', ['confirmed', 'booking_confirmed', 'completed'])
+                ->where('jenis_booking', $type)
+                ->whereDate('tanggal', '<', $currentDate)
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-        return response()->json([
-            'pendingOrders' => $pendingOrdersData,
-            'completedOrders' => $completedOrdersData
-        ]);
+            // Fetch cancelled orders
+            $cancelledOrders = Booking::with(['field'])
+                ->where('user_id', $user->id)
+                ->where('status', 'cancelled')
+                ->where('jenis_booking', $type)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Map function for consistent response format
+            $mapOrder = function ($booking) use ($user) {
+                return [
+                    'id' => $booking->id,
+                    'user_name' => $user->name,
+                    'booking_date' => $booking->tanggal,
+                    'field_name' => $booking->field->nama ?? 'Lapangan ' . $booking->lapangan_id,
+                    'duration' => $this->calculateDuration($booking->jam_mulai, $booking->jam_selesai),
+                    'start_time' => $booking->jam_mulai,
+                    'end_time' => $booking->jam_selesai,
+                    'total_price' => floatval($booking->total_harga),
+                    'status' => $booking->status,
+                    'jenis_booking' => $booking->jenis_booking
+                ];
+            };
+
+            return response()->json([
+                'pendingOrders' => $pendingOrders->map($mapOrder),
+                'confirmedOrders' => $confirmedOrders->map($mapOrder),
+                'completedOrders' => $completedOrders->map($mapOrder),
+                'cancelledOrders' => $cancelledOrders->map($mapOrder)
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Order retrieval error: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'type' => $type,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'error' => 'Gagal memuat data',
+                'message' => 'Terjadi kesalahan saat mengambil data pesanan'
+            ], 500);
+        }
     }
 
     private function calculateDuration($startTime, $endTime)
     {
-        $start = strtotime($startTime);
-        $end = strtotime($endTime);
-        return round(($end - $start) / 3600); // Convert seconds to hours
+        try {
+            $start = new \DateTime($startTime);
+            $end = new \DateTime($endTime);
+            $diff = $start->diff($end);
+            return $diff->h;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    // Debug endpoint
+    public function debugOrderFetching($type = null)
+    {
+        $query = Booking::with(['field'])
+            ->where('user_id', Auth::id());
+        
+        if ($type) {
+            $query->where('jenis_booking', $type);
+        }
+
+        $bookings = $query->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'user_id' => Auth::id(),
+            'type_filter' => $type,
+            'total_bookings' => $bookings->count(),
+            'bookings' => $bookings->map(function($booking) {
+                return [
+                    'id' => $booking->id,
+                    'status' => $booking->status,
+                    'jenis_booking' => $booking->jenis_booking,
+                    'tanggal' => $booking->tanggal,
+                    'jam_mulai' => $booking->jam_mulai,
+                    'jam_selesai' => $booking->jam_selesai,
+                    'total_harga' => $booking->total_harga,
+                    'field_name' => $booking->field->nama ?? null,
+                    'is_past' => now()->toDateString() > $booking->tanggal ? 'Ya' : 'Tidak'
+                ];
+            })
+        ]);
     }
 }

@@ -1,10 +1,10 @@
 <!-- resources/views/admin/transaksi.blade.php -->
 @extends('layouts.admin')
 
-@section('title', 'Transaksi / Booking')
+@section('title', 'Validasi')
 
 @section('content')
-    <h2>Transaksi / Booking</h2>
+    <h2>Validasi</h2>
     <div class="card">
         <div class="card-body">
             <!-- Transaksi table will go here -->

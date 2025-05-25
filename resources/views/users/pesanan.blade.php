@@ -76,6 +76,39 @@
     .tab-content.active {
         display: block;
     }
+
+    .badge {
+        display: inline-block;
+        padding: 0.35em 0.65em;
+        font-size: 0.75em;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: 0.25rem;
+    }
+
+    .badge.bg-warning {
+        color: #000;
+        background-color: #ffc107;
+    }
+
+    .badge.bg-success {
+        background-color: #28a745;
+    }
+
+    .badge.bg-danger {
+        background-color: #dc3545;
+    }
+
+    .badge.bg-info {
+        background-color: #17a2b8;
+    }
+
+    .badge.bg-secondary {
+        background-color: #6c757d;
+    }
 </style>
 @endsection
 
@@ -109,12 +142,11 @@
             </tbody>
         </table>
     </div>
-    <p class="note">NB: Harap tunggu validasi oleh admin max 1x24 jam</p>
+    <p class="note">NB: Harap tunggu validasi oleh admin max 1x24 jam, Setelah di konfirmasi oleh admin nama anda akan muncul di jadwal lapangan secara otomatis</p>
 </div>
 
-<button class="history-tab" id="history-button">RIWAYAT</button>
-
-<div id="completed-orders" style="display: none;">
+<div id="confirmed-orders" class="tab-content">
+    <div class="order-status">TERKONFIRMASI</div>
     <div class="table-responsive">
         <table class="orders-table">
             <thead>
@@ -129,7 +161,32 @@
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody id="completed-orders-body">
+            <tbody id="confirmed-orders-body">
+                <tr><td colspan="8" class="text-center">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<button class="history-tab" id="history-button">RIWAYAT</button> 
+
+<div id="completed-orders" style="display: none;">
+    <div class="order-status">RIWAYAT PESANAN DIBATALKAN</div>
+    <div class="table-responsive">
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Tanggal</th>
+                    <th>Lapangan</th>
+                    <th>Durasi</th>
+                    <th>Jam</th>
+                    <th>Harga</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="cancelled-orders-body">
                 <tr><td colspan="8" class="text-center">Memuat data...</td></tr>
             </tbody>
         </table>
@@ -145,85 +202,140 @@ document.addEventListener('DOMContentLoaded', function() {
     const completedOrdersDiv = document.getElementById('completed-orders');
 
     let currentType = 'reguler';
-    loadOrders(currentType);
-
-    customerTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            customerTabs.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            currentType = this.dataset.type;
-            loadOrders(currentType);
-        });
-    });
-
-    historyButton.addEventListener('click', () => {
-        const isVisible = completedOrdersDiv.style.display === 'block';
-        completedOrdersDiv.style.display = isVisible ? 'none' : 'block';
-        historyButton.textContent = isVisible ? 'RIWAYAT' : 'SEMBUNYIKAN RIWAYAT';
-    });
+    let orderData = {
+        pendingOrders: [],
+        confirmedOrders: [],
+        cancelledOrders: []
+    };
 
     function loadOrders(customerType) {
-        document.getElementById('pending-orders-body').innerHTML = '<tr><td colspan="8" class="text-center">Memuat data...</td></tr>';
-        document.getElementById('completed-orders-body').innerHTML = '<tr><td colspan="8" class="text-center">Memuat data...</td></tr>';
+        // Show loading indicators
+        ['pending-orders-body', 'confirmed-orders-body', 'cancelled-orders-body'].forEach(tableId => {
+            document.getElementById(tableId).innerHTML = '<tr><td colspan="8" class="text-center">Memuat data...</td></tr>';
+        });
 
         fetch(`/api/orders/${customerType}`)
-            .then(res => res.ok ? res.json() : Promise.reject('Gagal memuat data'))
-            .then(data => {
-                updateTable('pending-orders-body', data.pendingOrders);
-                updateTable('completed-orders-body', data.completedOrders);
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(errorData => {
+                        throw new Error(errorData.message || 'Gagal memuat data');
+                    }).catch(() => {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    });
+                }
+                return res.json();
             })
-            .catch(() => {
-                document.getElementById('pending-orders-body').innerHTML = '<tr><td colspan="8" class="text-center">Gagal memuat data</td></tr>';
-                document.getElementById('completed-orders-body').innerHTML = '<tr><td colspan="8" class="text-center">Gagal memuat data</td></tr>';
+            .then(data => {
+                console.log('Received order data:', data);
+
+                // Store the full data
+                orderData = {
+                    pendingOrders: data.pendingOrders || [],
+                    confirmedOrders: data.confirmedOrders || [],
+                    cancelledOrders: data.cancelledOrders || []
+                };
+
+                // Update tables
+                updateTable('pending-orders-body', orderData.pendingOrders);
+                updateTable('confirmed-orders-body', orderData.confirmedOrders);
+                updateTable('cancelled-orders-body', orderData.cancelledOrders);
+            })
+            .catch(error => {
+                console.error('Error loading orders:', error);
+                
+                ['pending-orders-body', 'confirmed-orders-body', 'cancelled-orders-body'].forEach(tableId => {
+                    document.getElementById(tableId).innerHTML = 
+                        `<tr>
+                            <td colspan="8" class="text-center text-danger">
+                                Gagal memuat data: ${error.message || 'Kesalahan tidak diketahui'}
+                            </td>
+                        </tr>`;
+                });
             });
     }
 
-    function updateTable(tableId, orders) {
-        const tableBody = document.getElementById(tableId);
-        if (!orders || orders.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="8" class="text-center">Tidak ada data</td></tr>`;
+    function updateTable(tableBodyId, orders) {
+        const tableBody = document.getElementById(tableBodyId);
+        
+        if (orders.length === 0) {
+            tableBody.innerHTML = 
+                `<tr>
+                    <td colspan="8" class="text-center text-muted">
+                        Tidak ada pesanan
+                    </td>
+                </tr>`;
             return;
         }
 
-        tableBody.innerHTML = orders.map((order, i) => `
-            <tr>
-                <td>${i + 1}</td>
+        tableBody.innerHTML = orders.map((order, index) => 
+            `<tr>
+                <td>${index + 1}</td>
                 <td>${order.user_name}</td>
                 <td>${formatDate(order.booking_date)}</td>
                 <td>${order.field_name}</td>
                 <td>${order.duration} jam</td>
-                <td>${formatTime(order.start_time)} - ${formatTime(order.end_time)}</td>
-                <td>Rp ${formatNumber(order.total_price)}</td>
-                <td>${formatStatus(order.status)}</td>
-            </tr>
-        `).join('');
+                <td>${order.start_time} - ${order.end_time}</td>
+                <td>Rp ${order.total_price.toLocaleString('id-ID')}</td>
+                <td>
+                    <span class="badge ${getStatusBadgeClass(order.status)}">
+                        ${formatOrderStatus(order.status)}
+                    </span>
+                </td>
+            </tr>`
+        ).join('');
     }
 
-    function formatDate(dateStr) {
-        const d = new Date(dateStr);
-        return `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
+    function getStatusBadgeClass(status) {
+        const statusClasses = {
+            'pending': 'bg-warning',
+            'waiting_confirmation': 'bg-warning',
+            'confirmed': 'bg-success',
+            'booking_confirmed': 'bg-success',
+            'completed': 'bg-info',
+            'cancelled': 'bg-danger'
+        };
+        return statusClasses[status] || 'bg-secondary';
     }
 
-    function formatTime(timeStr) {
-        return timeStr?.substring(0, 5) ?? '-';
+    function formatOrderStatus(status) {
+        const statusMap = {
+            'pending': 'Menunggu Konfirmasi',
+            'waiting_confirmation': 'Menunggu Konfirmasi',
+            'confirmed': 'Terkonfirmasi',
+            'booking_confirmed': 'Terkonfirmasi',
+            'completed': 'Selesai',
+            'cancelled': 'Dibatalkan'
+        };
+        return statusMap[status] || status;
     }
 
-    function formatNumber(num) {
-        return num.toLocaleString('id-ID');
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
     }
 
-    function formatStatus(status) {
-        switch(status) {
-            case 'pending':
-                return 'Menunggu Konfirmasi';
-            case 'completed':
-                return 'Selesai';
-            case 'cancelled':
-                return 'Dibatalkan';
-            default:
-                return status;
-        }
-    }
+    // Initial load for reguler type
+    loadOrders(currentType);
+
+    // Tab switching
+    customerTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            customerTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentType = this.getAttribute('data-type');
+            loadOrders(currentType);
+        });
+    });
+
+    // History button toggle
+    historyButton.addEventListener('click', function() {
+        completedOrdersDiv.style.display = 
+            completedOrdersDiv.style.display === 'none' ? 'block' : 'none';
+    });
 });
 </script>
 @endsection

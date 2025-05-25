@@ -535,7 +535,7 @@
                 <span class="close-btn" onclick="closePaymentModal()" style="color: #333;">&times;</span>
             </div>
             <div class="payment-modal-body">
-                <form id="paymentForm" enctype="multipart/form-data">
+                <form id="paymentForm" class="booking-form" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label>Total Harga Lapangan</label>
@@ -551,11 +551,12 @@
                         <label>Bank</label>
                         <select id="bankSelect" name="bank" class="form-control" required>
                             <option value="">Pilih Bank</option>
-                            <option value="bri">Bank BRI</option>
-                            <option value="bca">Bank BCA</option>
-                            <option value="dana">DANA</option>
-                            <option value="shopeepay">ShopeePay</option>
-                            <option value="mandiri">Bank Mandiri</option>
+                            <option value="bri">Bank BRI 0090011065146501</option>
+                            <option value="bca">Bank BCA 1210867658</option>
+                            <option value="mandiri">Bank Mandiri 1430016340273</option>
+                            <option value="dana">DANA 081913309344</option>
+                            <option value="shopeepay">ShopeePay 081913309344</option>
+                            
                         </select>
                     </div>
                     
@@ -896,9 +897,9 @@
                     bookingModal.style.display = 'none';
                     paymentModal.style.display = 'block';
                     
-                    // Update price displays
-                    document.getElementById('totalPrice').value = data.total_price;
-                    document.getElementById('dpAmount').value = data.dp_amount;
+                    // Update price displays using raw values and toLocaleString
+                    document.getElementById('totalPrice').value = 'Rp ' + data.total_price_raw.toLocaleString('id-ID') + ',00';
+                    document.getElementById('dpAmount').value = 'Rp ' + data.dp_amount_raw.toLocaleString('id-ID') + ',00';
                 } else {
                     console.log('Booking failed:', data.message);
                     alert(data.message || 'Terjadi kesalahan saat memproses booking.');
@@ -1028,6 +1029,67 @@
                 const x = e.touches[0].pageX - fieldContainer.offsetLeft;
                 const walk = (x - startX) * 2;
                 fieldContainer.scrollLeft = scrollLeft - walk;
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentModal = document.getElementById('paymentModal');
+            const totalPriceDisplay = document.getElementById('totalPrice');
+            const dpAmountDisplay = document.getElementById('dpAmount');
+            const paymentForm = document.getElementById('paymentForm');
+
+            // Function to format currency
+            function formatCurrency(amount) {
+                return 'Rp ' + new Intl.NumberFormat('id-ID').format(amount);
+            }
+
+            // When booking is successful, populate payment modal
+            window.populatePaymentModal = function(totalPrice, dpAmount) {
+                totalPriceDisplay.value = formatCurrency(totalPrice);
+                dpAmountDisplay.value = formatCurrency(dpAmount);
+            }
+
+            // Payment form submission
+            paymentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                fetch('{{ route('user.booking.payment') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pembayaran Berhasil',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Pembayaran Gagal',
+                            text: data.message,
+                            confirmButtonText: 'Tutup'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan',
+                        text: 'Terjadi kesalahan saat memproses pembayaran',
+                        confirmButtonText: 'Tutup'
+                    });
+                });
             });
         });
     </script>
