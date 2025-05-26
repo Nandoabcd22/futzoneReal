@@ -11,6 +11,14 @@
         <title>Futzone</title>
         <link rel="stylesheet" href="{{asset('assets/css/styles.css')}}">
         <script src="{{ asset('assets/js/scorll.js') }}"></script>
+        <script type="importmap">
+        {
+            "imports": {
+                "@google/generative-ai": "https://esm.run/@google/generative-ai",
+                "markdown-it": "https://esm.run/markdown-it"
+            }
+        }
+        </script>
     </head>
  
 
@@ -85,128 +93,112 @@
   </div>
 </section>
         <!-- Fields Section -->
-<section id="lapangan-tersedia" class="py-5">
+        <section id="lapangan-tersedia" class="py-5">
   <div class="container">
       <h2 class="text-center mb-5">Lapangan Tersedia</h2>
       
-      <div class="fields-container">
-          <div class="fields-wrapper">
-              <!-- Field 1 -->
-              <div class="field-card">
-                  <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/lp1.jpeg')}}" class="card-img-top" alt="Lapangan 1">
+      <div class="lapangan-scroll-container">
+          <div class="lapangan-wrapper">
+              @forelse($lapangans as $lapangan)
+              <div class="lapangan-card">
+                  <div class="card h-100 shadow-sm">
+                      <img src="{{ asset('storage/' . $lapangan->image) }}" class="card-img-top" alt="{{ $lapangan->nama }}">
                       <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 1 - Lantai Vinyl ukuran large 38m x 18m </h5>
-                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
+                          <h5 class="card-title fw-bold text-success">{{ $lapangan->nama }}</h5>
+                          <p class="card-text text-muted mb-3">{{ $lapangan->deskripsi }}</p>
                           <div class="pricing mb-3">
-                              <span class="price-tag">Rp100.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
-                              <span class="price-tag">Rp135.000/jam</span> <small>(17.00-22.00 WIB)</small>
+                              <div class="d-flex justify-content-between mb-2">
+                                  <span class="text-muted">Siang (07.00-16.00)</span>
+                                  <span class="fw-bold text-success">Rp{{ number_format($lapangan->harga_siang, 0, ',', '.') }}/jam</span>
+                              </div>
+                              <div class="d-flex justify-content-between">
+                                  <span class="text-muted">Malam (17.00-22.00)</span>
+                                  <span class="fw-bold text-success">Rp{{ number_format($lapangan->harga_malam, 0, ',', '.') }}/jam</span>
+                              </div>
                           </div>
+                          @if($lapangan->status === 'tersedia')
+                          <span class="badge bg-success">Tersedia</span>
+                          @else
+                          <span class="badge bg-danger">Tidak Tersedia</span>
+                          @endif
                       </div>
                   </div>
               </div>
-              
-              <!-- Field 2 -->
-              <div class="field-card">
-                  <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/2.jpeg')}}" class="card-img-top" alt="Lapangan 2">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 2 - Rumput Sintetis ukuran 25m x 15m </h5>
-                          <p class="card-text">Rasakan pengalaman bermain di rumput sintetis berkualitas. Mengurangi risiko cedera dan nyaman untuk bermain.</p>
-                          <div class="pricing mb-3">
-                              <span class="price-tag">Rp100.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
-                              <span class="price-tag">Rp135.000/jam</span> <small>(17.00-22.00 WIB)</small>
-                          </div>
-                      </div>
-                  </div>
+              @empty
+              <div class="text-center w-100">
+                  <p>Tidak ada lapangan tersedia saat ini.</p>
               </div>
-              
-              <!-- Field 3 -->
-              <div class="field-card">
-                  <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 3">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 3 - Lantai vinyl standart 25m x 15m </h5>
-                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</</p>
-                          <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              
-              <!-- Field 4 -->
-              <div class="field-card">
-                  <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 4">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 4 - Lantai vinyl standart 25m x 15m </h5>
-                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
-                          <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              
-              <!-- Field 5 -->
-              <div class="field-card">
-                  <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 5">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 5 - Lantai vinyl standart 25m x 15m </h5>
-                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
-                          <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              
-              <!-- Field 6 -->
-              <div class="field-card">
-                  <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 6">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 6 - Lantai vinyl standart 25m x 15m </h5>
-                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
-                          <div class="pricing mb-3">
-                              <span class="price-tag">Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              
-              <!-- Field 7 -->
-              <div class="field-card">
-                  <div class="card h-100 shadow">
-                      <img src="{{asset('assets/image/3.jpeg')}}" class="card-img-top" alt="Lapangan 7">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">Lapangan 7 - Lantai vinyl standart 25m x 15m </h5>
-                          <p class="card-text">Lapangan premium dengan permukaan vinyl berkualitas tinggi. Ideal untuk permainan cepat dan teknik tinggi.</p>
-                          <div class="pricing mb-3">
-                              <span class="price-tag">Rp1Rp60.000/jam</span> <small>(07.00-16.00 WIB)</small><br>
-                              <span class="price-tag">Rp110.000/jam</span> <small>(17.00-22.00 WIB)</small>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Navigation arrows -->
-          <div class="field-nav">
-              <button class="field-prev"><i class="fas fa-chevron-left"></i></button>
-              <button class="field-next"><i class="fas fa-chevron-right"></i></button>
+              @endforelse
           </div>
       </div>
   </div>
 </section>
-<!-- End Fields Section -->
 
+<style>
+#lapangan-tersedia {
+    background-color: #f8f9fa;
+}
+
+.lapangan-scroll-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 15px;
+}
+
+.lapangan-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    padding: 15px 0;
+}
+
+.lapangan-card {
+    flex: 0 0 280px;
+    max-width: 280px;
+    transition: transform 0.3s ease;
+}
+
+.lapangan-card:hover {
+    transform: scale(1.03);
+}
+
+.lapangan-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.lapangan-wrapper::-webkit-scrollbar-track {
+    background: #e9ecef;
+}
+
+.lapangan-wrapper::-webkit-scrollbar-thumb {
+    background: #28a745;
+    border-radius: 4px;
+}
+
+.lapangan-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.lapangan-card .pricing {
+    background-color: #f1f3f5;
+    padding: 10px;
+    border-radius: 5px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const lapanganWrapper = document.querySelector('.lapangan-wrapper');
+    
+    // Smooth horizontal scrolling with mouse wheel
+    lapanganWrapper.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        this.scrollLeft += e.deltaY;
+    });
+});
+</script>
         <!-- Booking Info Section -->
         <section id="booking-info" class="py-5 bg-light">
             <div class="container">
@@ -234,265 +226,272 @@
         <!-- End Booking Info Section -->
 
 <!-- Schedule Section -->
-<section id="jadwal-lapangan" class="py-5">
-    <div class="container">
-        <!-- Section Title -->
-        <h2 class="section-title">Jadwal Lapangan</h2>
-        
-        <!-- Calendar Header -->
-        <div class="calendar-container">
-            <div class="calendar-header">
-                <h4>Kalender</h4>
-                <div class="filter-date">
-                    <label for="date-picker">Tanggal:</label>
-                    <input type="date" class="date-picker" id="date-picker" value="2025-04-28">
-                </div>
-            </div>
-            <div class="selected-date-display" id="selected-date-display">
-                Jadwal untuk: <span id="formatted-date">28 April 2025</span>
-            </div>
-        </div>
-        
-        <!-- Legend -->
-        <div class="schedule-legend">
-            <div class="legend-container">
-                <div class="legend-item">
-                    <span class="legend-color available"></span>
-                    <span class="legend-text">Tersedia</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-color booked"></span>
-                    <span class="legend-text">Terisi</span>
-                </div>
-            </div>
-        </div>
-            
-        <!-- Schedule Table -->
-        <div class="table-responsive-container">
-            <div class="table-responsive">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>07.00</th>
-                            <th>08.00</th>
-                            <th>09.00</th>
-                            <th>10.00</th>
-                            <th>11.00</th>
-                            <th>12.00</th>
-                            <th>13.00</th>
-                            <th>14.00</th>
-                            <th>15.00</th>
-                            <th>16.00</th>
-                            <th>17.00</th>
-                            <th>18.00</th>
-                            <th>19.00</th>
-                            <th>20.00</th>
-                            <th>21.00</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="field-name">Lapangan 1</td>
-                            <td class="time-slot" data-field="1" data-time="07.00"></td>
-                            <td class="time-slot" data-field="1" data-time="08.00"></td>
-                            <td class="time-slot" data-field="1" data-time="09.00"></td>
-                            <td class="time-slot booked-cell" data-field="1" data-time="10.00">
-                                <span class="booked-info">Tim A</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="1" data-time="11.00">
-                                <span class="booked-info">Tim A</span>
-                            </td>
-                            <td class="time-slot" data-field="1" data-time="12.00"></td>
-                            <td class="time-slot" data-field="1" data-time="13.00"></td>
-                            <td class="time-slot" data-field="1" data-time="14.00"></td>
-                            <td class="time-slot" data-field="1" data-time="15.00"></td>
-                            <td class="time-slot" data-field="1" data-time="16.00"></td>
-                            <td class="time-slot booked-cell" data-field="1" data-time="17.00">
-                                <span class="booked-info">Tim B</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="1" data-time="18.00">
-                                <span class="booked-info">Tim B</span>
-                            </td>
-                            <td class="time-slot" data-field="1" data-time="19.00"></td>
-                            <td class="time-slot" data-field="1" data-time="20.00"></td>
-                            <td class="time-slot" data-field="1" data-time="21.00"></td>
-                        </tr>
-                        <tr>
-                            <td class="field-name">Lapangan 2</td>
-                            <td class="time-slot" data-field="2" data-time="07.00"></td>
-                            <td class="time-slot" data-field="2" data-time="08.00"></td>
-                            <td class="time-slot" data-field="2" data-time="09.00"></td>
-                            <td class="time-slot" data-field="2" data-time="10.00"></td>
-                            <td class="time-slot" data-field="2" data-time="11.00"></td>
-                            <td class="time-slot" data-field="2" data-time="12.00"></td>
-                            <td class="time-slot" data-field="2" data-time="13.00"></td>
-                            <td class="time-slot" data-field="2" data-time="14.00"></td>
-                            <td class="time-slot booked-cell" data-field="2" data-time="15.00">
-                                <span class="booked-info">Tim C</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="2" data-time="16.00">
-                                <span class="booked-info">Tim C</span>
-                            </td>
-                            <td class="time-slot" data-field="2" data-time="17.00"></td>
-                            <td class="time-slot" data-field="2" data-time="18.00"></td>
-                            <td class="time-slot booked-cell" data-field="2" data-time="19.00">
-                                <span class="booked-info">Tim D</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="2" data-time="20.00">
-                                <span class="booked-info">Tim D</span>
-                            </td>
-                            <td class="time-slot" data-field="2" data-time="21.00"></td>
-                        </tr>
-                        <tr>
-                            <td class="field-name">Lapangan 3</td>
-                            <td class="time-slot" data-field="3" data-time="07.00"></td>
-                            <td class="time-slot booked-cell" data-field="3" data-time="08.00">
-                                <span class="booked-info">Tim E</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="3" data-time="09.00">
-                                <span class="booked-info">Tim E</span>
-                            </td>
-                            <td class="time-slot" data-field="3" data-time="10.00"></td>
-                            <td class="time-slot" data-field="3" data-time="11.00"></td>
-                            <td class="time-slot" data-field="3" data-time="12.00"></td>
-                            <td class="time-slot" data-field="3" data-time="13.00"></td>
-                            <td class="time-slot" data-field="3" data-time="14.00"></td>
-                            <td class="time-slot" data-field="3" data-time="15.00"></td>
-                            <td class="time-slot" data-field="3" data-time="16.00"></td>
-                            <td class="time-slot" data-field="3" data-time="17.00"></td>
-                            <td class="time-slot" data-field="3" data-time="18.00"></td>
-                            <td class="time-slot" data-field="3" data-time="19.00"></td>
-                            <td class="time-slot" data-field="3" data-time="20.00"></td>
-                            <td class="time-slot" data-field="3" data-time="21.00"></td>
-                        </tr>
-                        <tr>
-                            <td class="field-name">Lapangan 4</td>
-                            <td class="time-slot" data-field="4" data-time="07.00"></td>
-                            <td class="time-slot" data-field="4" data-time="08.00"></td>
-                            <td class="time-slot" data-field="4" data-time="09.00"></td>
-                            <td class="time-slot" data-field="4" data-time="10.00"></td>
-                            <td class="time-slot" data-field="4" data-time="11.00"></td>
-                            <td class="time-slot" data-field="4" data-time="12.00"></td>
-                            <td class="time-slot booked-cell" data-field="4" data-time="13.00">
-                                <span class="booked-info">Tim F</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="4" data-time="14.00">
-                                <span class="booked-info">Tim F</span>
-                            </td>
-                            <td class="time-slot" data-field="4" data-time="15.00"></td>
-                            <td class="time-slot" data-field="4" data-time="16.00"></td>
-                            <td class="time-slot" data-field="4" data-time="17.00"></td>
-                            <td class="time-slot" data-field="4" data-time="18.00"></td>
-                            <td class="time-slot" data-field="4" data-time="19.00"></td>
-                            <td class="time-slot" data-field="4" data-time="20.00"></td>
-                            <td class="time-slot" data-field="4" data-time="21.00"></td>
-                        </tr>
-                        <tr>
-                            <td class="field-name">Lapangan 5</td>
-                            <td class="time-slot" data-field="5" data-time="07.00"></td>
-                            <td class="time-slot" data-field="5" data-time="08.00"></td>
-                            <td class="time-slot" data-field="5" data-time="09.00"></td>
-                            <td class="time-slot" data-field="5" data-time="10.00"></td>
-                            <td class="time-slot" data-field="5" data-time="11.00"></td>
-                            <td class="time-slot" data-field="5" data-time="12.00"></td>
-                            <td class="time-slot" data-field="5" data-time="13.00"></td>
-                            <td class="time-slot" data-field="5" data-time="14.00"></td>
-                            <td class="time-slot" data-field="5" data-time="15.00"></td>
-                            <td class="time-slot" data-field="5" data-time="16.00"></td>
-                            <td class="time-slot booked-cell" data-field="5" data-time="17.00">
-                                <span class="booked-info">Tim G</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="5" data-time="18.00">
-                                <span class="booked-info">Tim G</span>
-                            </td>
-                            <td class="time-slot" data-field="5" data-time="19.00"></td>
-                            <td class="time-slot" data-field="5" data-time="20.00"></td>
-                            <td class="time-slot" data-field="5" data-time="21.00"></td>
-                        </tr>
-                        <tr>
-                            <td class="field-name">Lapangan 6</td>
-                            <td class="time-slot" data-field="6" data-time="07.00"></td>
-                            <td class="time-slot" data-field="6" data-time="08.00"></td>
-                            <td class="time-slot" data-field="6" data-time="09.00"></td>
-                            <td class="time-slot booked-cell" data-field="6" data-time="10.00">
-                                <span class="booked-info">Tim H</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="6" data-time="11.00">
-                                <span class="booked-info">Tim H</span>
-                            </td>
-                            <td class="time-slot" data-field="6" data-time="12.00"></td>
-                            <td class="time-slot" data-field="6" data-time="13.00"></td>
-                            <td class="time-slot" data-field="6" data-time="14.00"></td>
-                            <td class="time-slot" data-field="6" data-time="15.00"></td>
-                            <td class="time-slot" data-field="6" data-time="16.00"></td>
-                            <td class="time-slot" data-field="6" data-time="17.00"></td>
-                            <td class="time-slot" data-field="6" data-time="18.00"></td>
-                            <td class="time-slot booked-cell" data-field="6" data-time="19.00">
-                                <span class="booked-info">Tim I</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="6" data-time="20.00">
-                                <span class="booked-info">Tim I</span>
-                            </td>
-                            <td class="time-slot" data-field="6" data-time="21.00"></td>
-                        </tr>
-                        <tr>
-                            <td class="field-name">Lapangan 7</td>
-                            <td class="time-slot booked-cell" data-field="7" data-time="07.00">
-                                <span class="booked-info">Tim J</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="7" data-time="08.00">
-                                <span class="booked-info">Tim J</span>
-                            </td>
-                            <td class="time-slot" data-field="7" data-time="09.00"></td>
-                            <td class="time-slot" data-field="7" data-time="10.00"></td>
-                            <td class="time-slot" data-field="7" data-time="11.00"></td>
-                            <td class="time-slot" data-field="7" data-time="12.00"></td>
-                            <td class="time-slot" data-field="7" data-time="13.00"></td>
-                            <td class="time-slot" data-field="7" data-time="14.00"></td>
-                            <td class="time-slot" data-field="7" data-time="15.00"></td>
-                            <td class="time-slot" data-field="7" data-time="16.00"></td>
-                            <td class="time-slot booked-cell" data-field="7" data-time="17.00">
-                                <span class="booked-info">Tim K</span>
-                            </td>
-                            <td class="time-slot booked-cell" data-field="7" data-time="18.00">
-                                <span class="booked-info">Tim K</span>
-                            </td>
-                            <td class="time-slot" data-field="7" data-time="19.00"></td>
-                            <td class="time-slot" data-field="7" data-time="20.00"></td>
-                            <td class="time-slot" data-field="7" data-time="21.00"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+<section id="jadwal-lapangan" class="py-5 bg-light">
+  <div class="container">
+      <h2 class="text-center mb-5">Jadwal Lapangan</h2>
+      
+      <!-- Calendar Header -->
+      <div class="calendar-container">
+          <div class="calendar-header">
+              <h4>Kalender Booking</h4>
+              <div class="filter-date">
+                  <label for="date-picker" class="text-white">Pilih Tanggal:</label>
+                  <input type="date" class="date-picker" id="date-picker" value="{{ date('Y-m-d') }}">
+              </div>
+          </div>
+          <div class="selected-date-display text-center mb-3">
+              Jadwal untuk: <span id="formatted-date" class="fw-bold">{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</span>
+          </div>
+      </div>
+      
+      <!-- Status Legend -->
+      <div class="status-legend">
+          <div class="status-label available-label">
+              <i class="fas fa-circle me-2"></i> Tersedia
+          </div>
+          <div class="status-label booked-label">
+              <i class="fas fa-circle me-2"></i> Terisi
+          </div>
+      </div>
+      
+      <!-- Schedule Table -->
+      <div class="table-responsive">
+          <table class="field-schedule">
+              <thead>
+                  <tr>
+                      <th class="field-name header-corner"></th>
+                      @for($hour = 7; $hour <= 21; $hour++)
+                      <th>{{ sprintf('%02d.00', $hour) }}</th>
+                      @endfor
+                  </tr>
+              </thead>
+              <tbody>
+                  @php
+                      $lapangans = \App\Models\Lapangan::all();
+                      $bookings = \App\Models\Booking::whereDate('tanggal', date('Y-m-d'))
+                          ->where('status', 'confirmed')
+                          ->get();
+                  @endphp
+                  
+                  @foreach($lapangans as $lapangan)
+                  <tr>
+                      <td class="field-name">{{ $lapangan->nama }}</td>
+                      @for($hour = 7; $hour <= 21; $hour++)
+                          @php
+                              $timeSlot = sprintf('%02d.00', $hour);
+                              $booking = $bookings->first(function($booking) use ($lapangan, $timeSlot) {
+                                  return $booking->lapangan_id == $lapangan->id && 
+                                         $booking->jam_mulai <= $timeSlot && 
+                                         $booking->jam_selesai > $timeSlot;
+                              });
+                          @endphp
+                          
+                          <td class="booking-cell {{ $booking ? 'booked' : 'available' }}" 
+                              data-field="{{ $lapangan->id }}" 
+                              data-time="{{ $timeSlot }}">
+                              @if($booking)
+                              <div class="booked">
+                                  <div class="booker-name">{{ $booking->user->name }}</div>
+                                  <div class="booking-time">
+                                      {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}
+                                  </div>
+                              </div>
+                              @endif
+                          </td>
+                      @endfor
+                  </tr>
+                  @endforeach
+              </tbody>
+          </table>
+      </div>
+  </div>
 </section>
+
+<style>
+.calendar-container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #28a745;
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+}
+
+.field-schedule {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.field-schedule th, .field-schedule td {
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    padding: 8px 4px;
+    position: relative;
+    height: 70px;
+    width: 80px;
+    vertical-align: middle;
+}
+
+.field-schedule thead th {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    height: auto;
+    padding: 12px 4px;
+    position: sticky;
+    top: 0;
+    z-index: 25;
+}
+
+.field-name {
+    position: sticky;
+    left: 0;
+    background-color: #28a745;
+    color: white;
+    z-index: 30;
+    min-width: 150px;
+}
+
+.booking-cell.booked {
+    background-color: #dc3545;
+    color: white;
+}
+
+.booking-cell.available {
+    background-color: #ffffff;
+}
+
+.booker-name {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.booking-time {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    max-height: 500px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.status-legend {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.status-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.available-label {
+    background-color: #28a745;
+    color: white;
+}
+
+.booked-label {
+    background-color: #dc3545;
+    color: white;
+}
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const datePicker = document.getElementById('date-picker');
     const formattedDateElement = document.getElementById('formatted-date');
+    const scheduleTable = document.querySelector('.field-schedule tbody');
     
-    // Function to format date in Indonesian format
+    // Fungsi untuk memformat tanggal dalam bahasa Indonesia
     function formatDateIndonesian(dateString) {
         const date = new Date(dateString);
-        const day = date.getDate();
-        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
-                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        const month = monthNames[date.getMonth()];
-        const year = date.getFullYear();
-        
-        return ${day} ${month} ${year};
+        const options = { 
+            day: 'numeric', 
+            month: 'long', 
+            year: 'numeric' 
+        };
+        return date.toLocaleDateString('id-ID', options);
     }
     
-    // Initialize with current date
+    // Fungsi untuk mengupdate tabel jadwal
+    function updateScheduleTable(data) {
+        // Reset semua sel menjadi available
+        const allCells = document.querySelectorAll('.booking-cell');
+        allCells.forEach(cell => {
+            cell.classList.remove('booked');
+            cell.classList.add('available');
+            cell.innerHTML = ''; // Hapus konten sebelumnya
+        });
+
+        // Update sel yang terbooked
+        data.bookings.forEach(booking => {
+            const lapanganId = booking.lapangan_id;
+            const startHour = parseInt(booking.jam_mulai.split('.')[0]);
+            
+            for (let hour = startHour; hour < parseInt(booking.jam_selesai.split('.')[0]); hour++) {
+                const cell = document.querySelector(
+                    `.booking-cell[data-field="${lapanganId}"][data-time="${hour.toString().padStart(2, '0')}.00"]`
+                );
+                
+                if (cell) {
+                    cell.classList.remove('available');
+                    cell.classList.add('booked');
+                    cell.innerHTML = `
+                        <div class="booked">
+                            <div class="booker-name">${booking.user_name}</div>
+                            <div class="booking-time">
+                                ${booking.jam_mulai} - ${booking.jam_selesai}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        });
+    }
+    
+    // Inisialisasi dengan tanggal saat ini
     formattedDateElement.textContent = formatDateIndonesian(datePicker.value);
     
-    // Update when date changes
+    // Update saat tanggal berubah
     datePicker.addEventListener('change', function() {
-        formattedDateElement.textContent = formatDateIndonesian(this.value);
-        console.log(Schedule updated for: ${this.value});
+        // Kirim permintaan AJAX untuk memperbarui jadwal
+        fetch(`/update-jadwal?date=${this.value}`)
+            .then(response => response.json())
+            .then(data => {
+                // Perbarui tabel jadwal dengan data baru
+                updateScheduleTable(data);
+                
+                // Perbarui tampilan tanggal
+                formattedDateElement.textContent = formatDateIndonesian(this.value);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Gagal memperbarui jadwal. Silakan coba lagi.');
+            });
     });
 });
 </script>
@@ -637,12 +636,14 @@ function smoothScrollTo(targetPosition, duration = 800) {
                     });
                 }
             });
-        </script>
-    
-    {{-- CHATBOX --}}<!-- Add this HTML code in your body section --><!-- Chat Widget -->
+
+        
+</script>
+
+{{-- CHATBOX --}}<!-- Add this HTML code in your body section --><!-- Chat Widget -->
     <div class="futzone-chat-widget">
       <div class="chat-widget-container">
-        <div class="chat-widget-header">
+        <div class="chat-widget-header"> 
           <div class="header-left">
             <div class="online-indicator"></div>
             <div class="header-icon">⚽</div>
@@ -700,454 +701,19 @@ function smoothScrollTo(targetPosition, duration = 800) {
       </div>
     </div>
     
-    <!-- Chat Widget Styles -->
-    <style>
-      .futzone-chat-widget {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 9999;
-        font-family: 'Poppins', sans-serif;
-      }
-      
-      .chat-widget-container {
-        width: 350px;
-        height: 450px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        transform-origin: bottom right;
-        transform: scale(0);
-        opacity: 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        border: 3px solid #15803d; /* Added green border */
-      }
-      
-      .chat-widget-container.active {
-        transform: scale(1);
-        opacity: 1;
-      }
-      
-      .chat-widget-header {
-        background: white;
-        color: #333;
-        padding: 15px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #e5e7eb;
-      }
-      
-      .header-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      
-      .online-indicator {
-        width: 10px;
-        height: 10px;
-        background-color: #10b981;
-        border-radius: 50%;
-        box-shadow: 0 0 0 2px rgba(255,255,255,0.5);
-      }
-      
-      .header-icon {
-        font-size: 18px;
-      }
-      
-      .header-left h4 {
-        margin: 0;
-        font-weight: 600;
-        font-size: 16px;
-        color: #333;
-      }
-      
-      .header-actions {
-        display: flex;
-        gap: 5px;
-      }
-      
-      .header-actions button {
-        background: #f3f4f6;
-        border: none;
-        color: #333;
-        width: 24px;
-        height: 24px;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      
-      .header-actions button:hover {
-        background: #e5e7eb;
-      }
-      
-      .chat-widget-body {
-        flex: 1;
-        padding: 20px;
-        overflow-y: auto;
-        background-color: #f9fafb;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-      
-      .chat-date-divider {
-        text-align: center;
-        margin: 10px 0;
-        position: relative;
-      }
-      
-      .chat-date-divider:before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        width: 100%;
-        height: 1px;
-        background: #e5e7eb;
-        z-index: 1;
-      }
-      
-      .chat-date-divider span {
-        background: #f9fafb;
-        padding: 0 10px;
-        font-size: 12px;
-        color: #9ca3af;
-        position: relative;
-        z-index: 2;
-      }
-      
-      .chat-message {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        max-width: 80%;
-      }
-      
-      .bot-message {
-        align-self: flex-start;
-      }
-      
-      .user-message {
-        align-self: flex-end;
-        flex-direction: row-reverse;
-      }
-      
-      .message-bubble {
-        background: white;
-        border-radius: 18px;
-        padding: 10px 15px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        position: relative;
-      }
-      
-      .bot-message .message-bubble {
-        border-top-left-radius: 4px;
-      }
-      
-      .user-message .message-bubble {
-        background: #dcfce7;
-        border-top-right-radius: 4px;
-      }
-      
-      .message-bubble p {
-        margin: 0;
-        font-size: 14px;
-        line-height: 1.4;
-      }
-      
-      .message-time {
-        font-size: 10px;
-        color: #9ca3af;
-        display: block;
-        margin-top: 5px;
-        text-align: right;
-      }
-      
-      .typing-indicator {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        padding: 10px 15px;
-        background: #f3f4f6;
-        border-radius: 18px;
-        width: fit-content;
-        margin-top: 5px;
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-      
-      .typing-indicator.active {
-        opacity: 1;
-      }
-      
-      .typing-indicator span {
-        width: 6px;
-        height: 6px;
-        background: #9ca3af;
-        border-radius: 50%;
-        display: inline-block;
-        animation: typing 1.5s infinite ease-in-out;
-      }
-      
-      .typing-indicator span:nth-child(1) {
-        animation-delay: 0s;
-      }
-      
-      .typing-indicator span:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      
-      .typing-indicator span:nth-child(3) {
-        animation-delay: 0.4s;
-      }
-      
-      @keyframes typing {
-        0%, 60%, 100% {
-          transform: translateY(0);
-        }
-        30% {
-          transform: translateY(-5px);
-        }
-      }
-      
-      .chat-widget-footer {
-        padding: 15px;
-        background: white;
-        border-top: 1px solid #e5e7eb;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      
-      .message-input-container {
-        flex: 1;
-        position: relative;
-        background: #f3f4f6;
-        border-radius: 20px;
-        overflow: hidden;
-      }
-      
-      .message-input {
-        width: 100%;
-        border: none;
-        padding: 10px 15px;
-        background: transparent;
-        outline: none;
-        font-size: 14px;
-      }
-      
-      .send-message-btn {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: #15803d;
-        border: none;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      
-      .send-message-btn:hover {
-        background: #166534;
-      }
-      
-      /* New stop button style */
-      .stop-message-btn {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: #ef4444;
-        border: none;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      
-      .stop-message-btn:hover {
-        background: #dc2626;
-      }
-      
-      .chat-widget-button {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        background: #15803d;
-        color: white;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        z-index: 9998;
-      }
-      
-      .chat-widget-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-      }
-      
-      .chat-icon {
-        font-size: 24px;
-      }
-      
-      /* Quick reply buttons - Fixed at bottom */
-      .quick-replies-container {
-        position: sticky;
-        bottom: 0;
-        background-color: rgba(249, 250, 251, 0.95);
-        padding: 10px;
-        border-top: 1px solid #e5e7eb;
-        z-index: 10;
-      }
-      
-      .quick-replies {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, auto);
-        gap: 6px;
-        max-width: 100%;
-      }
-      
-      .quick-reply-btn {
-        background-color: white;
-        border: 1px solid #15803d;
-        color: #15803d;
-        padding: 6px 8px;
-        border-radius: 16px;
-        font-size: 11px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        white-space: nowrap;
-      }
-      
-      .quick-reply-btn i {
-        font-size: 10px;
-      }
-      
-      .quick-reply-btn:hover {
-        background-color: #dcfce7;
-      }
-      
-      /* Animation for chat button */
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        50% {
-          transform: scale(1.05);
-          box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        100% {
-          transform: scale(1);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-      }
-      
-      .chat-widget-button {
-        animation: pulse 2s infinite;
-      }
-      
-      /* Responsive styles */
-      @media (max-width: 480px) {
-        .chat-widget-container {
-          width: 100%;
-          height: 100%;
-          border-radius: 0;
-          position: fixed;
-          bottom: 0;
-          right: 0;
-          z-index: 10000;
-        }
-        
-        .chat-widget-button {
-          bottom: 20px;
-          right: 20px;
-        }
-      }
-      
-      /* Disable input during response */
-      .message-input:disabled {
-        cursor: not-allowed;
-        opacity: 0.7;
-      }
-    </style>
     
     <!-- JavaScript for Chat Widget -->
-    <script>
-      // Konfigurasi AI Chatbot
-      const chatbotConfig = {
-        // Ganti ini dengan URL API AI Anda
-        apiEndpoint: 'https://api.example.com/v1/chat/completions',
-        // Kunci API Anda (dalam produksi, simpan di server backend, jangan di frontend)
-        apiKey: 'YOUR_API_KEY',
-        // Instruksi sistem untuk mengontrol perilaku dan pengetahuan chatbot
-        systemPrompt: `
-          Anda adalah asisten virtual FutZone, tempat penyewaan lapangan futsal terbaik.
-          
-          Informasi tentang FutZone:
-          - Lokasi: Jl. Tidar No.17, Kloncing, Karangrejo, Kec. Sumbersari, Kabupaten Jember, Jawa Timur 68124
-          - Telepon: 0895-3654-42639
-          - Jam operasional: 07.00 - 23.30 setiap hari (Minggu: 07.00 - 23.00)
-          
-          Peraturan FutZone:
-          - Untuk setiap pemesanan diharapkan register akun kemudian login
-          - Harga sewa lapangan:
-            * Pagi-Siang: Rp 85.000/jam
-            * Sore-Malam: Rp 95.000/jam
-          - Setiap pemesanan diwajibkan melakukan DP 50%
-          - Konformasi pembatalan maksimal 24 jam sebelum bermain, jika lebih maka DP akan hangus
-          - Untuk booking event skala besar minimal dilakukan 1 minggu sebelumnya
-          - Tersedia 7 lapangan: 5 lapangan standar, 2 lapangan rumput vinyl dan lebih lebar
-          
-          Promo dan Membership:
-          - Booking reguler: Setiap 10 kali pemesanan akan mendapatkan gratis sesi 1 jam dengan pilihan lapangan dan waktu bebas
-          - Membership: Berlaku pada minimal 4 kali/jam dalam 1 bulan, konsumen mendapatkan diskon 10% dari total biaya
-          - FutZone tidak menyediakan penyewaan atribut futsal
-          
-          Cara Booking:
-          1. Register dan login di website futzone.id
-          2. Pilih lapangan dan jadwal yang tersedia
-          3. Lakukan pembayaran DP minimal 50%
-          4. Konfirmasi pembayaran via WhatsApp 0895-3654-42639
-          
-          Fasilitas:
-          - Kamar mandi & ruang ganti
-          - Kantin dan area tunggu
-          - Free WiFi
-          - Tempat parkir luas
-          
-          Jawab pertanyaan pelanggan dengan ramah, informatif, dan sesuai konteks percakapan.
-          Jika ada pertanyaan di luar informasi yang tersedia, sarankan untuk menghubungi nomor WhatsApp kami.
-        `,
-        // History untuk menyimpan konteks percakapan
-        conversationHistory: []
-      };
-    
+    <script type="module">
+      import { GoogleGenerativeAI } from 'https://esm.run/@google/generative-ai';
+      import MarkdownIt from 'https://esm.run/markdown-it';
+
+      // Hapus konfigurasi safety settings yang tidak perlu
+      const API_KEY = 'AIzaSyCAygW9zHNuc_DGO0OeB2uyX7sppB2-qig';
+      const genAI = new GoogleGenerativeAI(API_KEY);
+
       document.addEventListener('DOMContentLoaded', function() {
+        console.log('Chat widget script loaded'); // Tambahkan logging
+
         const toggleChatBtn = document.getElementById('toggleChat');
         const chatContainer = document.querySelector('.chat-widget-container');
         const closeBtn = document.getElementById('closeChat');
@@ -1156,261 +722,273 @@ function smoothScrollTo(targetPosition, duration = 800) {
         const sendMessageBtn = document.getElementById('sendMessage');
         const chatMessages = document.getElementById('chatMessages');
         const welcomeMessage = document.getElementById('welcomeMessage');
+
+        // Logging untuk debugging
+        if (!toggleChatBtn) console.error('Toggle chat button not found');
+        if (!chatContainer) console.error('Chat container not found');
+        if (!closeBtn) console.error('Close button not found');
+        if (!minimizeBtn) console.error('Minimize button not found');
+        if (!messageInput) console.error('Message input not found');
+        if (!sendMessageBtn) console.error('Send message button not found');
+        if (!chatMessages) console.error('Chat messages container not found');
+        if (!welcomeMessage) console.error('Welcome message element not found');
+
+        // Conversation history for context
+        const conversationHistory = [];
         
-        // Update tanggal dan waktu sekarang
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const dateString = now.toLocaleDateString('id-ID', options);
-        
-        // Update tanggal di divider
-        const dateDivider = document.querySelector('.chat-date-divider span');
-        dateDivider.textContent = dateString;
-        
-        // Animasi teks berjalan untuk welcome message
+        // Welcome message text
         const welcomeText = "Selamat datang di FutZone AI! Kami siap membantu Anda menemukan lapangan futsal terbaik. Ada yang bisa kami bantu hari ini?";
         
-        // Variabel untuk melacak apakah chat sudah pernah dibuka
+        // Tracking chat state
         let chatOpened = false;
-        
-        // Variabel untuk mengontrol animasi typing
         let isTyping = false;
-        let stopTyping = false;
-        let typingAnimation = null;
-        
-        // Fungsi animasi teks dengan kecepatan acak untuk efek lebih alami
-        function animateText(element, text) {
-          return new Promise((resolve) => {
-            // Reset stop flag
-            stopTyping = false;
-            
-            // Set typing flag
-            isTyping = true;
-            
-            // Disable input during typing
-            messageInput.disabled = true;
-            
-            // Change send button to stop button
-            sendMessageBtn.innerHTML = '<i class="fas fa-stop"></i>';
-            sendMessageBtn.classList.remove('send-message-btn');
-            sendMessageBtn.classList.add('stop-message-btn');
-            
-            // Tampilkan indikator loading terlebih dahulu
-            const typingIndicator = document.querySelector('.typing-indicator');
-            typingIndicator.classList.add('active');
-            
-            // Delay sebelum mulai mengetik (simulasi loading)
-            const loadingTimeout = setTimeout(() => {
-              // Sembunyikan indikator loading
-              typingIndicator.classList.remove('active');
-              
-              let index = 0;
-              element.textContent = '';
-              
-              function typeNextChar() {
-                if (index < text.length && !stopTyping) {
-                  // Kecepatan acak untuk efek lebih natural
-                  const speed = Math.random() * 30 + 20; // 20-50ms
-                  
-                  element.textContent += text.charAt(index);
-                  index++;
-                  typingAnimation = setTimeout(typeNextChar, speed);
-                } else {
-                  // Reset typing state
-                  isTyping = false;
-                  
-                  // Re-enable input
-                  messageInput.disabled = false;
-                  
-                  // Change stop button back to send button
-                  sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                  sendMessageBtn.classList.remove('stop-message-btn');
-                  sendMessageBtn.classList.add('send-message-btn');
-                  
-                  // Focus back to input
-                  messageInput.focus();
-                  
-                  resolve();
-                }
-              }
-              
-              typeNextChar();
-            }, 1000); // Loading selama 1 detik
-            
-            // If stop is pressed during loading phase
-            sendMessageBtn.onclick = function() {
-              if (isTyping) {
-                clearTimeout(loadingTimeout);
-                clearTimeout(typingAnimation);
-                stopTyping = true;
-                isTyping = false;
-                
-                // Sembunyikan indikator loading
-                typingIndicator.classList.remove('active');
-                
-                // Re-enable input
-                messageInput.disabled = false;
-                
-                // Change stop button back to send button
-                sendMessageBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                sendMessageBtn.classList.remove('stop-message-btn');
-                sendMessageBtn.classList.add('send-message-btn');
-                
-                // Focus back to input
-                messageInput.focus();
-                
-                // Reset click handler
-                sendMessageBtn.onclick = sendMessage;
-                
-                resolve();
-              }
-            };
-          });
-        }
-        
-        // Toggle chat widget
-        toggleChatBtn.addEventListener('click', function() {
-          chatContainer.classList.add('active');
-          toggleChatBtn.style.display = 'none'; // Sembunyikan tombol saat chat dibuka
-          
-          // Jika chat belum pernah dibuka sebelumnya
-          if (!chatOpened) {
-            // Animasi typing untuk welcome message
-            animateText(welcomeMessage, welcomeText);
-            chatOpened = true;
-          }
-        });
-        
-        // Close chat widget
-        closeBtn.addEventListener('click', function() {
-          chatContainer.classList.remove('active');
-          // Tampilkan kembali tombol toggle saat chat ditutup
-          toggleChatBtn.style.display = 'flex';
-        });
-        
-        // Minimize chat widget
-        minimizeBtn.addEventListener('click', function() {
-          chatContainer.classList.remove('active');
-          // Tampilkan kembali tombol toggle saat chat diminimize
-          toggleChatBtn.style.display = 'flex';
-        });
-        
-        // Fungsi untuk mendapatkan waktu sekarang
+
+        // Fungsi untuk mendapatkan waktu saat ini
         function getCurrentTime() {
           const now = new Date();
           const hours = now.getHours() % 12 || 12;
           const minutes = now.getMinutes().toString().padStart(2, '0');
           const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
-          return ${hours}:${minutes} ${ampm};
+          return `${hours}:${minutes} ${ampm}`;
         }
-        
-        // Fungsi untuk mengirim pesan
-        function sendMessage() {
-          // If currently typing, this function acts as stop button
-          if (isTyping) {
-            stopTyping = true;
-            return;
+
+        // Fungsi animasi teks
+        function animateText(element, text) {
+          return new Promise((resolve) => {
+            let index = 0;
+            
+            function typeNextChar() {
+              if (index < text.length) {
+                element.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeNextChar, Math.random() * 30 + 20);
+              } else {
+                resolve();
+              }
+            }
+            
+            element.textContent = ''; // Clear existing text
+            typeNextChar();
+          });
+        }
+
+        // Generate AI response
+        async function generateGeminiResponse(messageText) {
+          try {
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            
+            // Informasi Statis FutZone
+            const FUTZONE_INFO = {
+              sejarah: `FutZone didirikan untuk memenuhi kebutuhan akan lapangan futsal berkualitas di Jember. 
+              Bermula dari passion para pecinta futsal, kami mengembangkan fasilitas modern yang nyaman dan berkualitas. 
+              Dengan komitmen memberikan pengalaman bermain terbaik, FutZone telah menjadi destinasi utama 
+              bagi komunitas futsal di wilayah Jember dan sekitarnya.`,
+              
+              profil: {
+                nama: 'FutZone Futsal Center',
+                lokasi: 'Jl. Tidar No.17, Kloncing, Karangrejo, Kec. Sumbersari, Kabupaten Jember, Jawa Timur 68124',
+                telepon: '0895-3654-42639',
+                email: 'futzone@gmail.com'
+              },
+              
+              fasilitas: {
+                totalLapangan: 7,
+                standar: 5,
+                rumputVinyl: 2
+              }
+            };
+
+            // Deteksi konteks pertanyaan
+            const konteksPertanyaan = {
+              identitas: ['siapa aku', 'namamu', 'kamu siapa'],
+              sejarah: ['sejarah', 'asal', 'cerita', 'didirikan'],
+              tanggal: ['besok', 'hari apa', 'tanggal'],
+              lokasi: ['alamat', 'lokasi', 'dimana'],
+              kontak: ['telepon', 'email', 'hubungi']
+            };
+
+            // Cari konteks pertanyaan
+            const konteks = Object.keys(konteksPertanyaan).find(key => 
+              konteksPertanyaan[key].some(kata => 
+                messageText.toLowerCase().includes(kata)
+              )
+            );
+
+            // Siapkan respons default
+            let responsTambahan = 'Maaf, saya tidak dapat menemukan informasi spesifik untuk pertanyaan Anda.';
+
+            // Generate respons berdasarkan konteks
+            switch(konteks) {
+              case 'identitas':
+                responsTambahan = `Saya adalah asisten AI resmi FutZone Futsal Center. Saya dibuat untuk membantu Anda dengan informasi seputar lapangan futsal, booking, dan layanan kami.`;
+                break;
+              
+              case 'sejarah':
+                responsTambahan = FUTZONE_INFO.sejarah;
+                break;
+              
+              case 'tanggal':
+                const hariIni = new Date();
+                const besok = new Date(hariIni);
+                besok.setDate(hariIni.getDate() + 1);
+                
+                const namaHari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                responsTambahan = `Besok adalah hari ${namaHari[besok.getDay()]} tanggal ${besok.getDate()}`;
+                break;
+              
+              case 'lokasi':
+                responsTambahan = `Lokasi FutZone: ${FUTZONE_INFO.profil.lokasi}`;
+                break;
+              
+              case 'kontak':
+                responsTambahan = `Kontak FutZone:\n- Telepon: ${FUTZONE_INFO.profil.telepon}\n- Email: ${FUTZONE_INFO.profil.email}`;
+                break;
+            }
+
+            const systemPrompt = `Anda adalah asisten AI resmi FutZone Futsal Center. 
+            Berikan informasi akurat, ramah, dan membantu seputar penyewaan lapangan futsal.
+
+            Informasi Utama FutZone:
+            📍 Lokasi: ${FUTZONE_INFO.profil.lokasi}
+            ☎️ Kontak: ${FUTZONE_INFO.profil.telepon}
+            📧 Email: ${FUTZONE_INFO.profil.email}
+
+            🏟️ Fasilitas Lapangan:
+            - Total Lapangan: ${FUTZONE_INFO.fasilitas.totalLapangan}
+            - Lapangan Standar: ${FUTZONE_INFO.fasilitas.standar}
+            - Lapangan Rumput Vinyl: ${FUTZONE_INFO.fasilitas.rumputVinyl}
+
+            Sejarah Singkat:
+            ${FUTZONE_INFO.sejarah}
+
+            Informasi Tambahan:
+            ${responsTambahan}
+
+            Pertanyaan Pengguna: ${messageText}
+
+            Instruksi:
+            - Jawab dengan ramah dan informatif
+            - Fokus pada kebutuhan spesifik pengguna
+            - Berikan solusi praktis
+            - Gunakan bahasa Indonesia yang baik dan komunikatif`;
+            
+            const result = await model.generateContent(systemPrompt);
+            const response = await result.response;
+            return response.text();
+          } catch (error) {
+            console.error('Gemini AI Error:', error);
+            return 'Maaf, sedang ada gangguan. Silakan coba lagi atau hubungi admin FutZone.';
           }
-          
+        }
+
+        // Fungsi kirim pesan
+        async function sendMessage() {
           const messageText = messageInput.value.trim();
           if (messageText === '') return;
-          
-          // Get current time
+
           const timeString = getCurrentTime();
           
-          // Create user message
-          const userMessage = document.createElement('div');
-          userMessage.className = 'chat-message user-message';
-          userMessage.innerHTML = `
+          // Tambahkan pesan pengguna
+          const userMessageEl = document.createElement('div');
+          userMessageEl.className = 'chat-message user-message';
+          userMessageEl.innerHTML = `
             <div class="message-bubble">
               <p>${messageText}</p>
               <span class="message-time">${timeString}</span>
             </div>
           `;
+          chatMessages.appendChild(userMessageEl);
           
-          // Add message to chat
-          chatMessages.appendChild(userMessage);
-          
-          // Clear input
+          // Bersihkan input
           messageInput.value = '';
           
-          // Scroll to bottom
+          // Scroll ke bawah
           chatMessages.scrollTop = chatMessages.scrollHeight;
           
-          // Dapatkan respons - untuk demo gunakan getDemoResponse
-          const botResponse = getDemoResponse(messageText);
-          
-          // Create bot response element
-          const botMessage = document.createElement('div');
-          botMessage.className = 'chat-message bot-message';
-          const botMessageContent = document.createElement('div');
-          botMessageContent.className = 'message-bubble';
-          
-          const responseText = document.createElement('p');
-          botMessageContent.appendChild(responseText);
-          
-          const timeElement = document.createElement('span');
-          timeElement.className = 'message-time';
-          timeElement.textContent = timeString;
-          botMessageContent.appendChild(timeElement);
-          
-          botMessage.appendChild(botMessageContent);
-          chatMessages.appendChild(botMessage);
-          
-          // Animasi typing untuk respons bot
-          animateText(responseText, botResponse).then(() => {
-            // Scroll to bottom setelah animasi selesai
+          try {
+            // Tampilkan indikator typing
+            const typingIndicator = document.querySelector('.typing-indicator');
+            typingIndicator.classList.add('active');
+            
+            // Generate respons AI
+            const aiResponseText = await generateGeminiResponse(messageText);
+            
+            // Sembunyikan indikator typing
+            typingIndicator.classList.remove('active');
+            
+            // Tambahkan respons bot
+            const botMessageEl = document.createElement('div');
+            botMessageEl.className = 'chat-message bot-message';
+            
+            const botMessageBubble = document.createElement('div');
+            botMessageBubble.className = 'message-bubble';
+            
+            const botResponseText = document.createElement('p');
+            const botTimeEl = document.createElement('span');
+            botTimeEl.className = 'message-time';
+            botTimeEl.textContent = timeString;
+            
+            botMessageBubble.appendChild(botResponseText);
+            botMessageBubble.appendChild(botTimeEl);
+            botMessageEl.appendChild(botMessageBubble);
+            
+            chatMessages.appendChild(botMessageEl);
+            
+            // Animasi teks respons
+            await animateText(botResponseText, aiResponseText);
+            
+            // Scroll ke bawah
             chatMessages.scrollTop = chatMessages.scrollHeight;
-          });
+          } catch (error) {
+            console.error('Kesalahan:', error);
+          }
         }
-        
-        // DEMO MODE - Simulasi respons tanpa API
-        function getDemoResponse(userMessage) {
-          userMessage = userMessage.toLowerCase();
+
+        // Event listener untuk tombol toggle chat
+        toggleChatBtn.addEventListener('click', function() {
+          console.log('Toggle chat clicked');
+          chatContainer.classList.add('active');
+          toggleChatBtn.style.display = 'none';
           
-          if (userMessage.includes('booking') || userMessage.includes('pesan') || userMessage.includes('cara')) {
-            return "Untuk booking lapangan di FutZone, silakan ikuti langkah berikut:\n\n1. Register dan login di website kami\n2. Pilih lapangan dan jadwal yang tersedia\n3. Lakukan pembayaran DP minimal 50%\n4. Konfirmasi pembayaran via WhatsApp 0895-3654-42639\n\nPerlu diingat bahwa pembatalan harus dilakukan maksimal 24 jam sebelum jadwal bermain.";
+          if (!chatOpened) {
+            animateText(welcomeMessage, welcomeText);
+            chatOpened = true;
           }
-          else if (userMessage.includes('harga') || userMessage.includes('biaya') || userMessage.includes('tarif')) {
-            return "Harga sewa lapangan FutZone:\n\n- Pagi-Siang: Rp 85.000/jam\n- Sore-Malam: Rp 95.000/jam\n\nTersedia 7 lapangan (5 standar dan 2 lapangan rumput vinyl yang lebih lebar).";
-          }
-          else if (userMessage.includes('jam') || userMessage.includes('buka') || userMessage.includes('operasional')) {
-            return "FutZone buka setiap hari dengan jadwal berikut:\n\n- Senin - Sabtu: 07.00 - 23.30 WIB\n- Minggu: 07.00 - 23.00 WIB\n\nSilakan booking lebih awal untuk mendapatkan jadwal terbaik!";
-          }
-          else if (userMessage.includes('lokasi') || userMessage.includes('alamat') || userMessage.includes('dimana')) {
-            return "FutZone berlokasi di Jl. Tidar No.17, Kloncing, Karangrejo, Kec. Sumbersari, Kabupaten Jember, Jawa Timur 68124.\n\nUntuk reservasi, silakan hubungi kami di 0895-3654-42639.";
-          }
-          else if (userMessage.includes('promo') || userMessage.includes('diskon') || userMessage.includes('membership')) {
-            return "Promo FutZone:\n\n1. Booking reguler: Setiap 10 kali pemesanan mendapatkan gratis 1 jam\n2. Membership: Minimal 4 jam/bulan dapatkan diskon 10% untuk semua pemesanan";
-          }
-          else {
-            return "Terima kasih telah menghubungi FutZone. Ada yang bisa kami bantu terkait pemesanan lapangan futsal? Untuk informasi lebih lanjut, silakan hubungi kami di WhatsApp 0895-3654-42639.";
-          }
-        }
-        
-        // Send message on button click
+        });
+
+        // Event listener untuk tombol tutup
+        closeBtn.addEventListener('click', function() {
+          chatContainer.classList.remove('active');
+          toggleChatBtn.style.display = 'flex';
+        });
+
+        // Event listener untuk tombol minimize
+        minimizeBtn.addEventListener('click', function() {
+          chatContainer.classList.remove('active');
+          toggleChatBtn.style.display = 'flex';
+        });
+
+        // Kirim pesan saat tombol ditekan
         sendMessageBtn.addEventListener('click', sendMessage);
-        
-        // Send message on Enter key
+
+        // Kirim pesan saat Enter ditekan
         messageInput.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter' && !isTyping) {
+          if (e.key === 'Enter') {
             sendMessage();
           }
         });
-        
+
         // Quick reply buttons
         const quickReplyButtons = document.querySelectorAll('.quick-reply-btn');
         quickReplyButtons.forEach(button => {
           button.addEventListener('click', function() {
-            // Only proceed if not currently typing
-            if (!isTyping) {
-              const message = this.getAttribute('data-message');
-              messageInput.value = message;
-              sendMessage();
-            }
+            const message = this.getAttribute('data-message');
+            messageInput.value = message;
+            sendMessage();
           });
         });
-        
-        // Selalu tampilkan toggle button saat halaman dimuat
+
+        // Tampilkan tombol toggle chat
         toggleChatBtn.style.display = 'flex';
       });
     </script>

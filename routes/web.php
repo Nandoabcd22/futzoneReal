@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegulerBookingController;
 use App\Http\Controllers\Admin\LapanganController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 
 /*
@@ -25,7 +26,8 @@ use Illuminate\Support\Facades\Auth;
 // Halaman Awal
 // =======================
 Route::get('/', function () {
-    return view('welcome');
+    $lapangans = \App\Models\Lapangan::where('status', 'tersedia')->get();
+    return view('welcome', compact('lapangans'));
 })->name('welcome');
 
 // =======================
@@ -161,4 +163,29 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/lapangan', [LapanganController::class, 'store'])->name('admin.lapangan.store');
     Route::put('/admin/lapangan/{lapangan}', [LapanganController::class, 'update'])->name('admin.lapangan.update');
     Route::delete('/admin/lapangan/{lapangan}', [LapanganController::class, 'destroy'])->name('admin.lapangan.destroy');
+});
+
+// Route untuk update jadwal
+Route::get('/update-jadwal', function(Request $request) {
+    $date = $request->input('date', date('Y-m-d'));
+
+    $bookings = \App\Models\Booking::with(['user', 'lapangan'])
+        ->whereDate('tanggal', $date)
+        ->where('status', 'confirmed')
+        ->orderBy('jam_mulai')
+        ->get();
+
+    $lapangans = \App\Models\Lapangan::all();
+
+    return response()->json([
+        'bookings' => $bookings->map(function($booking) {
+            return [
+                'lapangan_id' => $booking->lapangan_id,
+                'user_name' => $booking->user->name,
+                'jam_mulai' => $booking->jam_mulai,
+                'jam_selesai' => $booking->jam_selesai
+            ];
+        }),
+        'lapangans' => $lapangans->pluck('nama', 'id')
+    ]);
 });
